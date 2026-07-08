@@ -1,6 +1,34 @@
 export type Lang = 'de' | 'en'
 
-export const translations = {
+export interface TranslationShape {
+  tagline: string
+  title: string
+  subtitle: string
+  chooseVehicle: string
+  vehicles: string
+  allBrands: string
+  yourReference: string
+  energyCost: string
+  perYear: string
+  measured: string
+  estimated: string
+  opelCheaper: string
+  rivalCheaper: string
+  pickPrompt: string
+  charge: string
+  home: string
+  public: string
+  phevBattery: string
+  full: string
+  empty: string
+  gridCo2: string
+  typeAll: string
+  footer1: string
+  footer2: string
+  typeLabels: { BEV: string; PHEV: string; HEV: string }
+}
+
+export const translations: Record<Lang, TranslationShape> = {
   de: {
     tagline: 'Schweiz · Reale Verbrauchsdaten · ADAC Ecotest',
     title: 'EV Vergleich',
@@ -61,6 +89,6 @@ export const translations = {
       'Swiss defaults: ⛽ CHF 1.72/L · 🏠 CHF 0.31/kWh · ⚡ CHF 0.59/kWh · Grid CO₂: 30 g/kWh (SFOE 2026)',
     typeLabels: { BEV: 'Electric', PHEV: 'Plug-in Hybrid', HEV: 'Full Hybrid' },
   },
-} as const
+}
 
-export type Translation = typeof translations.de
+export type Translation = TranslationShape
