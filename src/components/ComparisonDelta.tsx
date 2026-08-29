@@ -23,51 +23,51 @@ export default function ComparisonDelta({ reference, comparison, t }: Props) {
   return (
     <div className="flex flex-col items-center justify-center gap-4 px-2 py-6 min-w-[140px]">
 
-      <div className="text-[10px] font-bold tracking-[0.25em] text-white/30 uppercase">vs</div>
+      <div className="text-[10px] font-bold tracking-[0.25em] text-gray-300 uppercase">vs</div>
 
       {/* Hero delta */}
       <div className="text-center">
-        <div className="font-display font-bold text-3xl leading-none" style={{ color: winColor }}>
+        <div className="font-display font-bold text-3xl leading-none tabular-nums" style={{ color: winColor }}>
           {costDiff >= 0 ? '+' : '−'} CHF {fmt2(Math.abs(costDiff))}
         </div>
-        <div className="text-[11px] text-white/40 mt-1">/100 km</div>
+        <div className="text-[11px] text-gray-400 mt-1">/100 km</div>
       </div>
 
       {/* Label */}
       <div
         className="text-[10px] font-bold px-2.5 py-1 rounded-full text-center leading-tight"
-        style={{ background: winColor + '20', color: winColor }}
+        style={{ background: winColor + '18', color: winColor }}
       >
         {opelWins ? t.opelCheaper : t.rivalCheaper}
       </div>
 
       {/* Divider */}
-      <div className="w-px h-8 bg-white/10" />
+      <div className="w-px h-8 bg-border" />
 
       {/* CO2 */}
       <div className="text-center">
         <div
-          className="font-mono font-bold text-lg"
+          className="font-mono font-bold text-lg tabular-nums"
           style={{ color: co2Diff >= 0 ? '#16A37A' : '#E8772E' }}
         >
           {co2Diff >= 0 ? '+' : '−'}{fmtCO2(Math.abs(co2Diff))}
           <span className="text-xs ml-0.5">g/km</span>
         </div>
-        <div className="text-[10px] text-white/30">CO₂</div>
+        <div className="text-[10px] text-gray-400">CO₂</div>
       </div>
 
       {/* Divider */}
-      <div className="w-px h-6 bg-white/10" />
+      <div className="w-px h-6 bg-border" />
 
       {/* Annual */}
-      <div className="text-center rounded-xl bg-white/5 px-3 py-3 w-full">
-        <p className="text-[9px] text-white/30 uppercase tracking-wider mb-1">
+      <div className="text-center rounded-xl bg-surface-sunken px-3 py-3 w-full">
+        <p className="text-[9px] text-gray-400 uppercase tracking-wider mb-1">
           {fmtInt(ANNUAL_KM)} km/yr
         </p>
-        <p className="font-mono font-bold text-base" style={{ color: winColor }}>
+        <p className="font-mono font-bold text-base tabular-nums" style={{ color: winColor }}>
           CHF {fmtInt(annualDiff)}
         </p>
-        <p className="text-[9px] text-white/30 mt-0.5">
+        <p className="text-[9px] text-gray-400 mt-0.5">
           {fmtInt(annualCO2)} kg CO₂
         </p>
       </div>

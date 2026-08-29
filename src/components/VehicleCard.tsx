@@ -12,15 +12,24 @@ interface LargeProps {
   vehicle: Vehicle
   result: CostResult
   t: Translation
+  /** Text for a subtle "this one's cheaper" corner badge; omit to hide it. */
+  cheaperBadgeLabel?: string
 }
 
-export function LargeVehicleCard({ vehicle, result, t }: LargeProps) {
+export function LargeVehicleCard({ vehicle, result, t, cheaperBadgeLabel }: LargeProps) {
   const c = vehicle.brandColor
 
   return (
     // h-full + flex → equal height in the grid
-    <div className="bg-white rounded-2xl overflow-hidden shadow-2xl flex flex-col h-full">
+    <div className="relative bg-white rounded-2xl overflow-hidden border border-border shadow-lg shadow-slate-200/60 flex flex-col h-full">
       <div className="h-1.5" style={{ background: c }} />
+
+      {cheaperBadgeLabel && (
+        <span className="absolute top-3 right-3 z-10 text-[9px] font-bold uppercase tracking-wider
+                          px-2 py-1 rounded-full bg-eco/10 text-eco">
+          {cheaperBadgeLabel}
+        </span>
+      )}
 
       <div className="p-6 flex flex-col gap-5 flex-1">
 
@@ -52,7 +61,7 @@ export function LargeVehicleCard({ vehicle, result, t }: LargeProps) {
               {t.yourReference}
             </div>
           ) : (
-            <div className="w-full text-xs font-medium px-3 py-2 rounded-lg text-center text-gray-400 bg-gray-50">
+            <div className="w-full text-xs font-medium px-3 py-2 rounded-lg text-center text-gray-400 bg-surface-sunken">
               {t.typeLabels[vehicle.type]}
             </div>
           )}
@@ -70,7 +79,7 @@ export function LargeVehicleCard({ vehicle, result, t }: LargeProps) {
             {t.energyCost}
           </p>
           <div className="flex items-baseline gap-1">
-            <span className="font-display font-bold text-4xl" style={{ color: c }}>
+            <span className="font-display font-bold text-4xl tabular-nums" style={{ color: c }}>
               CHF {fmt2(result.costPer100kmCHF)}
             </span>
             <span className="text-gray-400 text-sm">/100km</span>
@@ -128,20 +137,26 @@ interface ThumbProps {
   result: CostResult
   isSelected: boolean
   onClick: () => void
+  /** Stagger delay (ms) for the on-mount reveal animation. */
+  revealDelayMs?: number
 }
 
-export function ThumbVehicleCard({ vehicle, result, isSelected, onClick }: ThumbProps) {
+export function ThumbVehicleCard({ vehicle, result, isSelected, onClick, revealDelayMs = 0 }: ThumbProps) {
   const c = vehicle.brandColor
 
   return (
     <button
       onClick={onClick}
+      style={{
+        animation: 'card-reveal 0.4s ease-out both',
+        animationDelay: `${revealDelayMs}ms`,
+        ...(isSelected ? { borderColor: c, background: c + '08' } : {}),
+      }}
       className={`
-        w-full text-left rounded-2xl border-2 p-4 transition-all duration-200
-        hover:-translate-y-1 hover:shadow-xl focus:outline-none
-        ${isSelected ? 'shadow-lg' : 'border-gray-100 bg-white hover:border-gray-200'}
+        w-full text-left rounded-xl border p-4 transition-all duration-200
+        hover:-translate-y-0.5 hover:shadow-lg hover:shadow-slate-200/70 focus:outline-none
+        ${isSelected ? 'shadow-md shadow-slate-200/70' : 'border-border bg-white hover:border-gray-300'}
       `}
-      style={isSelected ? { borderColor: c, background: c + '08' } : {}}
     >
       {/* Logo + type */}
       <div className="flex items-center justify-between mb-3">
@@ -157,7 +172,7 @@ export function ThumbVehicleCard({ vehicle, result, isSelected, onClick }: Thumb
 
       {/* Visual — bigger */}
       <div className="rounded-xl h-20 flex items-center justify-center overflow-hidden mb-3"
-           style={{ background: isSelected ? c + '10' : '#F8FAFC' }}>
+           style={{ background: isSelected ? c + '10' : 'var(--color-surface-sunken)' }}>
         <VehicleVisual vehicle={vehicle} className="w-full h-full p-1" />
       </div>
 
@@ -166,7 +181,7 @@ export function ThumbVehicleCard({ vehicle, result, isSelected, onClick }: Thumb
       <p className="text-xs text-gray-400 truncate">{vehicle.model}</p>
 
       {/* Cost */}
-      <p className="font-mono font-bold text-base mt-2"
+      <p className="font-mono font-bold text-base mt-2 tabular-nums"
          style={{ color: isSelected ? c : '#374151' }}>
         CHF {fmt2(result.costPer100kmCHF)}
         <span className="text-[10px] font-normal text-gray-400 ml-0.5">/100km</span>

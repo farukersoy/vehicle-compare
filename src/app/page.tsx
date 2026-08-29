@@ -32,8 +32,21 @@ export default function Home() {
   const showPhevToggle =
     referenceVehicle.type === 'PHEV' || selectedVehicle?.type === 'PHEV'
 
+  const referenceCheaper = selectedResult
+    ? referenceResult.costPer100kmCHF <= selectedResult.costPer100kmCHF
+    : true
+
   return (
-    <div className="min-h-screen" style={{ background: '#0B1F3A' }}>
+    <div className="min-h-screen bg-white">
+
+      {/* Wordmark bar */}
+      <div className="border-b border-border">
+        <div className="max-w-6xl mx-auto px-6 sm:px-6 py-4">
+          <span className="font-display font-bold text-lg text-navy tracking-tight">
+            EV COMPARE
+          </span>
+        </div>
+      </div>
 
       {/* Header */}
       <header className="max-w-6xl mx-auto px-6 pt-10 pb-6">
@@ -41,10 +54,10 @@ export default function Home() {
            style={{ color: '#E8772E' }}>
           {t.tagline}
         </p>
-        <h1 className="font-display font-bold text-4xl sm:text-5xl text-white leading-tight">
+        <h1 className="font-display font-bold text-4xl sm:text-5xl text-navy leading-tight">
           {t.title}
         </h1>
-        <p className="text-white/40 mt-2 text-base max-w-lg">{t.subtitle}</p>
+        <p className="text-gray-500 mt-2 text-base max-w-lg">{t.subtitle}</p>
       </header>
 
       {/* Settings + language */}
@@ -59,41 +72,53 @@ export default function Home() {
 
       {/* Comparison cards */}
       <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-[1fr_148px_1fr] gap-4 items-stretch">
+        <div className="rounded-2xl border border-border bg-surface-sunken p-3 sm:p-4">
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_148px_1fr] gap-4 items-stretch">
 
-          <LargeVehicleCard vehicle={referenceVehicle} result={referenceResult} t={t} />
+            <LargeVehicleCard
+              vehicle={referenceVehicle}
+              result={referenceResult}
+              t={t}
+              cheaperBadgeLabel={selectedResult && referenceCheaper ? t.opelCheaper : undefined}
+            />
 
-          {selectedVehicle && selectedResult ? (
-            <ComparisonDelta reference={referenceResult} comparison={selectedResult} t={t} />
-          ) : (
-            <div className="hidden md:flex flex-col items-center justify-center
-                            gap-3 text-white/20 min-w-[120px]">
-              <div className="text-3xl">↔</div>
-              <p className="text-[11px] text-center leading-relaxed text-white/30">
-                {t.pickPrompt}
-              </p>
-            </div>
-          )}
+            {selectedVehicle && selectedResult ? (
+              <ComparisonDelta reference={referenceResult} comparison={selectedResult} t={t} />
+            ) : (
+              <div className="hidden md:flex flex-col items-center justify-center
+                              gap-3 text-gray-300 min-w-[120px]">
+                <div className="text-3xl">↔</div>
+                <p className="text-[11px] text-center leading-relaxed text-gray-400">
+                  {t.pickPrompt}
+                </p>
+              </div>
+            )}
 
-          {selectedVehicle && selectedResult ? (
-            <LargeVehicleCard vehicle={selectedVehicle} result={selectedResult} t={t} />
-          ) : (
-            <div className="rounded-2xl border-2 border-dashed border-white/10
-                            flex flex-col items-center justify-center
-                            text-white/20 gap-4 p-6 min-h-[420px]">
-              <div className="text-5xl">🚗</div>
-              <p className="font-display font-semibold text-white/40 text-lg text-center">
-                {t.pickPrompt}
-              </p>
-            </div>
-          )}
+            {selectedVehicle && selectedResult ? (
+              <LargeVehicleCard
+                vehicle={selectedVehicle}
+                result={selectedResult}
+                t={t}
+                cheaperBadgeLabel={!referenceCheaper ? t.rivalCheaper : undefined}
+              />
+            ) : (
+              <div className="rounded-2xl border-2 border-dashed border-gray-200
+                              flex flex-col items-center justify-center
+                              text-gray-300 gap-4 p-6 min-h-[420px]">
+                <div className="text-5xl">🚗</div>
+                <p className="font-display font-semibold text-gray-400 text-lg text-center">
+                  {t.pickPrompt}
+                </p>
+              </div>
+            )}
 
+          </div>
         </div>
       </div>
 
       {/* Vehicle selector — right below, big heading */}
       <div className="max-w-6xl mx-auto px-4 pb-16">
-        <h2 className="text-3xl font-display font-bold text-white mb-6">
+        <h2 className="text-3xl font-display font-bold text-navy mb-6">
           {t.chooseVehicle}
         </h2>
         <VehicleGrid
@@ -106,8 +131,8 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <div className="border-t border-white/10 px-6 py-8">
-        <div className="max-w-6xl mx-auto text-xs text-white/30 text-center space-y-1">
+      <div className="border-t border-border px-6 py-8">
+        <div className="max-w-6xl mx-auto text-xs text-gray-400 text-center space-y-1">
           <p>{t.footer1}</p>
           <p>{t.footer2}</p>
         </div>

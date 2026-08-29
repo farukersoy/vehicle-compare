@@ -16,18 +16,18 @@ export default function SettingsBar({
   settings, onChange, showPhevToggle, t, lang, onLangChange,
 }: Props) {
   return (
-    <div className="sticky top-0 z-30 bg-navy/95 backdrop-blur-sm border-b border-white/10">
-      <div className="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center gap-4">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6">
+      <div className="flex flex-wrap items-center gap-4 py-4 border-t border-b border-border">
 
         {/* Charge rate */}
         <div className="flex items-center gap-2">
-          <span className="text-white/50 text-xs uppercase tracking-widest">{t.charge}</span>
-          <div className="flex rounded-lg overflow-hidden border border-white/10">
+          <span className="text-gray-400 text-xs font-semibold uppercase tracking-widest">{t.charge}</span>
+          <div className="flex rounded-lg overflow-hidden border border-border">
             {(['home', 'public'] as const).map((rate) => (
               <button key={rate} onClick={() => onChange({ chargeRate: rate })}
                 className={`px-3 py-1.5 text-xs font-semibold transition-colors
                   ${settings.chargeRate === rate
-                    ? 'bg-energy text-white' : 'bg-white/5 text-white/60 hover:bg-white/10'}`}>
+                    ? 'bg-energy text-white' : 'bg-white text-gray-500 hover:bg-surface-muted'}`}>
                 {rate === 'home' ? t.home : t.public}
               </button>
             ))}
@@ -36,41 +36,44 @@ export default function SettingsBar({
 
         {/* PHEV scenario */}
         {showPhevToggle && (
-          <div className="flex items-center gap-2">
-            <span className="text-white/50 text-xs uppercase tracking-widest">{t.phevBattery}</span>
-            <div className="flex rounded-lg overflow-hidden border border-white/10">
-              {(['full', 'empty'] as const).map((s) => (
-                <button key={s} onClick={() => onChange({ phevScenario: s })}
-                  className={`px-3 py-1.5 text-xs font-semibold transition-colors
-                    ${settings.phevScenario === s
-                      ? 'bg-energy text-white' : 'bg-white/5 text-white/60 hover:bg-white/10'}`}>
-                  {s === 'full' ? t.full : t.empty}
-                </button>
-              ))}
+          <>
+            <div className="w-px h-6 bg-border hidden sm:block" />
+            <div className="flex items-center gap-2">
+              <span className="text-gray-400 text-xs font-semibold uppercase tracking-widest">{t.phevBattery}</span>
+              <div className="flex rounded-lg overflow-hidden border border-border">
+                {(['full', 'empty'] as const).map((s) => (
+                  <button key={s} onClick={() => onChange({ phevScenario: s })}
+                    className={`px-3 py-1.5 text-xs font-semibold transition-colors
+                      ${settings.phevScenario === s
+                        ? 'bg-energy text-white' : 'bg-white text-gray-500 hover:bg-surface-muted'}`}>
+                    {s === 'full' ? t.full : t.empty}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          </>
         )}
 
         {/* CO2 slider */}
         <div className="flex items-center gap-3 ml-auto">
-          <span className="text-white/50 text-xs uppercase tracking-widest whitespace-nowrap">
+          <span className="text-gray-400 text-xs font-semibold uppercase tracking-widest whitespace-nowrap">
             {t.gridCo2}
           </span>
           <input type="range" min={10} max={120} step={5}
             value={settings.co2GridGkwh}
             onChange={(e) => onChange({ co2GridGkwh: Number(e.target.value) })}
             className="w-24 accent-energy" />
-          <span className="font-mono text-white text-xs w-16">
+          <span className="font-mono text-navy text-xs w-16">
             {settings.co2GridGkwh} g/kWh
           </span>
         </div>
 
         {/* Language switch */}
-        <div className="flex rounded-lg overflow-hidden border border-white/10">
+        <div className="flex rounded-lg overflow-hidden border border-border">
           {(['de', 'en'] as const).map((l) => (
             <button key={l} onClick={() => onLangChange(l)}
               className={`px-3 py-1.5 text-xs font-bold transition-colors
-                ${lang === l ? 'bg-white text-navy' : 'bg-white/5 text-white/60 hover:bg-white/10'}`}>
+                ${lang === l ? 'bg-navy text-white' : 'bg-white text-gray-500 hover:bg-surface-muted'}`}>
               {l.toUpperCase()}
             </button>
           ))}
