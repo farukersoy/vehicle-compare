@@ -14,9 +14,11 @@ interface LargeProps {
   t: Translation
   /** Text for a subtle "this one's cheaper" corner badge; omit to hide it. */
   cheaperBadgeLabel?: string
+  /** Green when Opel/reference wins, red when the rival wins — same semantics as ComparisonDelta. */
+  cheaperBadgeTone?: 'green' | 'red'
 }
 
-export function LargeVehicleCard({ vehicle, result, t, cheaperBadgeLabel }: LargeProps) {
+export function LargeVehicleCard({ vehicle, result, t, cheaperBadgeLabel, cheaperBadgeTone = 'green' }: LargeProps) {
   const c = vehicle.brandColor
 
   return (
@@ -25,13 +27,13 @@ export function LargeVehicleCard({ vehicle, result, t, cheaperBadgeLabel }: Larg
       <div className="h-1.5" style={{ background: c }} />
 
       {cheaperBadgeLabel && (
-        <span className="absolute top-3 right-3 z-10 text-[9px] font-bold uppercase tracking-wider
-                          px-2 py-1 rounded-full bg-eco/10 text-eco">
+        <span className={`absolute top-3 right-3 z-10 text-[9px] font-bold uppercase tracking-wider
+                          px-2 py-1 rounded-full ${cheaperBadgeTone === 'red' ? 'bg-red-50 text-red-600' : 'bg-eco/10 text-eco'}`}>
           {cheaperBadgeLabel}
         </span>
       )}
 
-      <div className="p-6 flex flex-col gap-5 flex-1">
+      <div className="p-5 sm:p-6 lg:p-8 flex flex-col gap-4 sm:gap-5 lg:gap-6 flex-1">
 
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -67,8 +69,8 @@ export function LargeVehicleCard({ vehicle, result, t, cheaperBadgeLabel }: Larg
           )}
         </div>
 
-        {/* Visual — fixed height */}
-        <div className="rounded-xl h-40 flex items-center justify-center overflow-hidden"
+        {/* Visual — fixed height, scales up on larger screens */}
+        <div className="rounded-xl h-40 sm:h-48 lg:h-56 flex items-center justify-center overflow-hidden"
              style={{ background: c + '10' }}>
           <VehicleVisual vehicle={vehicle} className="w-full h-full p-2" />
         </div>
@@ -79,7 +81,7 @@ export function LargeVehicleCard({ vehicle, result, t, cheaperBadgeLabel }: Larg
             {t.energyCost}
           </p>
           <div className="flex items-baseline gap-1">
-            <span className="font-display font-bold text-4xl tabular-nums" style={{ color: c }}>
+            <span className="font-display font-bold text-4xl lg:text-5xl tabular-nums" style={{ color: c }}>
               CHF {fmt2(result.costPer100kmCHF)}
             </span>
             <span className="text-gray-400 text-sm">/100km</span>
@@ -153,38 +155,38 @@ export function ThumbVehicleCard({ vehicle, result, isSelected, onClick, revealD
         ...(isSelected ? { borderColor: c, background: c + '08' } : {}),
       }}
       className={`
-        w-full text-left rounded-xl border p-4 transition-all duration-200
-        hover:-translate-y-0.5 hover:shadow-lg hover:shadow-slate-200/70 focus:outline-none
-        ${isSelected ? 'shadow-md shadow-slate-200/70' : 'border-border bg-white hover:border-gray-300'}
+        w-full text-left rounded-lg border p-3 transition-colors duration-150
+        focus:outline-none
+        ${isSelected ? '' : 'border-border bg-white hover:border-gray-300'}
       `}
     >
       {/* Logo + type */}
-      <div className="flex items-center justify-between mb-3">
-        <div className="w-10 h-10 rounded-lg flex items-center justify-center"
+      <div className="flex items-center justify-between mb-2">
+        <div className="w-8 h-8 rounded-lg flex items-center justify-center"
              style={{ background: c + '15' }}>
-          <BrandLogo brand={vehicle.brand} domain={vehicle.brandDomain} size={26} />
+          <BrandLogo brand={vehicle.brand} domain={vehicle.brandDomain} size={20} />
         </div>
-        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
+        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full"
               style={{ background: c + '18', color: c }}>
           {vehicle.type}
         </span>
       </div>
 
-      {/* Visual — bigger */}
-      <div className="rounded-xl h-20 flex items-center justify-center overflow-hidden mb-3"
+      {/* Visual — smaller, quieter than the comparison hero above */}
+      <div className="rounded-lg h-16 flex items-center justify-center overflow-hidden mb-2"
            style={{ background: isSelected ? c + '10' : 'var(--color-surface-sunken)' }}>
         <VehicleVisual vehicle={vehicle} className="w-full h-full p-1" />
       </div>
 
       {/* Name */}
-      <p className="text-sm font-bold text-navy font-display truncate">{vehicle.brand}</p>
-      <p className="text-xs text-gray-400 truncate">{vehicle.model}</p>
+      <p className="text-sm font-semibold text-navy font-display truncate">{vehicle.brand}</p>
+      <p className="text-[11px] text-gray-400 truncate">{vehicle.model}</p>
 
       {/* Cost */}
-      <p className="font-mono font-bold text-base mt-2 tabular-nums"
+      <p className="font-mono font-bold text-sm mt-1.5 tabular-nums"
          style={{ color: isSelected ? c : '#374151' }}>
         CHF {fmt2(result.costPer100kmCHF)}
-        <span className="text-[10px] font-normal text-gray-400 ml-0.5">/100km</span>
+        <span className="text-[9px] font-normal text-gray-400 ml-0.5">/100km</span>
       </p>
     </button>
   )

@@ -25,6 +25,8 @@ export interface TranslationShape {
   typeAll: string
   footer1: string
   footer2: string
+  loadMore: string
+  showLess: string
   typeLabels: { BEV: string; PHEV: string; HEV: string }
 }
 
@@ -57,6 +59,8 @@ export const translations: Record<Lang, TranslationShape> = {
       'Datenquellen: ADAC Ecotest, reale Messungen von Fahrzeughaltern. «Geschätzte» Werte sind Marktdurchschnitte.',
     footer2:
       'Schweizer Standardwerte: ⛽ CHF 1.72/L · 🏠 CHF 0.31/kWh · ⚡ CHF 0.59/kWh · Netz-CO₂: 30 g/kWh (BFE 2026)',
+    loadMore: 'Mehr anzeigen',
+    showLess: 'Weniger anzeigen',
     typeLabels: { BEV: 'Elektrisch', PHEV: 'Plug-in-Hybrid', HEV: 'Vollhybrid' },
   },
   en: {
@@ -87,6 +91,8 @@ export const translations: Record<Lang, TranslationShape> = {
       'Data sources: ADAC Ecotest, real-world owner measurements. "Estimated" figures are market averages.',
     footer2:
       'Swiss defaults: ⛽ CHF 1.72/L · 🏠 CHF 0.31/kWh · ⚡ CHF 0.59/kWh · Grid CO₂: 30 g/kWh (SFOE 2026)',
+    loadMore: 'Show more',
+    showLess: 'Show less',
     typeLabels: { BEV: 'Electric', PHEV: 'Plug-in Hybrid', HEV: 'Full Hybrid' },
   },
 }
