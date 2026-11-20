@@ -3,36 +3,8 @@
 import { useState } from 'react'
 import { Settings } from '@/types'
 import { Lang, Translation } from '@/lib/i18n'
-import {
-  IconBatteryFull, IconBatteryLow, IconBolt, IconChevronDown, IconHome, IconSliders,
-} from './Icons'
-
-// ─── Shared controls ──────────────────────────────────────────────────────────
-
-interface SegOption<V extends string> { value: V; label: string; icon?: React.ReactNode }
-
-function Segmented<V extends string>({ value, options, onChange, label }: {
-  value: V
-  options: SegOption<V>[]
-  onChange: (v: V) => void
-  label: string
-}) {
-  return (
-    <div role="group" aria-label={label} className="inline-flex rounded-full border border-border bg-page p-0.5">
-      {options.map((o) => {
-        const active = o.value === value
-        return (
-          <button key={o.value} type="button" aria-pressed={active} onClick={() => onChange(o.value)}
-            className={`min-h-11 px-4 rounded-full inline-flex items-center gap-1.5 text-sm font-semibold
-                        transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent
-                        ${active ? 'bg-accent text-white shadow-sm' : 'text-ink hover:bg-surface'}`}>
-            {o.icon}{o.label}
-          </button>
-        )
-      })}
-    </div>
-  )
-}
+import { IconBatteryFull, IconBatteryLow, IconChevronDown, IconSliders } from './Icons'
+import { DecimalInput, Segmented } from './Controls'
 
 function Field({ label, children, htmlFor }: { label: string; children: React.ReactNode; htmlFor?: string }) {
   const Tag = htmlFor ? 'label' : 'div'
@@ -79,7 +51,6 @@ export default function SettingsBar({ settings, onChange, showPhevToggle, t }: P
   const [open, setOpen] = useState(false)
 
   const summary = [
-    settings.chargeRate === 'home' ? t.home : t.public,
     showPhevToggle ? (settings.phevScenario === 'full' ? t.full : t.empty) : null,
     `${settings.co2GridGkwh} g/kWh`,
     `CHF ${settings.fuelPriceCHF}/L`,
@@ -102,15 +73,6 @@ export default function SettingsBar({ settings, onChange, showPhevToggle, t }: P
       <div id="settings-panel" className={`${open ? 'block' : 'hidden'} lg:block mt-2 lg:mt-0`}>
         <div className="rounded-xl border border-border bg-surface p-4 grid gap-4 sm:grid-cols-2
                         lg:flex lg:flex-wrap lg:items-end lg:gap-x-8 lg:gap-y-4 lg:px-6">
-          <Field label={t.charge}>
-            <Segmented label={t.charge} value={settings.chargeRate}
-              onChange={(v) => onChange({ chargeRate: v })}
-              options={[
-                { value: 'home', label: t.home, icon: <IconHome size={15} /> },
-                { value: 'public', label: t.public, icon: <IconBolt size={15} /> },
-              ]} />
-          </Field>
-
           {showPhevToggle && (
             <Field label={t.phevBattery}>
               <Segmented label={t.phevBattery} value={settings.phevScenario}
@@ -138,13 +100,8 @@ export default function SettingsBar({ settings, onChange, showPhevToggle, t }: P
             <div className="inline-flex items-center min-h-11 rounded-full border border-border bg-surface px-4
                             focus-within:ring-2 focus-within:ring-accent w-fit">
               <span className="text-sm text-muted mr-1.5">CHF</span>
-              <input id="fuel-price" type="number" min={0} step={0.001} inputMode="decimal"
-                value={settings.fuelPriceCHF}
-                onChange={(e) => {
-                  if (e.target.value === '') return
-                  const v = Number(e.target.value)
-                  if (Number.isFinite(v) && v >= 0) onChange({ fuelPriceCHF: v })
-                }}
+              <DecimalInput id="fuel-price" value={settings.fuelPriceCHF} min={0} max={10}
+                onCommit={(v) => onChange({ fuelPriceCHF: v })}
                 className="w-20 h-11 font-mono text-base text-ink tabular-nums bg-transparent focus:outline-none" />
               <span className="text-sm text-muted ml-1">/L</span>
             </div>

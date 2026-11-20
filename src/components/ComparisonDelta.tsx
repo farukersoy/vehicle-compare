@@ -1,7 +1,8 @@
 'use client'
 
 import { CostResult } from '@/types'
-import { fmt2, fmtCO2, fmtCH, annualCostCHF, annualCO2Kg, ANNUAL_KM } from '@/lib/calculations'
+import { fmt2, fmtCO2, fmtCH, ANNUAL_KM } from '@/lib/calculations'
+import { displayDelta } from '@/lib/display'
 import { Translation } from '@/lib/i18n'
 import { useCountUp } from '@/lib/motion'
 
@@ -21,10 +22,9 @@ export function formatCostDiff(diff: number): string {
  * stacked cards, from lg up a column between the two cards.
  */
 export default function ComparisonDelta({ reference, comparison, t }: Props) {
-  const costDiff   = comparison.costPer100kmCHF - reference.costPer100kmCHF
-  const co2Diff    = comparison.co2TotalGkm     - reference.co2TotalGkm
-  const annualDiff = annualCostCHF(Math.abs(costDiff))
-  const annualCO2  = Math.abs(annualCO2Kg(co2Diff))
+  // All differences from the rounded, displayed values (see lib/display.ts)
+  const { costDiff, co2Diff, annualCostCHF: annualDiff, annualCO2Kg: annualCO2 } =
+    displayDelta(reference, comparison)
 
   // positive = compared car costs more = Opel wins = green; rival cheaper = red.
   const opelWins = costDiff >= 0

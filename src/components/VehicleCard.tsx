@@ -2,8 +2,9 @@
 
 import VehicleVisual from './VehicleVisual'
 import BrandLogo from './BrandLogo'
-import { IconBolt, IconFuel, IconLeaf } from './Icons'
-import { Vehicle, CostResult } from '@/types'
+import { IconBolt, IconFuel, IconHome, IconLeaf } from './Icons'
+import { Segmented } from './Controls'
+import { Vehicle, CostResult, Settings } from '@/types'
 import { fmt2, fmtCO2, fmtCH } from '@/lib/calculations'
 import { Translation } from '@/lib/i18n'
 
@@ -53,18 +54,25 @@ interface LargeProps {
   cheaperBadgeTone?: 'green' | 'red'
   /** Eager-load the photo (above the fold). */
   priority?: boolean
+  /** Charging control for the compared vehicle (shown for BEV/PHEV only). */
+  charge?: {
+    rate: Settings['chargeRate']
+    onChange: (rate: Settings['chargeRate']) => void
+  }
 }
 
 export function LargeVehicleCard({
-  vehicle, result, t, cheaperBadgeLabel, cheaperBadgeTone = 'green', priority = false,
+  vehicle, result, t, cheaperBadgeLabel, cheaperBadgeTone = 'green', priority = false, charge,
 }: LargeProps) {
+  const showChargeToggle = !vehicle.isReference && !!charge && vehicle.type !== 'HEV'
+
   return (
     <article className={`bg-surface rounded-xl border border-border ${CARD_SHADOW} flex flex-col h-full`}>
       <div className="p-4 sm:p-6 flex flex-col gap-4 flex-1">
 
         {/* Top row: type pill left, range badge in the top-right corner (normal flow, no overlap).
             Fixed height only from md, where the cards sit side by side and must align. */}
-        <div className="flex items-start justify-between gap-3 md:min-h-[4.5rem]">
+        <div className="flex items-start justify-between gap-3 md:min-h-[5.5rem]">
           <div className="pt-1"><TypePill type={vehicle.type} /></div>
           {vehicle.rangeKm != null && (
             <RangeBadge km={vehicle.rangeKm} caption={vehicle.rangeNote ?? t.range} />
@@ -107,7 +115,26 @@ export function LargeVehicleCard({
         {/* Cost */}
         <div>
           <p className="text-xs font-semibold uppercase tracking-wider text-muted">{t.energyCost}</p>
-          <div className="flex items-baseline gap-1.5 mt-1">
+
+          {/* Charging: fixed toggle-height slot so both cards' numbers line up side by side.
+              Reference: static (always home). Compared BEV/PHEV: home/public toggle. HEV: no grid power. */}
+          {vehicle.isReference ? (
+            <p className="mt-2 min-h-[50px] flex items-center gap-1.5 text-sm text-muted">
+              <IconHome size={15} /> {t.chargingAlwaysHome}
+            </p>
+          ) : showChargeToggle ? (
+            <div className="mt-2">
+              <Segmented label={t.charging} value={charge!.rate} onChange={charge!.onChange}
+                options={[
+                  { value: 'home', label: t.home, icon: <IconHome size={15} /> },
+                  { value: 'public', label: t.public, icon: <IconBolt size={15} /> },
+                ]} />
+            </div>
+          ) : (
+            <div aria-hidden className="hidden md:block mt-2 h-[50px]" />
+          )}
+
+          <div className="flex items-baseline gap-1.5 mt-3">
             <span className="font-display font-semibold text-[32px] sm:text-4xl leading-none tabular-nums text-ink">
               CHF {fmt2(result.costPer100kmCHF)}
             </span>

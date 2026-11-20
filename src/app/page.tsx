@@ -6,6 +6,7 @@ import { calculateCost, DEFAULT_SETTINGS } from '@/lib/calculations'
 import { CostResult, Settings } from '@/types'
 import { Lang, translations } from '@/lib/i18n'
 import { smoothScrollTo } from '@/lib/motion'
+import { displayDelta } from '@/lib/display'
 import SettingsBar, { LanguageSwitch } from '@/components/SettingsBar'
 import { LargeVehicleCard } from '@/components/VehicleCard'
 import ComparisonDelta, { formatCostDiff } from '@/components/ComparisonDelta'
@@ -34,8 +35,9 @@ export default function Home() {
   const showPhevToggle =
     referenceVehicle.type === 'PHEV' || selectedVehicle?.type === 'PHEV'
 
+  // Same rounded comparison as the delta band, so badges and numbers always agree
   const referenceCheaper = selectedResult
-    ? referenceResult.costPer100kmCHF <= selectedResult.costPer100kmCHF
+    ? displayDelta(referenceResult, selectedResult).costDiff >= 0
     : true
 
   // ── Scroll to the comparison after a selection ────────────────────────────
@@ -75,7 +77,7 @@ export default function Home() {
   }, [])
 
   const showSummaryBar = pastCompare && !!selectedVehicle && !!selectedResult
-  const costDiff = selectedResult ? selectedResult.costPer100kmCHF - referenceResult.costPer100kmCHF : 0
+  const costDiff = selectedResult ? displayDelta(referenceResult, selectedResult).costDiff : 0
 
   return (
     <div className="min-h-screen bg-page">
@@ -143,19 +145,25 @@ export default function Home() {
                   t={t}
                   cheaperBadgeLabel={!referenceCheaper ? t.rivalCheaper : undefined}
                   cheaperBadgeTone="red"
+                  charge={{
+                    rate: settings.chargeRate,
+                    onChange: (rate) => setSettings((s) => ({ ...s, chargeRate: rate })),
+                  }}
                 />
               </div>
             ) : (
-              <div className="h-full min-h-[220px] rounded-xl border-2 border-dashed border-border bg-surface/60
-                              flex flex-col items-center justify-center gap-4 p-6 text-center">
+              // The whole placeholder is one tap target that scrolls down to the picker.
+              <button type="button" onClick={() => smoothScrollTo(pickerRef.current)}
+                className="group w-full h-full min-h-[220px] rounded-xl border-2 border-dashed border-border bg-surface/60
+                           flex flex-col items-center justify-center gap-4 p-6 text-center
+                           hover:border-slate-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent">
                 <IconCar size={40} className="text-muted" />
-                <p className="font-display font-semibold text-lg text-ink max-w-[16rem]">{t.pickPrompt}</p>
-                <button type="button" onClick={() => smoothScrollTo(pickerRef.current)}
-                  className="min-h-11 px-6 rounded-full bg-accent text-white text-sm font-semibold
-                             focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2">
+                <span className="font-display font-semibold text-lg text-ink max-w-[16rem]">{t.pickPrompt}</span>
+                <span className="inline-flex items-center min-h-11 px-6 rounded-full bg-accent text-white text-sm font-semibold
+                                 group-hover:bg-ink/90">
                   {t.pickVehicle}
-                </button>
-              </div>
+                </span>
+              </button>
             )}
           </div>
         </div>

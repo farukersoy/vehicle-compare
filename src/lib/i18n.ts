@@ -15,7 +15,8 @@ export interface TranslationShape {
   opelCheaper: string
   rivalCheaper: string
   pickPrompt: string
-  charge: string
+  charging: string
+  chargingAlwaysHome: string
   home: string
   public: string
   phevBattery: string
@@ -66,8 +67,9 @@ export const translations: Record<Lang, TranslationShape> = {
     estimated: 'Geschätzt',
     opelCheaper: 'Opel günstiger',
     rivalCheaper: 'Konkurrent günstiger',
-    pickPrompt: 'Wählen Sie unten ein Fahrzeug zum Vergleichen',
-    charge: 'Laden (Vergleichsfahrzeug)',
+    pickPrompt: 'Wählen Sie unten ein Fahrzeug',
+    charging: 'Laden',
+    chargingAlwaysHome: 'Laden: immer zu Hause',
     home: 'Zuhause',
     public: 'Öffentlich',
     phevBattery: 'PHEV-Batterie',
@@ -119,8 +121,9 @@ export const translations: Record<Lang, TranslationShape> = {
     estimated: 'Estimated',
     opelCheaper: 'Opel cheaper',
     rivalCheaper: 'Rival cheaper',
-    pickPrompt: 'Select a vehicle below to compare',
-    charge: 'Charging (compared vehicle)',
+    pickPrompt: 'Select a vehicle below',
+    charging: 'Charging',
+    chargingAlwaysHome: 'Charging: always at home',
     home: 'Home',
     public: 'Public',
     phevBattery: 'PHEV battery',
