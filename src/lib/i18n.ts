@@ -36,6 +36,18 @@ export interface TranslationShape {
   loadMore: string
   showLess: string
   typeLabels: { BEV: string; PHEV: string; HEV: string }
+  settings: string
+  searchPlaceholder: string
+  noResults: string
+  compareHeading: string
+  differencePer100: string
+  co2Difference: string
+  annualAt: string
+  pickVehicle: string
+  backToComparison: string
+  language: string
+  typeFilter: string
+  brandFilter: string
 }
 
 export const translations: Record<Lang, TranslationShape> = {
@@ -47,28 +59,28 @@ export const translations: Record<Lang, TranslationShape> = {
     chooseVehicle: 'Fahrzeug zum Vergleichen wählen',
     vehicles: 'Fahrzeuge',
     allBrands: 'Alle Marken',
-    yourReference: '⭐ Ihr Referenzfahrzeug — reale Verbrauchsdaten',
+    yourReference: 'Ihr Referenzfahrzeug — reale Verbrauchsdaten',
     energyCost: 'Energiekosten pro 100 km',
     perYear: 'pro Jahr',
     measured: 'Gemessen',
     estimated: 'Geschätzt',
     opelCheaper: 'Opel günstiger',
     rivalCheaper: 'Konkurrent günstiger',
-    pickPrompt: 'Wählen Sie oben ein Fahrzeug',
+    pickPrompt: 'Wählen Sie unten ein Fahrzeug zum Vergleichen',
     charge: 'Laden (Vergleichsfahrzeug)',
-    home: '🏠 Zuhause',
-    public: '⚡ Öffentlich',
+    home: 'Zuhause',
+    public: 'Öffentlich',
     phevBattery: 'PHEV-Batterie',
-    full: '🔋 Voll',
-    empty: '📉 Leer',
+    full: 'Voll',
+    empty: 'Leer',
     gridCo2: 'Netz-CO₂',
     typeAll: 'Alle',
     footer1:
       'Datenquellen: Gemini-Abfrage (Fahrzeughalter), reale Messungen.',
     footer2:
-      'Standardwerte: ⛽ CHF 1.718/L · 🏠 CHF 0.277/kWh · ⚡ CHF 0.59/kWh · Benzin-CO₂: 2\'780 g/L · Netz-CO₂: 50 g/kWh',
+      'Standardwerte: Benzin CHF 1.718/L · Strom zuhause CHF 0.278/kWh · öffentlich CHF 0.59/kWh · Benzin-CO₂ 2\'780 g/L · Netz-CO₂ 50 g/kWh',
     footer3:
-      'Preisquellen: ElCom (Median Haushaltsstrom), TCS (Median DC-Schnellladen) · Stand 2026',
+      'Preisquellen: Strom zuhause = Ø Abrechnung Fahrzeughalter (ElCom-Median 2026: CHF 0.277/kWh), öffentlich = TCS-Median DC-Schnellladen · Stand 2026',
     fuelPrice: 'Benzin',
     range: 'Reichweite',
     yourBilling: 'Ihre Abrechnung',
@@ -79,6 +91,18 @@ export const translations: Record<Lang, TranslationShape> = {
     loadMore: 'Mehr anzeigen',
     showLess: 'Weniger anzeigen',
     typeLabels: { BEV: 'Elektrisch', PHEV: 'Plug-in-Hybrid', HEV: 'Vollhybrid' },
+    settings: 'Einstellungen',
+    searchPlaceholder: 'Marke oder Modell suchen',
+    noResults: 'Keine Fahrzeuge gefunden.',
+    compareHeading: 'Vergleich',
+    differencePer100: 'Differenz pro 100 km',
+    co2Difference: 'CO₂-Differenz',
+    annualAt: 'pro Jahr bei',
+    pickVehicle: 'Fahrzeug wählen',
+    backToComparison: 'Zurück zum Vergleich',
+    language: 'Sprache',
+    typeFilter: 'Antriebsart',
+    brandFilter: 'Marke',
   },
   en: {
     tagline: 'Switzerland · Real-world data',
@@ -88,28 +112,28 @@ export const translations: Record<Lang, TranslationShape> = {
     chooseVehicle: 'Choose a vehicle to compare',
     vehicles: 'vehicles',
     allBrands: 'All brands',
-    yourReference: '⭐ Your reference vehicle — real-world data',
+    yourReference: 'Your reference vehicle — real-world data',
     energyCost: 'Energy cost per 100 km',
     perYear: 'per year',
     measured: 'Measured',
     estimated: 'Estimated',
     opelCheaper: 'Opel cheaper',
     rivalCheaper: 'Rival cheaper',
-    pickPrompt: 'Select a vehicle above',
+    pickPrompt: 'Select a vehicle below to compare',
     charge: 'Charging (compared vehicle)',
-    home: '🏠 Home',
-    public: '⚡ Public',
+    home: 'Home',
+    public: 'Public',
     phevBattery: 'PHEV battery',
-    full: '🔋 Full',
-    empty: '📉 Empty',
+    full: 'Full',
+    empty: 'Empty',
     gridCo2: 'Grid CO₂',
     typeAll: 'All',
     footer1:
       'Data sources: Gemini query (vehicle owners), real-world measurements.',
     footer2:
-      'Defaults: ⛽ CHF 1.718/L · 🏠 CHF 0.277/kWh · ⚡ CHF 0.59/kWh · Petrol CO₂: 2\'780 g/L · Grid CO₂: 50 g/kWh',
+      'Defaults: petrol CHF 1.718/L · home electricity CHF 0.278/kWh · public CHF 0.59/kWh · petrol CO₂ 2\'780 g/L · grid CO₂ 50 g/kWh',
     footer3:
-      'Price sources: ElCom (median household electricity), TCS (median DC fast charging) · as of 2026',
+      'Price sources: home electricity = owner\'s billed average (ElCom median 2026: CHF 0.277/kWh), public = TCS median DC fast charging · as of 2026',
     fuelPrice: 'Petrol',
     range: 'Range',
     yourBilling: 'Your billing',
@@ -120,6 +144,18 @@ export const translations: Record<Lang, TranslationShape> = {
     loadMore: 'Show more',
     showLess: 'Show less',
     typeLabels: { BEV: 'Electric', PHEV: 'Plug-in Hybrid', HEV: 'Full Hybrid' },
+    settings: 'Settings',
+    searchPlaceholder: 'Search brand or model',
+    noResults: 'No vehicles found.',
+    compareHeading: 'Comparison',
+    differencePer100: 'Difference per 100 km',
+    co2Difference: 'CO₂ difference',
+    annualAt: 'per year at',
+    pickVehicle: 'Choose vehicle',
+    backToComparison: 'Back to comparison',
+    language: 'Language',
+    typeFilter: 'Powertrain',
+    brandFilter: 'Brand',
   },
 }
 

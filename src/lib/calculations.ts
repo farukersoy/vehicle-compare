@@ -6,7 +6,7 @@ export const DEFAULT_SETTINGS: Settings = {
   chargeRate: 'home',
   phevScenario: 'full',
   co2GridGkwh: 50,        // g CO2/kWh default grid factor
-  homePriceCHF: 0.277,    // CHF/kWh — ElCom median household tariff 2026
+  homePriceCHF: 0.278,    // CHF/kWh — owner's billed average (ElCom median 2026: 0.277)
   publicPriceCHF: 0.59,   // CHF/kWh — TCS median DC fast charging 2026
   fuelPriceCHF: 1.718,    // CHF/litre petrol 95 — owner's actual average (editable)
 }

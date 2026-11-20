@@ -1,23 +1,28 @@
 @import "tailwindcss";
 
 @theme {
-  /* Brand colors */
-  --color-navy:         #0B1F3A;
-  --color-navy-light:   #1A3558;
-  --color-navy-dark:    #071528;
-  --color-cream:        #F5F3EE;
-  --color-cream-dark:   #E2DEDA;
-  --color-energy:       #E8772E;
-  --color-energy-light: #F4A261;
-  --color-eco:          #16A37A;
-  --color-eco-light:    #2DD4A7;
-  --color-dark:         #1C1C1E;
-
-  /* Surface (light-theme redesign) */
+  /* ── Semantic palette ────────────────────────────────────────────────────
+     Contrast (WCAG): ink on surface 16.5:1 · muted on surface 4.8:1 ·
+     muted-page on page 5.8:1 · positive-ink on surface 5.3:1 ·
+     attention on surface 4.8:1 · attention-ink on attention-soft 5.9:1.
+     #16A37A (positive) is 3.2:1 on white: fine for fills, dots, borders and
+     icons, too light for small text, so text and the range badge use
+     positive-ink instead. */
+  --color-ink:            #0B1F3A;
+  --color-muted:          #64748B;  /* secondary text on white surfaces */
+  --color-muted-page:     #556274;  /* secondary text on the page background */
   --color-surface:        #FFFFFF;
-  --color-surface-sunken: #F8FAFC;
-  --color-surface-muted:  #F1F5F9;
-  --color-border:         #E7EBF0;
+  --color-page:           #F6F7F9;
+  --color-border:         #E5E7EB;
+  --color-accent:         #0B1F3A;  /* primary action / selection */
+  --color-positive:       #16A37A;
+  --color-positive-ink:   #0F7A5C;
+  --color-positive-soft:  #ECFDF5;
+  --color-attention:      #DC2626;
+  --color-attention-ink:  #B91C1C;
+  --color-attention-soft: #FEF2F2;
+  --color-range:          #0F7A5C;  /* range badge: #16A37A darkened for AA with white text */
+  --color-sunken:         #F1F5F9;  /* neutral tint for image wells */
 
   /* Fonts */
   --font-display: var(--font-space-grotesk), system-ui, sans-serif;
@@ -27,22 +32,68 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background-color: var(--color-surface-sunken);
-  color: var(--color-dark);
+  background-color: var(--color-page);
+  color: var(--color-ink);
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: var(--color-cream-dark); }
-::-webkit-scrollbar-thumb {
-  background: color-mix(in srgb, var(--color-navy) 30%, transparent);
-  border-radius: 9999px;
-}
+/* Horizontally scrolling chip rows: keep scrollable, hide the bar */
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
 
+/* Range input: 44px touch area, thin track */
+.range-input {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 44px;
+  background: transparent;
+  cursor: pointer;
+}
+.range-input::-webkit-slider-runnable-track {
+  height: 4px; border-radius: 999px; background: var(--color-border);
+}
+.range-input::-moz-range-track {
+  height: 4px; border-radius: 999px; background: var(--color-border);
+}
+.range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px; height: 20px; margin-top: -8px; border-radius: 999px;
+  background: var(--color-accent); border: 3px solid #fff;
+  box-shadow: 0 1px 3px rgb(11 31 58 / 0.35);
+}
+.range-input::-moz-range-thumb {
+  width: 20px; height: 20px; border-radius: 999px;
+  background: var(--color-accent); border: 3px solid #fff;
+  box-shadow: 0 1px 3px rgb(11 31 58 / 0.35);
+}
+.range-input:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
+/* ── Motion ─────────────────────────────────────────────────────────────── */
 @keyframes card-reveal {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes bar-in {
+  from { opacity: 0; transform: translateY(100%); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-card-in { animation: card-in 0.35s ease-out both; }
+.animate-bar-in  { animation: bar-in 0.25s ease-out both; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

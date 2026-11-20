@@ -2,31 +2,41 @@
 
 import VehicleVisual from './VehicleVisual'
 import BrandLogo from './BrandLogo'
+import { IconBolt, IconFuel, IconLeaf } from './Icons'
 import { Vehicle, CostResult } from '@/types'
 import { fmt2, fmtCO2, fmtCH } from '@/lib/calculations'
 import { Translation } from '@/lib/i18n'
 
-// ─── Range badge ───────────────────────────────────────────────────────────────
+// Shared soft card shadow (ink-tinted, very low opacity)
+export const CARD_SHADOW =
+  'shadow-[0_1px_2px_rgba(11,31,58,0.04),0_8px_24px_-12px_rgba(11,31,58,0.14)]'
 
-function RangeBadge({ km, caption, compact = false, className = '' }: {
-  km: number
-  caption: string
-  compact?: boolean
-  className?: string
-}) {
+// ─── Small building blocks ────────────────────────────────────────────────────
+
+function BrandDot({ color }: { color: string }) {
+  // The only place a brand colour appears: a tiny identifying dot.
+  return <span aria-hidden className="inline-block size-1.5 rounded-full flex-shrink-0" style={{ background: color }} />
+}
+
+function TypePill({ type, overlay = false }: { type: Vehicle['type']; overlay?: boolean }) {
   return (
-    <div
-      className={`flex-shrink-0 rounded-xl text-white text-right shadow-md shadow-emerald-900/20
-                  ${compact ? 'px-2 py-1 max-w-[6.5rem]' : 'px-3 py-1.5 max-w-[8.5rem] sm:max-w-[11rem] md:max-w-[8.5rem] lg:max-w-[11rem]'} ${className}`}
-      style={{ background: '#16A37A' }}
-    >
-      <div className={`font-display font-bold leading-tight tabular-nums whitespace-nowrap
-                       ${compact ? 'text-xs' : 'text-base sm:text-lg'}`}>
+    <span className={`inline-flex items-center h-6 px-2.5 rounded-full text-xs font-semibold text-ink
+                      ${overlay ? 'bg-surface/95 shadow-sm' : 'bg-surface border border-border'}`}>
+      {type}
+    </span>
+  )
+}
+
+function RangeBadge({ km, caption, compact = false }: { km: number; caption: string; compact?: boolean }) {
+  return (
+    <div className={`flex-shrink-0 rounded-xl bg-range text-white text-right
+                     shadow-[0_4px_12px_-4px_rgba(15,122,92,0.55)]
+                     ${compact ? 'px-2 py-1 max-w-[7.5rem]' : 'px-3 py-2 max-w-[11rem]'}`}>
+      <div className={`font-display font-semibold leading-tight tabular-nums whitespace-nowrap
+                       ${compact ? 'text-[13px]' : 'text-lg'}`}>
         ≈ {fmtCH(km)} km
       </div>
-      <div className={`leading-tight opacity-90 ${compact ? 'text-[8px] truncate' : 'text-[9px] sm:text-[10px]'}`}>
-        {caption}
-      </div>
+      <div className={`text-xs leading-snug text-white/95 ${compact ? 'truncate' : ''}`}>{caption}</div>
     </div>
   )
 }
@@ -37,108 +47,88 @@ interface LargeProps {
   vehicle: Vehicle
   result: CostResult
   t: Translation
-  /** Text for a subtle "this one's cheaper" corner badge; omit to hide it. */
+  /** Text for the "this one's cheaper" badge; omit to hide it. */
   cheaperBadgeLabel?: string
-  /** Green when Opel/reference wins, red when the rival wins — same semantics as ComparisonDelta. */
+  /** Green when Opel/reference wins, red when the rival wins. */
   cheaperBadgeTone?: 'green' | 'red'
+  /** Eager-load the photo (above the fold). */
+  priority?: boolean
 }
 
-export function LargeVehicleCard({ vehicle, result, t, cheaperBadgeLabel, cheaperBadgeTone = 'green' }: LargeProps) {
-  const c = vehicle.brandColor
-
+export function LargeVehicleCard({
+  vehicle, result, t, cheaperBadgeLabel, cheaperBadgeTone = 'green', priority = false,
+}: LargeProps) {
   return (
-    // h-full + flex → equal height in the grid
-    <div className="relative bg-white rounded-2xl overflow-hidden border border-border shadow-lg shadow-slate-200/60 flex flex-col h-full">
-      <div className="h-1.5" style={{ background: c }} />
+    <article className={`bg-surface rounded-xl border border-border ${CARD_SHADOW} flex flex-col h-full`}>
+      <div className="p-4 sm:p-6 flex flex-col gap-4 flex-1">
 
-      <div className="p-5 sm:p-6 lg:p-8 flex flex-col gap-4 sm:gap-5 lg:gap-6 flex-1">
-
-        {/* Top row — type pill on the left, range badge in the top-right corner.
-            In normal flow (not absolute) so nothing overlaps at any width; fixed
-            min-height keeps both cards aligned. The "cheaper" badge sits on the
-            visual below so it never competes with the range badge. */}
-        <div className="flex items-start justify-between gap-2 min-h-[3.5rem]">
-          <div className="flex flex-wrap items-center gap-1.5 min-w-[3rem] flex-1 pt-1">
-            <span className="text-[11px] font-bold px-3 py-1.5 rounded-full"
-                  style={{ background: c + '18', color: c }}>
-              {vehicle.type}
-            </span>
-          </div>
+        {/* Top row: type pill left, range badge in the top-right corner (normal flow, no overlap).
+            Fixed height only from md, where the cards sit side by side and must align. */}
+        <div className="flex items-start justify-between gap-3 md:min-h-[4.5rem]">
+          <div className="pt-1"><TypePill type={vehicle.type} /></div>
           {vehicle.rangeKm != null && (
-            <RangeBadge km={vehicle.rangeKm} caption={vehicle.rangeNote ?? t.range}
-                        className="-mt-2 -mr-2 sm:-mt-3 sm:-mr-3 lg:-mt-5 lg:-mr-5" />
+            <RangeBadge km={vehicle.rangeKm} caption={vehicle.rangeNote ?? t.range} />
           )}
         </div>
 
-        {/* Header */}
+        {/* Identity */}
         <div className="flex items-center gap-3 min-w-0">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
-               style={{ background: c + '18' }}>
-            <BrandLogo brand={vehicle.brand} domain={vehicle.brandDomain} size={32} />
+          <div className="size-11 rounded-xl bg-sunken flex items-center justify-center flex-shrink-0">
+            <BrandLogo brand={vehicle.brand} domain={vehicle.brandDomain} size={26} />
           </div>
           <div className="min-w-0">
-            <p className="font-display font-bold text-navy text-xl leading-tight truncate">
-              {vehicle.brand}
+            <p className="flex items-center gap-2 font-display font-semibold text-lg leading-tight text-ink">
+              <span className="truncate">{vehicle.brand}</span>
+              <BrandDot color={vehicle.brandColor} />
             </p>
-            <p className="text-sm text-gray-400 leading-tight truncate">{vehicle.model}</p>
+            <p className="text-sm text-muted leading-snug truncate">{vehicle.model}</p>
           </div>
         </div>
 
-        {/* Reference badge — fixed height slot so both cards align */}
-        <div className="h-9 flex items-center">
-          {vehicle.isReference ? (
-            <div className="w-full text-xs font-semibold px-3 py-2 rounded-lg text-center"
-                 style={{ background: c + '18', color: c }}>
-              {t.yourReference}
-            </div>
-          ) : (
-            <div className="w-full text-xs font-medium px-3 py-2 rounded-lg text-center text-gray-400 bg-surface-sunken">
-              {t.typeLabels[vehicle.type]}
-            </div>
-          )}
-        </div>
+        <p className="text-[13px] leading-snug text-muted min-h-[1.25rem]">
+          {vehicle.isReference ? t.yourReference : t.typeLabels[vehicle.type]}
+        </p>
 
-        {/* Visual — fixed height, scales up on larger screens */}
-        <div className="relative rounded-xl h-40 sm:h-48 lg:h-56 flex items-center justify-center overflow-hidden"
-             style={{ background: c + '10' }}>
-          <VehicleVisual vehicle={vehicle} className="w-full h-full p-2" />
+        {/* Visual — reserved 16:9 box, so no layout shift */}
+        <div className="relative aspect-[16/9] rounded-lg bg-sunken overflow-hidden">
+          <VehicleVisual vehicle={vehicle} priority={priority} className="p-3"
+                         sizes="(max-width: 767px) calc(100vw - 64px), (max-width: 1023px) 45vw, 420px" />
           {cheaperBadgeLabel && (
-            <span className={`absolute top-2 left-2 z-10 text-[9px] font-bold uppercase tracking-wider
-                              px-2 py-1 rounded-full shadow-sm ${cheaperBadgeTone === 'red' ? 'bg-red-50 text-red-600' : 'bg-white text-eco'}`}>
+            <span className={`absolute top-2 left-2 z-10 inline-flex items-center h-7 px-2.5 rounded-full
+                              text-xs font-semibold shadow-sm
+                              ${cheaperBadgeTone === 'red'
+                                ? 'bg-attention-soft text-attention-ink'
+                                : 'bg-positive-soft text-positive-ink'}`}>
               {cheaperBadgeLabel}
             </span>
           )}
         </div>
 
-        {/* Hero cost */}
-        <div className="rounded-xl p-5" style={{ background: c + '0D' }}>
-          <p className="text-xs text-gray-400 mb-1 uppercase tracking-wider">
-            {t.energyCost}
-          </p>
-          <div className="flex items-baseline gap-1">
-            <span className="font-display font-bold text-4xl lg:text-5xl tabular-nums" style={{ color: c }}>
+        {/* Cost */}
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wider text-muted">{t.energyCost}</p>
+          <div className="flex items-baseline gap-1.5 mt-1">
+            <span className="font-display font-semibold text-[32px] sm:text-4xl leading-none tabular-nums text-ink">
               CHF {fmt2(result.costPer100kmCHF)}
             </span>
-            <span className="text-gray-400 text-sm">/100km</span>
+            <span className="text-sm text-muted">/100 km</span>
           </div>
 
-          {/* Breakdown — fixed height slot (2 rows) */}
-          <div className="mt-3 pt-3 border-t space-y-1.5 min-h-[52px]"
-               style={{ borderColor: c + '30' }}>
+          <div className="mt-3 pt-3 border-t border-border space-y-1.5 min-h-[3.5rem]">
             {result.electricKwhUsed > 0 && (
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-500">⚡ {fmt2(result.electricKwhUsed)} kWh</span>
-                <span className="font-mono font-semibold text-gray-700">
-                  CHF {fmt2(result.electricCostPer100km)}
+              <div className="flex justify-between gap-3 text-sm">
+                <span className="flex items-center gap-1.5 text-muted">
+                  <IconBolt size={14} /> {fmt2(result.electricKwhUsed)} kWh
                 </span>
+                <span className="font-mono text-ink tabular-nums">CHF {fmt2(result.electricCostPer100km)}</span>
               </div>
             )}
             {result.fuelLUsed > 0 && (
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-500">⛽ {fmt2(result.fuelLUsed)} L</span>
-                <span className="font-mono font-semibold text-gray-700">
-                  CHF {fmt2(result.fuelCostPer100km)}
+              <div className="flex justify-between gap-3 text-sm">
+                <span className="flex items-center gap-1.5 text-muted">
+                  <IconFuel size={14} /> {fmt2(result.fuelLUsed)} L
                 </span>
+                <span className="font-mono text-ink tabular-nums">CHF {fmt2(result.fuelCostPer100km)}</span>
               </div>
             )}
           </div>
@@ -146,59 +136,54 @@ export function LargeVehicleCard({ vehicle, result, t, cheaperBadgeLabel, cheape
 
         {/* Owner's real billing — reference vehicle only, display only */}
         {vehicle.isReference && vehicle.invoice && (
-          <div className="rounded-xl border px-4 py-3 text-xs" style={{ borderColor: c + '30' }}>
-            <p className="font-semibold uppercase tracking-wider text-[10px] mb-1.5" style={{ color: c }}>
-              {t.yourBilling}
+          <div className="rounded-lg bg-page px-4 py-3 text-sm">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-page mb-2">
+              {t.yourBilling} · {fmtCH(vehicle.invoice.km)} km
             </p>
-            <div className="space-y-0.5 text-gray-500">
-              <div className="flex justify-between gap-2">
-                <span>{fmtCH(vehicle.invoice.km)} km</span>
+            <dl className="space-y-1">
+              <div className="flex justify-between gap-3">
+                <dt className="text-muted-page">{t.electricity} {fmtCH(vehicle.invoice.electricityKwh, 2)} kWh</dt>
+                <dd className="font-mono text-ink tabular-nums">CHF {fmtCH(vehicle.invoice.electricityCHF, 2)}</dd>
               </div>
-              <div className="flex justify-between gap-2">
-                <span>⚡ {t.electricity} {fmtCH(vehicle.invoice.electricityKwh, 2)} kWh</span>
-                <span className="font-mono text-gray-700">CHF {fmtCH(vehicle.invoice.electricityCHF, 2)}</span>
+              <div className="flex justify-between gap-3">
+                <dt className="text-muted-page">{t.petrol} {fmtCH(vehicle.invoice.fuelL, 2)} L</dt>
+                <dd className="font-mono text-ink tabular-nums">CHF {fmtCH(vehicle.invoice.fuelCHF, 2)}</dd>
               </div>
-              <div className="flex justify-between gap-2">
-                <span>⛽ {t.petrol} {fmtCH(vehicle.invoice.fuelL, 2)} L</span>
-                <span className="font-mono text-gray-700">CHF {fmtCH(vehicle.invoice.fuelCHF, 2)}</span>
+              <div className="flex justify-between gap-3 pt-1.5 mt-1.5 border-t border-border font-semibold">
+                <dt className="text-ink">{t.total}</dt>
+                <dd className="font-mono text-ink tabular-nums">CHF {fmtCH(vehicle.invoice.totalCHF, 2)}</dd>
               </div>
-              <div className="flex justify-between gap-2 pt-1 mt-1 border-t font-semibold text-gray-700"
-                   style={{ borderColor: c + '30' }}>
-                <span>{t.total}</span>
-                <span className="font-mono">CHF {fmtCH(vehicle.invoice.totalCHF, 2)}</span>
+              <div className="flex justify-between gap-3">
+                <dt className="text-muted-page">{t.per100km}</dt>
+                <dd className="font-mono text-ink tabular-nums">CHF {fmt2(vehicle.invoice.costPer100kmCHF)}</dd>
               </div>
-              <div className="flex justify-between gap-2">
-                <span>{t.per100km}</span>
-                <span className="font-mono">CHF {fmt2(vehicle.invoice.costPer100kmCHF)}</span>
-              </div>
-            </div>
+            </dl>
           </div>
         )}
 
-        {/* CO2 row */}
-        <div className="flex items-center justify-between text-sm">
-          <span className="text-gray-400 text-xs">{vehicle.segment}</span>
-          <span className="font-mono font-semibold text-gray-600">
+        {/* CO2 */}
+        <div className="flex items-center justify-between gap-3 text-sm">
+          <span className="text-muted truncate">{vehicle.segment}</span>
+          <span className="flex items-center gap-1.5 font-mono text-ink tabular-nums whitespace-nowrap">
+            <IconLeaf size={14} className="text-muted" />
             {fmtCO2(result.co2TotalGkm)} g/km CO₂
           </span>
         </div>
 
         {/* Data quality — pinned to bottom */}
-        <div className="flex items-center gap-1.5 mt-auto">
-          <span className="w-2 h-2 rounded-full flex-shrink-0"
+        <p className="flex items-start gap-2 mt-auto text-xs leading-snug text-muted">
+          <span aria-hidden className="mt-1 size-2 rounded-full flex-shrink-0"
                 style={{ background: vehicle.dataQuality === 'measured' ? '#16A37A' : '#94A3B8' }} />
-          <span className="text-[10px] text-gray-400 leading-tight">
-            {vehicle.dataQuality === 'measured' ? t.measured : t.estimated}
-            {' — '}{vehicle.sourceNote}
+          <span>
+            {vehicle.dataQuality === 'measured' ? t.measured : t.estimated}{' — '}{vehicle.sourceNote}
           </span>
-        </div>
-
+        </p>
       </div>
-    </div>
+    </article>
   )
 }
 
-// ─── Thumbnail card (grid selector) — larger ──────────────────────────────────
+// ─── Thumbnail card (grid selector) ───────────────────────────────────────────
 
 interface ThumbProps {
   vehicle: Vehicle
@@ -211,53 +196,52 @@ interface ThumbProps {
   rangeLabel: string
 }
 
-export function ThumbVehicleCard({ vehicle, result, isSelected, onClick, revealDelayMs = 0, rangeLabel }: ThumbProps) {
-  const c = vehicle.brandColor
-
+export function ThumbVehicleCard({
+  vehicle, result, isSelected, onClick, revealDelayMs = 0, rangeLabel,
+}: ThumbProps) {
   return (
     <button
+      type="button"
       onClick={onClick}
-      style={{
-        animation: 'card-reveal 0.4s ease-out both',
-        animationDelay: `${revealDelayMs}ms`,
-        ...(isSelected ? { borderColor: c, background: c + '08' } : {}),
-      }}
-      className={`
-        w-full text-left rounded-lg border p-3 transition-colors duration-150
-        focus:outline-none
-        ${isSelected ? '' : 'border-border bg-white hover:border-gray-300'}
-      `}
+      aria-pressed={isSelected}
+      style={{ animation: 'card-reveal 0.35s ease-out both', animationDelay: `${revealDelayMs}ms` }}
+      className={`w-full h-full text-left bg-surface rounded-xl border p-3 flex flex-col gap-2
+                  transition-[border-color,box-shadow] duration-150
+                  focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2
+                  ${isSelected
+                    ? 'border-accent ring-1 ring-accent shadow-md'
+                    : 'border-border hover:border-slate-300 hover:shadow-sm'}`}
     >
-      {/* Logo + range badge (top-right corner) */}
-      <div className="flex items-start justify-between gap-1 mb-2 min-h-9">
-        <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-             style={{ background: c + '15' }}>
-          <BrandLogo brand={vehicle.brand} domain={vehicle.brandDomain} size={20} />
+      {/* Logo + range badge */}
+      <div className="flex items-start justify-between gap-2 min-h-7">
+        <div className="size-7 rounded-lg bg-sunken flex items-center justify-center flex-shrink-0">
+          <BrandLogo brand={vehicle.brand} domain={vehicle.brandDomain} size={16} />
         </div>
         {vehicle.rangeKm != null && (
-          <RangeBadge km={vehicle.rangeKm} caption={rangeLabel} compact className="-mt-1 -mr-1" />
+          <RangeBadge km={vehicle.rangeKm} caption={rangeLabel} compact />
         )}
       </div>
 
-      {/* Visual — smaller, quieter than the comparison hero above; type pill overlaid */}
-      <div className="relative rounded-lg h-16 flex items-center justify-center overflow-hidden mb-2"
-           style={{ background: isSelected ? c + '10' : 'var(--color-surface-sunken)' }}>
-        <VehicleVisual vehicle={vehicle} className="w-full h-full p-1" />
-        <span className="absolute top-1 left-1 text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-white/90"
-              style={{ color: c }}>
-          {vehicle.type}
-        </span>
+      {/* Visual — reserved 4:3 box; type pill overlaid */}
+      <div className="relative aspect-[4/3] rounded-lg bg-sunken overflow-hidden">
+        <VehicleVisual vehicle={vehicle} className="p-1.5"
+                       sizes="(max-width: 639px) 45vw, (max-width: 1023px) 30vw, 230px" />
+        <span className="absolute top-1.5 left-1.5 z-10"><TypePill type={vehicle.type} overlay /></span>
       </div>
 
       {/* Name */}
-      <p className="text-sm font-semibold text-navy font-display truncate">{vehicle.brand}</p>
-      <p className="text-[11px] text-gray-400 truncate">{vehicle.model}</p>
+      <div className="min-w-0">
+        <p className="flex items-center gap-1.5 text-[15px] font-semibold text-ink font-display leading-tight">
+          <span className="truncate">{vehicle.brand}</span>
+          <BrandDot color={vehicle.brandColor} />
+        </p>
+        <p className="text-xs text-muted truncate mt-0.5">{vehicle.model}</p>
+      </div>
 
       {/* Cost */}
-      <p className="font-mono font-bold text-sm mt-1.5 tabular-nums"
-         style={{ color: isSelected ? c : '#374151' }}>
+      <p className="mt-auto font-mono font-semibold text-sm tabular-nums text-ink">
         CHF {fmt2(result.costPer100kmCHF)}
-        <span className="text-[9px] font-normal text-gray-400 ml-0.5">/100km</span>
+        <span className="text-xs font-normal text-muted ml-1">/100 km</span>
       </p>
     </button>
   )

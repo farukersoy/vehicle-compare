@@ -1,42 +1,47 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import VehicleSilhouette from './VehicleSilhouette'
 import { Vehicle } from '@/types'
 
 interface Props {
   vehicle: Vehicle
+  /** `sizes` hint so next/image serves a small file for small slots. */
+  sizes: string
+  /** Eager-load (above-the-fold hero). Everything else is lazy. */
+  priority?: boolean
   className?: string
 }
 
 /**
- * Shows a real, Gemini-generated studio photo if `vehicle.image` is set
- * and loads successfully. All photos share the same style: 3/4 front
- * angle, white background, studio lighting (see /public/cars/README.txt
- * for the prompt template used to generate them).
+ * Real studio photo via next/image (responsive, lazy, WebP/AVIF) when
+ * `vehicle.image` is set and loads; otherwise the SVG silhouette.
  *
- * Falls back to the SVG silhouette if no image is set yet, or if it
- * fails to load — so adding photos vehicle-by-vehicle never breaks
- * the site.
+ * The parent must be `relative` with a fixed aspect ratio, so the image fills
+ * a reserved box and nothing shifts while it loads.
  */
-export default function VehicleVisual({ vehicle, className = '' }: Props) {
+export default function VehicleVisual({ vehicle, sizes, priority = false, className = '' }: Props) {
   const [imgFailed, setImgFailed] = useState(false)
-  const c = vehicle.brandColor
 
   if (vehicle.image && !imgFailed) {
     return (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
+      <Image
         src={vehicle.image}
         alt={`${vehicle.brand} ${vehicle.model}`}
+        fill
+        sizes={sizes}
+        priority={priority}
+        quality={70}
         className={`object-contain ${className}`}
-        loading="lazy"
         onError={() => setImgFailed(true)}
       />
     )
   }
 
   return (
-    <VehicleSilhouette shape={vehicle.silhouette} bodyColor={c} className={className} />
+    <div className={`absolute inset-0 flex items-center justify-center ${className}`}>
+      <VehicleSilhouette shape={vehicle.silhouette} bodyColor="#94A3B8" className="w-full h-full" />
+    </div>
   )
 }

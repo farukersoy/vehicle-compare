@@ -83,7 +83,7 @@ gh repo create vehicle-compare --public --source=. --remote=origin --push
 
 | Setting | Default | Notes |
 |---------|---------|-------|
-| Charge rate (compared vehicle only) | Home | CHF 0.277 / kWh (ElCom median 2026) |
+| Charge rate (compared vehicle only) | Home | CHF 0.278 / kWh (owner's billed average; ElCom median 2026: 0.277) |
 | Public charge | — | CHF 0.59 / kWh (TCS median DC fast charging) |
 | Petrol | CHF 1.718 / L | Editable; owner's actual average |
 | Petrol CO₂ | 2'780 g/L | — |

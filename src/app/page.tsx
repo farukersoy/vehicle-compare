@@ -1,14 +1,16 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { vehicles, REFERENCE_VEHICLE_ID } from '@/data/vehicles'
 import { calculateCost, DEFAULT_SETTINGS } from '@/lib/calculations'
-import { Settings } from '@/types'
+import { CostResult, Settings } from '@/types'
 import { Lang, translations } from '@/lib/i18n'
-import SettingsBar from '@/components/SettingsBar'
+import { smoothScrollTo } from '@/lib/motion'
+import SettingsBar, { LanguageSwitch } from '@/components/SettingsBar'
 import { LargeVehicleCard } from '@/components/VehicleCard'
-import ComparisonDelta from '@/components/ComparisonDelta'
+import ComparisonDelta, { formatCostDiff } from '@/components/ComparisonDelta'
 import VehicleGrid from '@/components/VehicleGrid'
+import { IconArrowUp, IconCar } from '@/components/Icons'
 
 export default function Home() {
   const [selectedId, setSelectedId] = useState<string | null>(null)
@@ -21,7 +23,7 @@ export default function Home() {
   const selectedVehicle  = vehicles.find((v) => v.id === selectedId) ?? null
 
   const allResults = useMemo(() => {
-    const map = new Map()
+    const map = new Map<string, CostResult>()
     vehicles.forEach((v) => map.set(v.id, calculateCost(v, settings)))
     return map
   }, [settings])
@@ -36,106 +38,170 @@ export default function Home() {
     ? referenceResult.costPer100kmCHF <= selectedResult.costPer100kmCHF
     : true
 
+  // ── Scroll to the comparison after a selection ────────────────────────────
+  const compareRef = useRef<HTMLElement>(null)
+  const pickerRef  = useRef<HTMLElement>(null)
+  const scrollPending = useRef(false)
+
+  const handleSelect = useCallback((id: string) => {
+    scrollPending.current = true
+    setSelectedId(id)
+  }, [])
+
+  useEffect(() => {
+    if (!scrollPending.current) return
+    scrollPending.current = false
+    smoothScrollTo(compareRef.current)
+  }, [selectedId])
+
+  // ── Mobile summary bar: visible once the comparison is scrolled past ──────
+  const [pastCompare, setPastCompare] = useState(false)
+  useEffect(() => {
+    let raf = 0
+    const update = () => {
+      raf = 0
+      const el = compareRef.current
+      setPastCompare(!!el && el.getBoundingClientRect().bottom < 0)
+    }
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update) }
+    update()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      if (raf) cancelAnimationFrame(raf)
+    }
+  }, [])
+
+  const showSummaryBar = pastCompare && !!selectedVehicle && !!selectedResult
+  const costDiff = selectedResult ? selectedResult.costPer100kmCHF - referenceResult.costPer100kmCHF : 0
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-page">
 
-      {/* Wordmark bar */}
-      <div className="border-b border-border">
-        <div className="max-w-6xl mx-auto px-6 sm:px-6 py-3">
-          <span className="font-display font-bold text-lg text-navy tracking-tight">
-            EV COMPARE
-          </span>
+      {/* Header — wordmark + language (always visible) */}
+      <header className="bg-surface border-b border-border">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+          <span className="font-display font-bold text-base tracking-tight text-ink">EV COMPARE</span>
+          <LanguageSwitch lang={lang} onLangChange={setLang} t={t} />
         </div>
-      </div>
-
-      {/* Header */}
-      <header className="max-w-6xl mx-auto px-6 pt-6 pb-4">
-        <h1 className="font-display font-bold text-2xl sm:text-3xl text-navy leading-tight">
-          {t.title}
-        </h1>
-        <p className="text-gray-500 mt-2 text-base max-w-none">{t.subtitle}</p>
       </header>
 
-      {/* Settings + language */}
+      {/* Intro */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 sm:pt-10 pb-4 sm:pb-6">
+        <p className="text-xs font-semibold uppercase tracking-wider text-muted-page">{t.tagline}</p>
+        <h1 className="mt-2 font-display font-semibold text-[28px] sm:text-4xl leading-tight text-ink">
+          {t.title}
+        </h1>
+        <p className="mt-2 text-[15px] sm:text-base leading-relaxed text-muted-page max-w-2xl">{t.subtitle}</p>
+      </div>
+
+      {/* Settings */}
       <SettingsBar
         settings={settings}
         onChange={(p) => setSettings((s) => ({ ...s, ...p }))}
         showPhevToggle={showPhevToggle}
         t={t}
-        lang={lang}
-        onLangChange={setLang}
       />
 
-      {/* Comparison cards — the hero of the page */}
-      <div className="max-w-6xl mx-auto px-4 py-6 sm:py-8">
-        <div className="rounded-2xl border border-border bg-surface-sunken p-4 sm:p-6 lg:p-8">
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_180px_1fr] gap-4 md:gap-6 lg:gap-8 items-stretch">
+      {/* Comparison */}
+      <section ref={compareRef} aria-label={t.compareHeading}
+               className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 sm:pt-8 scroll-mt-4">
+        <div className="grid gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_224px_minmax(0,1fr)] lg:gap-6 items-stretch">
 
+          {/* Reference car — mobile: 1st · tablet: 2nd (under the delta) · desktop: left */}
+          <div className="order-1 md:order-2 lg:order-1 min-w-0">
             <LargeVehicleCard
               vehicle={referenceVehicle}
               result={referenceResult}
               t={t}
+              priority
               cheaperBadgeLabel={selectedResult && referenceCheaper ? t.opelCheaper : undefined}
               cheaperBadgeTone="green"
             />
+          </div>
 
-            {selectedVehicle && selectedResult ? (
+          {/* Delta — mobile: band between the cards · tablet: full-width band on top · desktop: middle column */}
+          {selectedVehicle && selectedResult ? (
+            <div className="order-2 md:order-1 md:col-span-2 lg:col-span-1 lg:order-2 min-w-0">
               <ComparisonDelta reference={referenceResult} comparison={selectedResult} t={t} />
-            ) : (
-              <div className="hidden md:flex flex-col items-center justify-center
-                              gap-3 text-gray-300 min-w-[120px]">
-                <div className="text-3xl">↔</div>
-                <p className="text-[11px] text-center leading-relaxed text-gray-400">
-                  {t.pickPrompt}
-                </p>
-              </div>
-            )}
+            </div>
+          ) : (
+            <div aria-hidden className="hidden lg:flex lg:order-2 items-center justify-center">
+              <span className="text-xs font-semibold uppercase tracking-[0.25em] text-muted-page">vs</span>
+            </div>
+          )}
 
+          {/* Compared car */}
+          <div className="order-3 min-w-0">
             {selectedVehicle && selectedResult ? (
-              <LargeVehicleCard
-                vehicle={selectedVehicle}
-                result={selectedResult}
-                t={t}
-                cheaperBadgeLabel={!referenceCheaper ? t.rivalCheaper : undefined}
-                cheaperBadgeTone="red"
-              />
+              <div key={selectedVehicle.id} className="animate-card-in h-full">
+                <LargeVehicleCard
+                  vehicle={selectedVehicle}
+                  result={selectedResult}
+                  t={t}
+                  cheaperBadgeLabel={!referenceCheaper ? t.rivalCheaper : undefined}
+                  cheaperBadgeTone="red"
+                />
+              </div>
             ) : (
-              <div className="rounded-2xl border-2 border-dashed border-gray-200
-                              flex flex-col items-center justify-center
-                              text-gray-300 gap-4 p-6 min-h-[220px] sm:min-h-[320px] md:min-h-[420px]">
-                <div className="text-5xl">🚗</div>
-                <p className="font-display font-semibold text-gray-400 text-lg text-center">
-                  {t.pickPrompt}
-                </p>
+              <div className="h-full min-h-[220px] rounded-xl border-2 border-dashed border-border bg-surface/60
+                              flex flex-col items-center justify-center gap-4 p-6 text-center">
+                <IconCar size={40} className="text-muted" />
+                <p className="font-display font-semibold text-lg text-ink max-w-[16rem]">{t.pickPrompt}</p>
+                <button type="button" onClick={() => smoothScrollTo(pickerRef.current)}
+                  className="min-h-11 px-6 rounded-full bg-accent text-white text-sm font-semibold
+                             focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2">
+                  {t.pickVehicle}
+                </button>
               </div>
             )}
-
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Vehicle selector — secondary, "browse more" section */}
-      <div className="max-w-6xl mx-auto px-4 pb-16">
-        <h2 className="text-xl sm:text-2xl font-display font-semibold text-gray-600 mb-4">
-          {t.chooseVehicle}
-        </h2>
+      {/* Vehicle picker */}
+      <section ref={pickerRef} className="max-w-6xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-16 scroll-mt-4">
+        <h2 className="font-display font-semibold text-xl sm:text-2xl text-ink mb-4">{t.chooseVehicle}</h2>
         <VehicleGrid
           vehicles={vehicles}
           results={allResults}
           selectedId={selectedId}
-          onSelect={setSelectedId}
+          onSelect={handleSelect}
           t={t}
         />
-      </div>
+      </section>
 
       {/* Footer */}
-      <div className="border-t border-border px-6 py-8">
-        <div className="max-w-6xl mx-auto text-xs text-gray-400 text-center space-y-1">
+      <footer className={`border-t border-border px-4 sm:px-6 py-8 ${showSummaryBar ? 'pb-24 md:pb-8' : ''}`}>
+        <div className="max-w-3xl mx-auto text-xs leading-relaxed text-muted-page text-center space-y-1.5">
           <p>{t.footer1}</p>
           <p>{t.footer2}</p>
           <p>{t.footer3}</p>
         </div>
-      </div>
+      </footer>
+
+      {/* Mobile summary bar */}
+      {showSummaryBar && selectedVehicle && (
+        <div className="md:hidden fixed inset-x-0 bottom-0 z-40 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] animate-bar-in">
+          <button type="button" onClick={() => smoothScrollTo(compareRef.current)}
+            aria-label={t.backToComparison}
+            className="w-full min-h-12 flex items-center gap-3 rounded-full bg-accent text-white px-4
+                       shadow-[0_8px_24px_-8px_rgba(11,31,58,0.5)]
+                       focus:outline-none focus-visible:ring-2 focus-visible:ring-white">
+            <span className="text-sm truncate min-w-0">
+              {referenceVehicle.brand} vs {selectedVehicle.model}
+            </span>
+            <span className={`ml-auto inline-flex items-center h-7 px-2.5 rounded-full text-sm font-semibold
+                              font-mono tabular-nums whitespace-nowrap
+                              ${costDiff >= 0 ? 'bg-positive-soft text-positive-ink' : 'bg-attention-soft text-attention-ink'}`}>
+              {formatCostDiff(costDiff)}<span className="text-xs font-normal ml-1">/100 km</span>
+            </span>
+            <IconArrowUp size={18} className="flex-shrink-0" />
+          </button>
+        </div>
+      )}
 
     </div>
   )
