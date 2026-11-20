@@ -14,8 +14,8 @@ export const vehicles: Vehicle[] = [
     type: 'PHEV',
     segment: 'Kompakt-SUV',
     silhouette: 'suv',
-    electricKwh100km: 12.45,
-    fuelL100km: 1.96,
+    electricKwh100km: 12.453,   // 2845.35 kWh / 22849 km
+    fuelL100km: 1.9626,         // 448.43 L / 22849 km
     fuelL100kmEmpty: 7.2,
     co2DirectGkm: 60.8,
     dataQuality: 'measured',
