@@ -23,7 +23,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: 'EV Compare — Swiss Real-World Fuel & Energy Calculator',
   description:
-    'Compare BEV, PHEV and hybrid vehicles by real-world cost and CO₂ per 100 km. Swiss pricing, ADAC-based data.',
+    'Compare BEV, PHEV and hybrid vehicles by real-world cost and CO₂ per 100 km. Swiss pricing, real-world data.',
 }
 
 export default function RootLayout({

@@ -78,7 +78,7 @@ export default function VehicleGrid({ vehicles, results, selectedId, onSelect, t
           return (
             <ThumbVehicleCard key={v.id} vehicle={v} result={result}
               isSelected={v.id === selectedId} onClick={() => onSelect(v.id)}
-              revealDelayMs={(i % PAGE_SIZE) * 30} />
+              revealDelayMs={(i % PAGE_SIZE) * 30} rangeLabel={t.range} />
           )
         })}
       </div>

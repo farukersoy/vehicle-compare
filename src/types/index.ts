@@ -26,6 +26,22 @@ export interface Vehicle {
   dataQuality: DataQuality
   sourceNote: string
   isReference?: boolean
+  /** Real-world range in km, shown as a badge on the card. */
+  rangeKm?: number
+  /** Optional caption under the range badge (large card). */
+  rangeNote?: string
+  /** Owner's real billing figures — display only, never used in calculateCost. */
+  invoice?: VehicleInvoice
+}
+
+export interface VehicleInvoice {
+  km: number
+  electricityKwh: number
+  electricityCHF: number
+  fuelL: number
+  fuelCHF: number
+  totalCHF: number
+  costPer100kmCHF: number
 }
 
 export interface Settings {

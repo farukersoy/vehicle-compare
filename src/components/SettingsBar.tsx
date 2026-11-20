@@ -54,6 +54,23 @@ export default function SettingsBar({
           </>
         )}
 
+        {/* Fuel price (applies to all vehicles) */}
+        <div className="w-px h-6 bg-border hidden sm:block" />
+        <label className="flex items-center gap-2">
+          <span className="text-gray-400 text-xs font-semibold uppercase tracking-widest">{t.fuelPrice}</span>
+          <span className="flex items-center rounded-lg border border-border bg-white px-2 py-1">
+            <span className="text-xs text-gray-400 mr-1">CHF</span>
+            <input type="number" min={0} step={0.001} inputMode="decimal"
+              value={settings.fuelPriceCHF}
+              onChange={(e) => {
+                const v = Number(e.target.value)
+                if (Number.isFinite(v) && v >= 0) onChange({ fuelPriceCHF: v })
+              }}
+              className="w-16 font-mono text-navy text-xs bg-transparent focus:outline-none" />
+            <span className="text-xs text-gray-400 ml-1">/L</span>
+          </span>
+        </label>
+
         {/* CO2 slider */}
         <div className="flex items-center gap-3 ml-auto">
           <span className="text-gray-400 text-xs font-semibold uppercase tracking-widest whitespace-nowrap">

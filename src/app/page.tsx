@@ -133,6 +133,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto text-xs text-gray-400 text-center space-y-1">
           <p>{t.footer1}</p>
           <p>{t.footer2}</p>
+          <p>{t.footer3}</p>
         </div>
       </div>
 

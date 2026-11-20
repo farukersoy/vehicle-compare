@@ -1,7 +1,7 @@
 # EV Compare — Swiss Real-World Vehicle Cost Calculator
 
 Compare BEV, PHEV, and HEV vehicles by real-world energy cost and CO₂ per 100 km.
-Based on ADAC Ecotest data and real owner measurements.
+Based on a Gemini query of owner-reported consumption and real owner measurements.
 
 ---
 
@@ -76,17 +76,20 @@ gh repo create vehicle-compare --public --source=. --remote=origin --push
 
 - **30 vehicles** across BEV, PHEV, HEV categories
 - **10+ brands**: Opel, VW, Toyota, Hyundai, Kia, BMW, Tesla, Mercedes, Audi, Volvo, Dacia, Peugeot, Mini, Honda, Lucid
-- Data quality flag: `measured` (ADAC Ecotest or owner data) vs `estimated`
+- Data quality flag: `measured` (owner data) vs `estimated`
 - Reference vehicle: **Opel Grandland PHEV 4×4** — owner's real 22,849 km measurements
 
 ## Settings
 
 | Setting | Default | Notes |
 |---------|---------|-------|
-| Charge rate | Home | CHF 0.31 / kWh |
-| Public charge | — | CHF 0.59 / kWh |
-| Petrol | — | CHF 1.72 / L |
-| CO₂ grid factor | 30 g/kWh | Adjustable slider (Swiss SFOE 2026) |
+| Charge rate (compared vehicle only) | Home | CHF 0.277 / kWh (ElCom median 2026) |
+| Public charge | — | CHF 0.59 / kWh (TCS median DC fast charging) |
+| Petrol | CHF 1.718 / L | Editable; owner's actual average |
+| Petrol CO₂ | 2'780 g/L | — |
+| CO₂ grid factor | 50 g/kWh | Adjustable slider |
+
+The reference Opel is always calculated with home charging.
 | PHEV scenario | Full battery | Toggle: full ↔ empty |
 
 ---

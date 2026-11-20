@@ -5,16 +5,16 @@ import { Vehicle, Settings, CostResult } from '@/types'
 export const DEFAULT_SETTINGS: Settings = {
   chargeRate: 'home',
   phevScenario: 'full',
-  co2GridGkwh: 30,        // Swiss grid average 2026 (SFOE)
-  homePriceCHF: 0.31,     // CHF/kWh typical Swiss home tariff
-  publicPriceCHF: 0.59,   // CHF/kWh public fast charger (avg. Switzerland)
-  fuelPriceCHF: 1.72,     // CHF/litre petrol 95 (Swiss avg. mid-2026)
+  co2GridGkwh: 50,        // g CO2/kWh default grid factor
+  homePriceCHF: 0.277,    // CHF/kWh — ElCom median household tariff 2026
+  publicPriceCHF: 0.59,   // CHF/kWh — TCS median DC fast charging 2026
+  fuelPriceCHF: 1.718,    // CHF/litre petrol 95 — owner's actual average (editable)
 }
 
 // ─── Constants ─────────────────────────────────────────────────────────────────
 
-/** g CO2 emitted per litre of petrol burned (WLTP/EU standard) */
-const CO2_G_PER_LITRE_PETROL = 2330
+/** g CO2 per litre of petrol (well-to-wheel) */
+const CO2_G_PER_LITRE_PETROL = 2780
 
 /** Swiss average annual mileage (km) */
 export const ANNUAL_KM = 15_000
@@ -28,6 +28,8 @@ export const ANNUAL_KM = 15_000
  *  - BEV:  only electric cost, no fuel
  *  - HEV:  only fuel cost (battery never charges from grid)
  *  - PHEV: electric + fuel — switches to empty-battery scenario when requested
+ *  - The reference vehicle (owner's Opel) always charges at home; the
+ *    home/public toggle only applies to the compared vehicle.
  */
 export function calculateCost(vehicle: Vehicle, settings: Settings): CostResult {
   const {
@@ -39,7 +41,8 @@ export function calculateCost(vehicle: Vehicle, settings: Settings): CostResult 
     fuelPriceCHF,
   } = settings
 
-  const kwhPrice = chargeRate === 'home' ? homePriceCHF : publicPriceCHF
+  const effectiveRate = vehicle.isReference ? 'home' : chargeRate
+  const kwhPrice = effectiveRate === 'home' ? homePriceCHF : publicPriceCHF
 
   // Determine effective consumption based on vehicle type + scenario
   let electricKwhUsed = vehicle.electricKwh100km
@@ -61,7 +64,7 @@ export function calculateCost(vehicle: Vehicle, settings: Settings): CostResult 
   const fuelCostPer100km = fuelLUsed * fuelPriceCHF
 
   // ── CO2 ───────────────────────────────────────────────────────────────────────
-  // Tailpipe: fuelL [L/100km] × 2330 [gCO2/L] ÷ 100 = gCO2/km
+  // Fuel: fuelL [L/100km] × 2780 [gCO2/L] ÷ 100 = gCO2/km
   const co2Fuel = (fuelLUsed * CO2_G_PER_LITRE_PETROL) / 100
   // Upstream electric: kWh [kWh/100km] × gridFactor [gCO2/kWh] ÷ 100 = gCO2/km
   const co2Grid = (electricKwhUsed * co2GridGkwh) / 100
@@ -97,5 +100,12 @@ export function fmtInt(n: number): string {
 }
 
 export function fmtCO2(n: number): string {
-  return Math.round(n).toString()
+  return (Math.round(n * 10) / 10).toFixed(1)
+}
+
+/** Swiss number format with ASCII apostrophe thousands separator, e.g. 1'561.11 */
+export function fmtCH(n: number, decimals = 0): string {
+  const [int, frac] = n.toFixed(decimals).split('.')
+  const grouped = int.replace(/\B(?=(\d{3})+(?!\d))/g, "'")
+  return frac ? `${grouped}.${frac}` : grouped
 }

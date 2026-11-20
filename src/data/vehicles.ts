@@ -19,8 +19,19 @@ export const vehicles: Vehicle[] = [
     fuelL100kmEmpty: 7.2,
     co2DirectGkm: 60.8,
     dataQuality: 'measured',
-    sourceNote: 'Reale Messdaten des Fahrzeughalters — 22\'849 km, Stromzähler-Abrechnung 2023/2024',
+    sourceNote: 'Reale Messdaten des Fahrzeughalters — 22\'849 km, Stromzähler-Abrechnung',
     isReference: true,
+    rangeKm: 1000,
+    rangeNote: '1× Laden, ohne Zwischenstopp (gemessen)',
+    invoice: {
+      km: 22849,
+      electricityKwh: 2845.35,
+      electricityCHF: 790.54,
+      fuelL: 448.43,
+      fuelCHF: 770.57,
+      totalCHF: 1561.11,
+      costPer100kmCHF: 6.83,
+    },
   },
 
   // ─── Gemini-Abfrage vom 19.06.2026 — 79 Fahrzeuge, 30 Marken ───────────────

@@ -25,6 +25,14 @@ export interface TranslationShape {
   typeAll: string
   footer1: string
   footer2: string
+  footer3: string
+  fuelPrice: string
+  range: string
+  yourBilling: string
+  electricity: string
+  petrol: string
+  total: string
+  per100km: string
   loadMore: string
   showLess: string
   typeLabels: { BEV: string; PHEV: string; HEV: string }
@@ -32,7 +40,7 @@ export interface TranslationShape {
 
 export const translations: Record<Lang, TranslationShape> = {
   de: {
-    tagline: 'Schweiz · Reale Verbrauchsdaten · ADAC Ecotest',
+    tagline: 'Schweiz · Reale Verbrauchsdaten',
     title: 'EV Vergleich',
     subtitle:
       'Vergleichen Sie die realen Energiekosten und den CO₂-Ausstoss von BEV, PHEV und Hybridfahrzeugen mit Ihrem Opel Grandland.',
@@ -47,7 +55,7 @@ export const translations: Record<Lang, TranslationShape> = {
     opelCheaper: 'Opel günstiger',
     rivalCheaper: 'Konkurrent günstiger',
     pickPrompt: 'Wählen Sie oben ein Fahrzeug',
-    charge: 'Laden',
+    charge: 'Laden (Vergleichsfahrzeug)',
     home: '🏠 Zuhause',
     public: '⚡ Öffentlich',
     phevBattery: 'PHEV-Batterie',
@@ -56,15 +64,24 @@ export const translations: Record<Lang, TranslationShape> = {
     gridCo2: 'Netz-CO₂',
     typeAll: 'Alle',
     footer1:
-      'Datenquellen: ADAC Ecotest, reale Messungen von Fahrzeughaltern. «Geschätzte» Werte sind Marktdurchschnitte.',
+      'Datenquellen: Gemini-Abfrage (Fahrzeughalter), reale Messungen.',
     footer2:
-      'Schweizer Standardwerte: ⛽ CHF 1.72/L · 🏠 CHF 0.31/kWh · ⚡ CHF 0.59/kWh · Netz-CO₂: 30 g/kWh (BFE 2026)',
+      'Standardwerte: ⛽ CHF 1.718/L · 🏠 CHF 0.277/kWh · ⚡ CHF 0.59/kWh · Benzin-CO₂: 2\'780 g/L · Netz-CO₂: 50 g/kWh',
+    footer3:
+      'Preisquellen: ElCom (Median Haushaltsstrom), TCS (Median DC-Schnellladen) · Stand 2026',
+    fuelPrice: 'Benzin',
+    range: 'Reichweite',
+    yourBilling: 'Ihre Abrechnung',
+    electricity: 'Strom',
+    petrol: 'Benzin',
+    total: 'Total',
+    per100km: 'pro 100 km',
     loadMore: 'Mehr anzeigen',
     showLess: 'Weniger anzeigen',
     typeLabels: { BEV: 'Elektrisch', PHEV: 'Plug-in-Hybrid', HEV: 'Vollhybrid' },
   },
   en: {
-    tagline: 'Switzerland · Real-world data · ADAC Ecotest',
+    tagline: 'Switzerland · Real-world data',
     title: 'EV Compare',
     subtitle:
       'Compare the real energy cost and CO₂ of BEV, PHEV and hybrid vehicles against your Opel Grandland.',
@@ -79,7 +96,7 @@ export const translations: Record<Lang, TranslationShape> = {
     opelCheaper: 'Opel cheaper',
     rivalCheaper: 'Rival cheaper',
     pickPrompt: 'Select a vehicle above',
-    charge: 'Charge',
+    charge: 'Charging (compared vehicle)',
     home: '🏠 Home',
     public: '⚡ Public',
     phevBattery: 'PHEV battery',
@@ -88,9 +105,18 @@ export const translations: Record<Lang, TranslationShape> = {
     gridCo2: 'Grid CO₂',
     typeAll: 'All',
     footer1:
-      'Data sources: ADAC Ecotest, real-world owner measurements. "Estimated" figures are market averages.',
+      'Data sources: Gemini query (vehicle owners), real-world measurements.',
     footer2:
-      'Swiss defaults: ⛽ CHF 1.72/L · 🏠 CHF 0.31/kWh · ⚡ CHF 0.59/kWh · Grid CO₂: 30 g/kWh (SFOE 2026)',
+      'Defaults: ⛽ CHF 1.718/L · 🏠 CHF 0.277/kWh · ⚡ CHF 0.59/kWh · Petrol CO₂: 2\'780 g/L · Grid CO₂: 50 g/kWh',
+    footer3:
+      'Price sources: ElCom (median household electricity), TCS (median DC fast charging) · as of 2026',
+    fuelPrice: 'Petrol',
+    range: 'Range',
+    yourBilling: 'Your billing',
+    electricity: 'Electricity',
+    petrol: 'Petrol',
+    total: 'Total',
+    per100km: 'per 100 km',
     loadMore: 'Show more',
     showLess: 'Show less',
     typeLabels: { BEV: 'Electric', PHEV: 'Plug-in Hybrid', HEV: 'Full Hybrid' },
