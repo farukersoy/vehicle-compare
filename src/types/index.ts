@@ -30,6 +30,10 @@ export interface Vehicle {
   rangeKm?: number
   /** Optional caption under the range badge (large card). */
   rangeNote?: string
+  /** Fuel tank capacity in litres (from the bulk import, informational). */
+  tankLiters?: number
+  /** Usable battery capacity in kWh (from the bulk import, informational). */
+  usableBatteryKwh?: number
   /** Owner's real billing figures — display only, never used in calculateCost. */
   invoice?: VehicleInvoice
 }

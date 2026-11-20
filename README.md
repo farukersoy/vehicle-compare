@@ -79,6 +79,29 @@ gh repo create vehicle-compare --public --source=. --remote=origin --push
 - Data quality flag: `measured` (owner data) vs `estimated`
 - Reference vehicle: **Opel Grandland PHEV 4×4** — owner's real 22,849 km measurements
 
+## Bulk build (one-time, offline)
+
+Data and photos are collected once and committed as static files; the live
+site never fetches anything at runtime.
+
+1. **Paste tables** from Gemini into `data/gemini/*.md` (Markdown tables or CSV,
+   German headers: Marke, Modell, Antrieb, Stromverbrauch kWh/100km,
+   Benzinverbrauch L/100km, Kosten CHF/100km, CO2 g/km, optional Reale
+   Reichweite km, Tankinhalt Liter, Nutzbare Batterie kWh). Files named
+   `sample*` are test data and are skipped unless `--include-sample` is given.
+2. `npm run import-data` – dry run, writes `scripts/import-report.md`.
+   Fix or allow flagged rows (`scripts/import-allow.json`), correct body styles
+   in `scripts/overrides.json`, then `npm run import-data -- --apply`
+   (old file backed up to `scripts/backup/`). `--update-existing` overwrites
+   values of existing vehicles and lists every change.
+3. Photos: set `WIKIMEDIA_CONTACT` (e-mail or URL) in `.env.local`, then
+   `npm run fetch-images` – dry run with a local review page
+   (`scripts/image-review.html`). Record decisions in
+   `scripts/image-overrides.json`, then `npm run fetch-images -- --apply`.
+   Missing photos get ready-made prompts in `scripts/gemini-image-prompts.md`.
+   Credits land in `src/data/photo-credits.json` and are shown on `/credits`.
+4. `node scripts/test-image-matching.mjs` – offline checks of the matching rules.
+
 ## Settings
 
 | Setting | Default | Notes |

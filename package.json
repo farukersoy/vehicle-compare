@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "import-data": "node scripts/import-vehicles.mjs",
+    "fetch-images": "node scripts/fetch-images.mjs"
   },
   "dependencies": {
     "next": "^16.2.10",

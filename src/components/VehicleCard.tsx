@@ -54,6 +54,8 @@ interface LargeProps {
   cheaperBadgeTone?: 'green' | 'red'
   /** Eager-load the photo (above the fold). */
   priority?: boolean
+  /** Small note under the cost breakdown (e.g. missing empty-battery value). */
+  note?: string
   /** Charging control for the compared vehicle (shown for BEV/PHEV only). */
   charge?: {
     rate: Settings['chargeRate']
@@ -62,7 +64,7 @@ interface LargeProps {
 }
 
 export function LargeVehicleCard({
-  vehicle, result, t, cheaperBadgeLabel, cheaperBadgeTone = 'green', priority = false, charge,
+  vehicle, result, t, cheaperBadgeLabel, cheaperBadgeTone = 'green', priority = false, charge, note,
 }: LargeProps) {
   const showChargeToggle = !vehicle.isReference && !!charge && vehicle.type !== 'HEV'
 
@@ -159,6 +161,7 @@ export function LargeVehicleCard({
               </div>
             )}
           </div>
+          {note && <p className="mt-2 text-xs leading-snug text-muted">{note}</p>}
         </div>
 
         {/* Owner's real billing — reference vehicle only, display only */}

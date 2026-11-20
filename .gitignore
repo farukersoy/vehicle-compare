@@ -9,3 +9,8 @@ npm-debug.log*
 .vercel
 *.tsbuildinfo
 next-env.d.ts
+
+# bulk build (local only)
+scripts/.cache/
+scripts/backup/
+scripts/image-review.html

@@ -1,0 +1,9 @@
+{
+  "_comment": "Extra Commons search terms per vehicle id (or per 'Brand Model' prefix). Example entries below.",
+  "volvo-ex40-twin-motor-xc40-recharge": ["Volvo XC40 Recharge", "Volvo EX40"],
+  "mercedes-eqa-300-4matic": ["Mercedes-Benz EQA"],
+  "mercedes-eqb-350-4matic": ["Mercedes-Benz EQB"],
+  "mercedes-glc-300-e-4matic": ["Mercedes-Benz GLC X254"],
+  "citroen-e-c4": ["Citroën ë-C4", "Citroen e-C4"],
+  "citroen-e-c3": ["Citroën ë-C3", "Citroen e-C3"]
+}
