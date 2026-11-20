@@ -29,11 +29,17 @@ export default function VehicleGrid({ vehicles, results, selectedId, onSelect, t
     setVisibleCount(PAGE_SIZE)
   }, [typeFilter, brandFilter, query])
 
+  // Only offer type chips that have at least one pickable vehicle in the dataset
+  // (e.g. HEV is hidden until HEVs are added, then reappears automatically).
+  const availableTypes = useMemo(
+    () => new Set(vehicles.filter((v) => !v.isReference).map((v) => v.type)),
+    [vehicles],
+  )
   const TABS: { label: string; value: TypeFilter }[] = [
-    { label: t.typeAll, value: 'ALL' },
-    { label: 'BEV', value: 'BEV' },
-    { label: 'PHEV', value: 'PHEV' },
-    { label: 'HEV', value: 'HEV' },
+    { label: t.typeAll, value: 'ALL' as const },
+    ...(['BEV', 'PHEV', 'HEV'] as const)
+      .filter((type) => availableTypes.has(type))
+      .map((type) => ({ label: type, value: type })),
   ]
 
   const filtered = useMemo(() => {
