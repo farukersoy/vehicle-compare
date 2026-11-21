@@ -100,6 +100,18 @@ site never fetches anything at runtime.
    `scripts/image-overrides.json`, then `npm run fetch-images -- --apply`.
    Missing photos get ready-made prompts in `scripts/gemini-image-prompts.md`.
    Credits land in `src/data/photo-credits.json` and are shown on `/credits`.
+   - `--replace id1,id2` re-selects photos that exist but are wrong; the review
+     page shows current vs proposed, and `--apply` moves the old file to
+     `scripts/backup/photos/` first. Per-model search terms, generation year
+     range and reject patterns live in `scripts/model-aliases.json`.
+   - `--allow-reference` (off by default) lets `--replace` also replace the
+     reference Opel's photo; without it the reference is always skipped. It
+     only changes the `image` field and the photo credit, never the Opel's
+     consumption, cost or invoice values.
+   - `--append-review` keeps the previous run's results on the review page,
+     so a `--replace` run and a missing-photo run can be reviewed together.
+   - AI-generated images are recorded with `"type": "ai-generated"` and get a
+     "Symbolbild" caption on the card and their own section on `/credits`.
 4. `node scripts/test-image-matching.mjs` – offline checks of the matching rules.
 
 ## Settings

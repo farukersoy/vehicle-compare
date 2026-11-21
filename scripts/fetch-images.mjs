@@ -11,6 +11,11 @@
  *                                               exists; with --apply the old file is moved to
  *                                               scripts/backup/photos/ first. The review page shows
  *                                               the current photo next to the proposed one.
+ *   npm run fetch-images -- --replace <id> --allow-reference
+ *                                               also allow replacing the reference vehicle (Opel);
+ *                                               off by default, the reference is skipped otherwise
+ *   npm run fetch-images -- --append-review     keep the previous run's sections on the review page
+ *                                               (same vehicle id: the newer result wins)
  *
  * Without --replace, only vehicles whose image FILE is missing on disk are processed.
  * Per-model search terms, match text, generation year range and reject patterns:
@@ -41,6 +46,8 @@ const ONLY = args.only ? new Set(String(args.only).split(',').map((s) => s.trim(
 const LIMIT = args.limit ? Number(args.limit) : Infinity
 const BACKFILL = !!args['backfill-credits']
 const REPLACE = args.replace ? new Set(String(args.replace).split(',').map((s) => s.trim()).filter(Boolean)) : null
+const ALLOW_REFERENCE = !!args['allow-reference']
+const APPEND_REVIEW = !!args['append-review']
 if (args.replace === true || (REPLACE && !REPLACE.size)) {
   console.error('--replace needs a comma-separated list of vehicle ids, e.g. --replace opel-corsa-e,tesla-model-x-dual-motor')
   process.exit(2)
@@ -105,8 +112,10 @@ if (REPLACE) {
   if (unknown.length) log(`Unknown ids for --replace: ${unknown.join(', ')}`)
   todo = all.filter((v) => REPLACE.has(v.id))
   const ref = todo.filter((v) => v.isReference).map((v) => v.id)
-  if (ref.length) log(`Reference vehicle is never replaced (skipped): ${ref.join(', ')}`)
-  todo = todo.filter((v) => !v.isReference)
+  if (ref.length && !ALLOW_REFERENCE) {
+    log(`Reference vehicle skipped (pass --allow-reference to replace it): ${ref.join(', ')}`)
+    todo = todo.filter((v) => !v.isReference)
+  } else if (ref.length) log(`--allow-reference: the reference vehicle ${ref.join(', ')} may be replaced`)
 } else if (ONLY) {
   const unknown = [...ONLY].filter((id) => !all.some((v) => v.id === id))
   if (unknown.length) log(`Unknown ids (not in vehicles.ts or the last import dry run): ${unknown.join(', ')}`)
@@ -349,12 +358,12 @@ const prompts = ['# Gemini image prompts', '',
 // --replace runs keep the last full run's prompt list.
 if (!REPLACE) await fs.writeFile(p('scripts/gemini-image-prompts.md'), notFound.length ? prompts.join('\n') : '# Gemini image prompts\n\n_No missing photos in the last run._\n')
 
-await fs.writeFile(p('scripts/image-review.html'), reviewHtml(results))
+await fs.writeFile(p('scripts/image-review.html'), await reviewHtml(results))
 log(`\nWrote scripts/image-report.md, scripts/image-review.html${REPLACE ? '' : ', scripts/gemini-image-prompts.md'}.`)
 
 // ─── Review page ──────────────────────────────────────────────────────────────
 
-function reviewHtml(rs) {
+async function reviewHtml(rs) {
   const h = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))
   const card = (c, chosen) => `
     <figure class="${chosen ? 'chosen' : ''}">
@@ -408,6 +417,16 @@ function reviewHtml(rs) {
     <p class="muted">Decide in <code>scripts/image-overrides.json</code>: <code>"${h(r.v.id)}": "File:…"</code> or <code>"${h(r.v.id)}": "skip"</code></p>
   </section>`
   }
+  // Sections persist in the cache so --append-review can combine several runs on one page.
+  const store = path.join(PATHS.cache, 'review-sections.json')
+  const mode = REPLACE ? 'replace' : 'missing photo'
+  const fresh = rs.map((r) => ({ id: r.v.id, mode, status: r.status,
+    html: section(r).replace('</h2>', ` <span class="badge mode">${mode}</span></h2>`) }))
+  const kept = APPEND_REVIEW ? (await readJson(store, [])).filter((x) => !fresh.some((f) => f.id === x.id)) : []
+  const sections = [...kept, ...fresh]
+  await writeJson(store, sections)
+  const counts = ['found', 'needs-review', 'not-found', 'skipped']
+    .map((st) => `${st.replace('-', ' ')}: ${sections.filter((x) => x.status === st).length}`).join(' · ')
   return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Image review</title>
@@ -422,6 +441,7 @@ function reviewHtml(rs) {
   .badge { font-size:12px; padding:2px 10px; border-radius:999px; color:#fff; }
   .badge.found { background:var(--green); } .badge.needs-review { background:var(--amber); }
   .badge.not-found { background:var(--red); } .badge.skipped { background:var(--muted); }
+  .badge.mode { background:#fff; color:var(--muted); border:1px solid var(--border); }
   .row { display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:12px; }
   figure { margin:0; border:1px solid var(--border); border-radius:8px; overflow:hidden; }
   figure.chosen { outline:3px solid var(--green); }
@@ -438,10 +458,11 @@ function reviewHtml(rs) {
   .alt-h { margin:4px 0; }
   @media (max-width: 640px) { .compare { grid-template-columns:1fr; } .compare .arrow { transform:rotate(90deg); justify-self:center; } }
 </style></head><body><main>
-  <h1>Image review${REPLACE ? ' — replace' : ''}</h1>
-  ${REPLACE ? '<p class="muted">Left (red): the photo currently on the site. Right (green): the proposed replacement. With <code>--apply</code> the old file is moved to <code>scripts/backup/photos/</code>.</p>' : ''}
+  <h1>Image review</h1>
+  <p class="muted">${sections.length} vehicle(s) · ${counts}</p>
+  ${sections.some((x) => x.mode === 'replace') ? '<p class="muted">Left (red): the photo currently on the site. Right (green): the proposed replacement. With <code>--apply</code> the old file is moved to <code>scripts/backup/photos/</code>.</p>' : ''}
   <p class="muted">Generated ${new Date().toISOString().slice(0, 16).replace('T', ' ')} · local file, not deployed. Thumbnails load from upload.wikimedia.org for review only; the site self-hosts the normalised copies.</p>
-  ${rs.map(section).join('\n')}
+  ${sections.map((x) => x.html).join('\n')}
 </main></body></html>
 `
 }

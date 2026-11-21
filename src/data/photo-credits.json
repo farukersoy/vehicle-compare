@@ -170,11 +170,11 @@
   },
   {
     "vehicleId": "land-rover-range-rover-evoque-p300e",
-    "fileTitle": "File:Land Rover RANGE ROVER EVOQUE R-DYNAMIC HSE P300E (5BA-LZ2XA) rear.jpg",
-    "author": "Tokumeigakarinoaoshima",
+    "fileTitle": "File:2023 Range Rover Evoque (L551) IMG 3588.jpg",
+    "author": "Alexander Migl",
     "licenseName": "CC BY-SA 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Land_Rover_RANGE_ROVER_EVOQUE_R-DYNAMIC_HSE_P300E_(5BA-LZ2XA)_rear.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:2023_Range_Rover_Evoque_(L551)_IMG_3588.jpg",
     "modified": true
   },
   {
@@ -188,11 +188,11 @@
   },
   {
     "vehicleId": "mazda-cx-60-e-skyactiv-phev",
-    "fileTitle": "File:2022 Mazda CX-60 e-Skyactiv PHEV (Europe) rear view.png",
-    "author": "Car and Driver España",
-    "licenseName": "CC BY 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:2022_Mazda_CX-60_e-Skyactiv_PHEV_(Europe)_rear_view.png",
+    "fileTitle": "File:Mazda CX-60 PHEV Leonberg 2022 1X7A0442.jpg",
+    "author": "Alexander Migl",
+    "licenseName": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Mazda_CX-60_PHEV_Leonberg_2022_1X7A0442.jpg",
     "modified": true
   },
   {
@@ -251,11 +251,11 @@
   },
   {
     "vehicleId": "nissan-leaf-62-kwh",
-    "fileTitle": "File:Nissan Leaf - Mondial de l'Automobile de Paris 2012 - 006.jpg",
-    "author": "Thesupermat",
-    "licenseName": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Nissan_Leaf_-_Mondial_de_l%27Automobile_de_Paris_2012_-_006.jpg",
+    "fileTitle": "File:2024 Nissan Leaf ZE1 EV in Magnetic Blue, front right.jpg",
+    "author": "Ethan Llamas",
+    "licenseName": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:2024_Nissan_Leaf_ZE1_EV_in_Magnetic_Blue,_front_right.jpg",
     "modified": true
   },
   {
@@ -273,6 +273,15 @@
     "author": "Google Gemini (KI-generiert)"
   },
   {
+    "vehicleId": "peugeot-3008-plug-in-hybrid-225",
+    "fileTitle": "File:Peugeot 3008 C IMG 9387.jpg",
+    "author": "Alexander-93",
+    "licenseName": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Peugeot_3008_C_IMG_9387.jpg",
+    "modified": true
+  },
+  {
     "vehicleId": "peugeot-e-2008",
     "fileTitle": "File:Peugeot 2008.jpg",
     "author": "GerdeeX",
@@ -283,11 +292,11 @@
   },
   {
     "vehicleId": "peugeot-e-3008",
-    "fileTitle": "File:2021 Peugeot 3008 B Hybrid4 1X7A0141.jpg",
-    "author": "Alexander Migl",
+    "fileTitle": "File:Peugeot 3008 C IMG 9387.jpg",
+    "author": "Alexander-93",
     "licenseName": "CC BY-SA 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:2021_Peugeot_3008_B_Hybrid4_1X7A0141.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Peugeot_3008_C_IMG_9387.jpg",
     "modified": true
   },
   {
@@ -310,20 +319,20 @@
   },
   {
     "vehicleId": "porsche-cayenne-e-hybrid",
-    "fileTitle": "File:Porsche Cayenne E-Hybrid (cropped).JPG",
-    "author": "KarleHorn",
-    "licenseName": "CC BY 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Porsche_Cayenne_E-Hybrid_(cropped).JPG",
+    "fileTitle": "File:2023 Porsche Cayenne S IAA 2023 1X7A0025.jpg",
+    "author": "Alexander-93",
+    "licenseName": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:2023_Porsche_Cayenne_S_IAA_2023_1X7A0025.jpg",
     "modified": true
   },
   {
     "vehicleId": "porsche-panamera-4-e-hybrid",
-    "fileTitle": "File:Porsche Panamera Turbo S Sport Turismo e-hybrid, 70 Years Porsche Sports Car, Berlin (1X7A3892).jpg",
-    "author": "Matti Blume",
+    "fileTitle": "File:Porsche Panamera 4 E-Hybrid \"Go North\" edition at the 2026 Australian Grand Prix (028A8462).jpg",
+    "author": "Yu Chu Chin",
     "licenseName": "CC BY-SA 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Porsche_Panamera_Turbo_S_Sport_Turismo_e-hybrid,_70_Years_Porsche_Sports_Car,_Berlin_(1X7A3892).jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Porsche_Panamera_4_E-Hybrid_%22Go_North%22_edition_at_the_2026_Australian_Grand_Prix_(028A8462).jpg",
     "modified": true
   },
   {
@@ -373,11 +382,11 @@
   },
   {
     "vehicleId": "tesla-model-x-dual-motor",
-    "fileTitle": "File:2020 Tesla Model X Dual Motor, Rear Right, 08-18-2020.jpg",
-    "author": "SsmIntrigue",
+    "fileTitle": "File:2017 Tesla Model X 100D in Catalina White, Front Left, 04-30-2023.jpg",
+    "author": "Elise240SX",
     "licenseName": "CC BY-SA 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:2020_Tesla_Model_X_Dual_Motor,_Rear_Right,_08-18-2020.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:2017_Tesla_Model_X_100D_in_Catalina_White,_Front_Left,_04-30-2023.jpg",
     "modified": true
   },
   {
@@ -427,11 +436,11 @@
   },
   {
     "vehicleId": "volvo-ex30-single-motor-extended-range",
-    "fileTitle": "File:The tire wheel of Volvo EX30 Ultra Single Motor Extended Range (ZAA-2E400R).jpg",
-    "author": "Tokumeigakarinoaoshima",
+    "fileTitle": "File:Volvo EX30 Auto Zuerich 2023 1X7A0949.jpg",
+    "author": "Alexander-93",
     "licenseName": "CC BY-SA 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:The_tire_wheel_of_Volvo_EX30_Ultra_Single_Motor_Extended_Range_(ZAA-2E400R).jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Volvo_EX30_Auto_Zuerich_2023_1X7A0949.jpg",
     "modified": true
   },
   {
@@ -445,11 +454,11 @@
   },
   {
     "vehicleId": "volvo-xc60-recharge-t6-awd",
-    "fileTitle": "File:Volvo XC60 RECHARGE Plug-in Hybrid T6 AWD Inscription Expression (5LA-UB420XCP2) rear.jpg",
-    "author": "Tokumeigakarinoaoshima",
+    "fileTitle": "File:Volvo XC60 (SPA) FL 1X7A0185.jpg",
+    "author": "Alexander Migl",
     "licenseName": "CC BY-SA 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Volvo_XC60_RECHARGE_Plug-in_Hybrid_T6_AWD_Inscription_Expression_(5LA-UB420XCP2)_rear.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Volvo_XC60_(SPA)_FL_1X7A0185.jpg",
     "modified": true
   }
 ]

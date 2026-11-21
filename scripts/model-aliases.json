@@ -3,7 +3,46 @@
   "volvo-ex40-twin-motor-xc40-recharge": ["Volvo XC40 Recharge", "Volvo EX40"],
   "mercedes-eqa-300-4matic": ["Mercedes-Benz EQA"],
   "mercedes-eqb-350-4matic": ["Mercedes-Benz EQB"],
-  "mercedes-glc-300-e-4matic": ["Mercedes-Benz GLC X254"],
+  "mercedes-glc-300-e-4matic": {
+    "search": ["Mercedes-Benz GLC X254", "Mercedes-Benz GLC 300 e"],
+    "years": [2022, null],
+    "reject": ["\\b[XC]253\\b", "\\bC254\\b", "(?i:\\bEQ\\b|EQ[ _]Technology|electric|elektro)"]
+  },
+  "mazda-mx-30-e-skyactiv": {
+    "search": ["Mazda MX-30"],
+    "years": [2020, null]
+  },
+  "skoda-octavia-combi-iv": {
+    "search": ["Škoda Octavia IV Combi", "Skoda Octavia Combi iV", "Škoda Octavia Combi"],
+    "years": [2020, null],
+    "reject": ["\\b(?:I|II|III)\\b", "\\b(?:1Z|5E|1U)\\b"]
+  },
+  "alfa-romeo-junior-elettrica": {
+    "search": ["Alfa Romeo Junior Elettrica", "Alfa Romeo Junior 2024", "Alfa Romeo Junior Veloce"],
+    "match": "Junior",
+    "years": [2024, null],
+    "reject": ["(?i:mito)", "(?i:gt[ _]junior)", "(?i:giulia|spider|bertone|zagato)"]
+  },
+  "kia-sportage-16-t-gdi-phev-4wd": {
+    "search": ["Kia Sportage NQ5", "Kia Sportage V", "Kia Sportage Plug-in Hybrid"],
+    "years": [2022, null],
+    "reject": ["\\b(?:I|II|III|IV)\\b", "\\b(?:QL|SL|KM|JA)\\b"]
+  },
+  "toyota-rav4-plug-in-hybrid-4x4": {
+    "search": ["Toyota RAV4 XA50", "Toyota RAV4 Plug-in Hybrid", "Toyota RAV4 Prime"],
+    "years": [2020, null],
+    "reject": ["\\bXA[1-4]0\\b", "RAV4 EV"]
+  },
+  "toyota-c-hr-plug-in-hybrid": {
+    "search": ["Toyota C-HR AX20", "Toyota C-HR (2023)", "Toyota C-HR Plug-in Hybrid"],
+    "years": [2024, null],
+    "reject": ["\\bAX10\\b", "(?i:\\bX?SE AWD\\b|\\bLE AWD\\b|C-HR\\+|C-HR BEV|electric)"]
+  },
+  "ford-kuga-plug-in-hybrid": {
+    "search": ["Ford Kuga III", "Ford Kuga Plug-In Hybrid", "Ford Kuga (2019)", "Ford Kuga 2024"],
+    "years": [2020, null],
+    "reject": ["\\b(?:I|II)\\b", "\\bC520\\b", "(?i:escape)"]
+  },
   "citroen-e-c4": ["Citroën ë-C4", "Citroen e-C4"],
   "citroen-e-c3": ["Citroën ë-C3", "Citroen e-C3"],
 

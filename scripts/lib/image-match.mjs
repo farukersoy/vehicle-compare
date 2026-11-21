@@ -56,7 +56,7 @@ export const brandRegex = (brand) =>
 const VARIANTS = ['countryman', 'clubman', 'cabrio', 'cabriolet', 'convertible', 'coupe', 'coupé', 'roadster',
   'estate', 'avant', 'touring', 'kombi', 'combi', 'sportback', 'allroad', 'shooting brake', 'wagon', 'tourer',
   'gran coupe', 'fastback', 'active tourer', 'gran turismo', 'cross turismo', 'sport turismo', 'van', 'cargo',
-  'pickup', 'long wheelbase', 'lwb', 'executive', 'cross country']
+  'pickup', 'long wheelbase', 'lwb', 'executive', 'cross country', 'shooting break']
 
 const variantIn = (text, allowed) =>
   VARIANTS.find((v) => !allowed.includes(v) && new RegExp(`${B}${esc(v)}${E}`, 'iu').test(text.replace(/_/g, ' ')))
@@ -160,6 +160,7 @@ const YEAR = '(?:19|20)\\d{2}'
 const DATE_STAMPS = [
   new RegExp(`${B}\\d{1,2}[-./]\\d{1,2}[-./](${YEAR})${E}`, 'gu'),      // 06-05-2025, 24.12.2015
   new RegExp(`${B}(${YEAR})[-./]\\d{1,2}[-./]\\d{1,2}${E}`, 'gu'),      // 2025-06-05
+  new RegExp(`${B}\\d{1,2}[-./](${YEAR})${E}`, 'gu'),                  // 05-2024 (month-year)
   new RegExp(`[–-]\\s?[a-z]{1,2}\\s\\d{4}(${YEAR})${E}`, 'gu'),          // "– f 05072025"
   new RegExp(`${B}(${YEAR})[01]\\d[0-3]\\d(?=[-_ )])`, 'gu'),            // (20250908-P1049823)
 ]
@@ -178,7 +179,7 @@ export function yearOf(file) {
   }
   const inTitle = [...title.matchAll(new RegExp(`${B}(${YEAR})${E}`, 'gu'))].map((m) => Number(m[1]))
   if (inTitle.length) return { year: Math.max(...inTitle), from: 'title' }
-  const short = /^File:\s?(\d{2})\s+\p{Lu}/u.exec(title)                  // "File:14 Porsche Panamera", "File:23 BMW i4"
+  const short = /^File:\s?['’]?(\d{2})\s+\p{Lu}/u.exec(title)                  // "File:14 Porsche Panamera", "File:23 BMW i4"
   if (short) return { year: 2000 + Number(short[1]), from: 'title' }
   if (stamped) return { year: stamped, from: 'title date' }
   for (const key of ['DateTimeOriginal', 'DateTime']) {
