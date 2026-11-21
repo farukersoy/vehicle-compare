@@ -1,8 +1,12 @@
 [
   {
     "vehicleId": "alfa-romeo-junior-elettrica",
-    "type": "ai-generated",
-    "author": "Google Gemini (KI-generiert)"
+    "fileTitle": "File:Alfa Romeo Junior Auto Zuerich 2024 DSC 6376.jpg",
+    "author": "Alexander-93",
+    "licenseName": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Alfa_Romeo_Junior_Auto_Zuerich_2024_DSC_6376.jpg",
+    "modified": true
   },
   {
     "vehicleId": "alfa-romeo-tonale-plug-in-hybrid-q4",
@@ -96,8 +100,12 @@
   },
   {
     "vehicleId": "ford-kuga-plug-in-hybrid",
-    "type": "ai-generated",
-    "author": "Google Gemini (KI-generiert)"
+    "fileTitle": "File:2024 Ford Kuga (third generation) IMG 9853.jpg",
+    "author": "Alexander-93",
+    "licenseName": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:2024_Ford_Kuga_(third_generation)_IMG_9853.jpg",
+    "modified": true
   },
   {
     "vehicleId": "ford-mustang-mach-e-awd",
@@ -169,12 +177,39 @@
     "author": "Google Gemini (KI-generiert)"
   },
   {
+    "vehicleId": "kia-sportage-16-t-gdi-phev-4wd",
+    "fileTitle": "File:2025 Kia Sportage (NQ5) Automesse Ludwigsburg 2025 DSC 2533.jpg",
+    "author": "Alexander Migl",
+    "licenseName": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:2025_Kia_Sportage_(NQ5)_Automesse_Ludwigsburg_2025_DSC_2533.jpg",
+    "modified": true
+  },
+  {
     "vehicleId": "land-rover-range-rover-evoque-p300e",
     "fileTitle": "File:2023 Range Rover Evoque (L551) IMG 3588.jpg",
     "author": "Alexander Migl",
     "licenseName": "CC BY-SA 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
     "sourceUrl": "https://commons.wikimedia.org/wiki/File:2023_Range_Rover_Evoque_(L551)_IMG_3588.jpg",
+    "modified": true
+  },
+  {
+    "vehicleId": "land-rover-sport-p460e",
+    "fileTitle": "File:2023 Range Rover Sport Dynamic HSE in Santorini Black Metallic, front left.jpg",
+    "author": "Ethan Llamas",
+    "licenseName": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:2023_Range_Rover_Sport_Dynamic_HSE_in_Santorini_Black_Metallic,_front_left.jpg",
+    "modified": true
+  },
+  {
+    "vehicleId": "land-rover-velar-p400e",
+    "fileTitle": "File:2023 Land Rover Range Rover Velar S in Varesine Blue Metallic, front right.jpg",
+    "author": "Ethan Llamas",
+    "licenseName": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:2023_Land_Rover_Range_Rover_Velar_S_in_Varesine_Blue_Metallic,_front_right.jpg",
     "modified": true
   },
   {
@@ -187,12 +222,30 @@
     "modified": true
   },
   {
+    "vehicleId": "lexus-rz-450e-awd",
+    "fileTitle": "File:Lexus RZ 450e (XEBM15) Auto Zuerich 2023 1X7A1248.jpg",
+    "author": "Alexander-93",
+    "licenseName": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lexus_RZ_450e_(XEBM15)_Auto_Zuerich_2023_1X7A1248.jpg",
+    "modified": true
+  },
+  {
     "vehicleId": "mazda-cx-60-e-skyactiv-phev",
     "fileTitle": "File:Mazda CX-60 PHEV Leonberg 2022 1X7A0442.jpg",
     "author": "Alexander Migl",
     "licenseName": "CC BY-SA 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
     "sourceUrl": "https://commons.wikimedia.org/wiki/File:Mazda_CX-60_PHEV_Leonberg_2022_1X7A0442.jpg",
+    "modified": true
+  },
+  {
+    "vehicleId": "mazda-mx-30-e-skyactiv",
+    "fileTitle": "File:Mazda MX-30 EV 1X7A0377.jpg",
+    "author": "Alexander Migl",
+    "licenseName": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Mazda_MX-30_EV_1X7A0377.jpg",
     "modified": true
   },
   {
@@ -232,6 +285,15 @@
     "modified": true
   },
   {
+    "vehicleId": "mitsubishi-asx-16-phev",
+    "fileTitle": "File:2024 Mitsubishi ASX Leonberg 2024 IMG 0808.jpg",
+    "author": "Alexander-93",
+    "licenseName": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:2024_Mitsubishi_ASX_Leonberg_2024_IMG_0808.jpg",
+    "modified": true
+  },
+  {
     "vehicleId": "mitsubishi-eclipse-cross-phev-4wd",
     "fileTitle": "File:Mitsubishi Eclipse Cross 2.4 Plug-in Hybrid 4WD (Facelift) – f 11102025.jpg",
     "author": "© M 93",
@@ -250,12 +312,30 @@
     "modified": true
   },
   {
+    "vehicleId": "nissan-ariya-87-kwh-e-4orce",
+    "fileTitle": "File:2023 Nissan Ariya Advance Front.jpg",
+    "author": "Vauxford",
+    "licenseName": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:2023_Nissan_Ariya_Advance_Front.jpg",
+    "modified": true
+  },
+  {
     "vehicleId": "nissan-leaf-62-kwh",
     "fileTitle": "File:2024 Nissan Leaf ZE1 EV in Magnetic Blue, front right.jpg",
     "author": "Ethan Llamas",
     "licenseName": "CC BY-SA 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
     "sourceUrl": "https://commons.wikimedia.org/wiki/File:2024_Nissan_Leaf_ZE1_EV_in_Magnetic_Blue,_front_right.jpg",
+    "modified": true
+  },
+  {
+    "vehicleId": "opel-astra-plug-in-hybrid",
+    "fileTitle": "File:Opel Astra L PHEV Leonberg 2022 1X7A0420.jpg",
+    "author": "Alexander Migl",
+    "licenseName": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Opel_Astra_L_PHEV_Leonberg_2022_1X7A0420.jpg",
     "modified": true
   },
   {
@@ -309,6 +389,15 @@
     "modified": true
   },
   {
+    "vehicleId": "polestar-polestar-3-long-range-dual-motor",
+    "fileTitle": "File:Polestar 3 Auto Zuerich 2023 1X7A1307.jpg",
+    "author": "Alexander-93",
+    "licenseName": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Polestar_3_Auto_Zuerich_2023_1X7A1307.jpg",
+    "modified": true
+  },
+  {
     "vehicleId": "polestar-polestar-4-long-range-single-motor",
     "fileTitle": "File:Polestar 4 Long Range Single Motor – f 14022026.jpg",
     "author": "© M 93",
@@ -354,12 +443,66 @@
     "modified": true
   },
   {
+    "vehicleId": "renault-megane-e-tech-ev60",
+    "fileTitle": "File:Renault Megane E-Tech IAA 2021 1X7A0073.jpg",
+    "author": "Alexander Migl",
+    "licenseName": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Renault_Megane_E-Tech_IAA_2021_1X7A0073.jpg",
+    "modified": true
+  },
+  {
+    "vehicleId": "renault-scenic-e-tech-ev87",
+    "fileTitle": "File:Renault Scenic E-Tech, BAS 24, Brussels (P1170249-RR).jpg",
+    "author": "Matti Blume",
+    "licenseName": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Renault_Scenic_E-Tech,_BAS_24,_Brussels_(P1170249-RR).jpg",
+    "modified": true
+  },
+  {
+    "vehicleId": "seat-leon-14-e-hybrid",
+    "fileTitle": "File:SEAT Leon Mk4 1X7A5844.jpg",
+    "author": "Alexander Migl",
+    "licenseName": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:SEAT_Leon_Mk4_1X7A5844.jpg",
+    "modified": true
+  },
+  {
+    "vehicleId": "seat-tarraco-fr-14-e-hybrid",
+    "fileTitle": "File:SEAT Tarraco PHEV FR Auto Zuerich 2023 1X7A1347.jpg",
+    "author": "Alexander-93",
+    "licenseName": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:SEAT_Tarraco_PHEV_FR_Auto_Zuerich_2023_1X7A1347.jpg",
+    "modified": true
+  },
+  {
+    "vehicleId": "skoda-enyaq-iv-80x-4x4",
+    "fileTitle": "File:2025 Škoda Enyaq DSC 8246.jpg",
+    "author": "Alexander Migl",
+    "licenseName": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:2025_%C5%A0koda_Enyaq_DSC_8246.jpg",
+    "modified": true
+  },
+  {
     "vehicleId": "skoda-kodiaq-iv",
     "fileTitle": "File:Skoda Kodiaq 1.5 TSI iV Selection (II) – f 01032025.jpg",
     "author": "© M 93",
     "licenseName": "CC BY-SA 3.0 de",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
     "sourceUrl": "https://commons.wikimedia.org/wiki/File:Skoda_Kodiaq_1.5_TSI_iV_Selection_(II)_%E2%80%93_f_01032025.jpg",
+    "modified": true
+  },
+  {
+    "vehicleId": "skoda-octavia-combi-iv",
+    "fileTitle": "File:Skoda Octavia IV Combi 1X7A0209.jpg",
+    "author": "Alexander Migl",
+    "licenseName": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Skoda_Octavia_IV_Combi_1X7A0209.jpg",
     "modified": true
   },
   {
@@ -417,12 +560,30 @@
     "modified": true
   },
   {
+    "vehicleId": "toyota-rav4-plug-in-hybrid-4x4",
+    "fileTitle": "File:2021 Toyota RAV4 PHV.jpg",
+    "author": "TTTNIS",
+    "licenseName": "CC0 1.0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:2021_Toyota_RAV4_PHV.jpg",
+    "modified": true
+  },
+  {
     "vehicleId": "volkswagen-id3-pro-s",
     "fileTitle": "File:Volkswagen ID.3 (48753683307).jpg",
     "author": "Rutger van der Maar from Leiden, The Netherlands",
     "licenseName": "CC BY 2.0",
     "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
     "sourceUrl": "https://commons.wikimedia.org/wiki/File:Volkswagen_ID.3_(48753683307).jpg",
+    "modified": true
+  },
+  {
+    "vehicleId": "volkswagen-id4-gtx-4motion",
+    "fileTitle": "File:Volkswagen ID.4 GTX IMG 5304.jpg",
+    "author": "Alexander Migl",
+    "licenseName": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Volkswagen_ID.4_GTX_IMG_5304.jpg",
     "modified": true
   },
   {
