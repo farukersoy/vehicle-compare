@@ -92,7 +92,7 @@ export const FILE_PROPS = {
   prop: 'imageinfo|categories',
   iiprop: 'url|size|mime|extmetadata',
   iiurlwidth: '1280',   // Commons only serves standard thumbnail widths (e.g. 500, 960, 1280, 1920)
-  iiextmetadatafilter: 'LicenseShortName|License|LicenseUrl|UsageTerms|Artist|Credit|ImageDescription|ObjectName',
+  iiextmetadatafilter: 'LicenseShortName|License|LicenseUrl|UsageTerms|Artist|Credit|ImageDescription|ObjectName|DateTimeOriginal|DateTime',
   clcategories: QUALITY_CATS.join('|'),
   cllimit: 'max',
 }

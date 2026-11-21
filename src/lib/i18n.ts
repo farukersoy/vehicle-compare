@@ -35,6 +35,8 @@ export interface TranslationShape {
   total: string
   per100km: string
   imageCredits: string
+  /** Caption on AI-generated vehicle images. */
+  illustration: string
   phevEmptyUnknown: string
   loadMore: string
   showLess: string
@@ -93,6 +95,7 @@ export const translations: Record<Lang, TranslationShape> = {
     total: 'Total',
     per100km: 'pro 100 km',
     imageCredits: 'Bildnachweise',
+    illustration: 'Symbolbild',
     phevEmptyUnknown: 'Kein Wert für leere Batterie bekannt – Verbrauch mit voller Batterie angezeigt.',
     loadMore: 'Mehr anzeigen',
     showLess: 'Weniger anzeigen',
@@ -149,6 +152,7 @@ export const translations: Record<Lang, TranslationShape> = {
     total: 'Total',
     per100km: 'per 100 km',
     imageCredits: 'Image credits',
+    illustration: 'Illustration',
     phevEmptyUnknown: 'No empty-battery value known – full-battery consumption shown.',
     loadMore: 'Show more',
     showLess: 'Show less',

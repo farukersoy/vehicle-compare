@@ -1,5 +1,110 @@
 [
   {
+    "vehicleId": "alfa-romeo-junior-elettrica",
+    "type": "ai-generated",
+    "author": "Google Gemini (KI-generiert)"
+  },
+  {
+    "vehicleId": "alfa-romeo-tonale-plug-in-hybrid-q4",
+    "type": "ai-generated",
+    "author": "Google Gemini (KI-generiert)"
+  },
+  {
+    "vehicleId": "audi-q4-e-tron-40",
+    "type": "ai-generated",
+    "author": "Google Gemini (KI-generiert)"
+  },
+  {
+    "vehicleId": "audi-q5-50-tfsi-e-quattro",
+    "type": "ai-generated",
+    "author": "Google Gemini (KI-generiert)"
+  },
+  {
+    "vehicleId": "audi-q6-e-tron-quattro",
+    "type": "ai-generated",
+    "author": "Google Gemini (KI-generiert)"
+  },
+  {
+    "vehicleId": "bmw-i4-edrive40",
+    "type": "ai-generated",
+    "author": "Google Gemini (KI-generiert)"
+  },
+  {
+    "vehicleId": "bmw-ix3",
+    "type": "ai-generated",
+    "author": "Google Gemini (KI-generiert)"
+  },
+  {
+    "vehicleId": "bmw-x3-xdrive30e",
+    "type": "ai-generated",
+    "author": "Google Gemini (KI-generiert)"
+  },
+  {
+    "vehicleId": "citroen-c5-aircross-plug-in-hybrid",
+    "type": "ai-generated",
+    "author": "Google Gemini (KI-generiert)"
+  },
+  {
+    "vehicleId": "citroen-e-c3",
+    "type": "ai-generated",
+    "author": "Google Gemini (KI-generiert)"
+  },
+  {
+    "vehicleId": "citroen-e-c4",
+    "type": "ai-generated",
+    "author": "Google Gemini (KI-generiert)"
+  },
+  {
+    "vehicleId": "cupra-born-77-kwh",
+    "type": "ai-generated",
+    "author": "Google Gemini (KI-generiert)"
+  },
+  {
+    "vehicleId": "cupra-formentor-vz-e-hybrid",
+    "type": "ai-generated",
+    "author": "Google Gemini (KI-generiert)"
+  },
+  {
+    "vehicleId": "cupra-tavascan-vz-awd",
+    "type": "ai-generated",
+    "author": "Google Gemini (KI-generiert)"
+  },
+  {
+    "vehicleId": "dacia-spring-electric-45",
+    "type": "ai-generated",
+    "author": "Google Gemini (KI-generiert)"
+  },
+  {
+    "vehicleId": "dacia-spring-electric-65",
+    "type": "ai-generated",
+    "author": "Google Gemini (KI-generiert)"
+  },
+  {
+    "vehicleId": "fiat-500e-42-kwh",
+    "type": "ai-generated",
+    "author": "Google Gemini (KI-generiert)"
+  },
+  {
+    "vehicleId": "fiat-600e",
+    "type": "ai-generated",
+    "author": "Google Gemini (KI-generiert)"
+  },
+  {
+    "vehicleId": "ford-explorer-electric",
+    "type": "ai-generated",
+    "author": "Google Gemini (KI-generiert)"
+  },
+  {
+    "vehicleId": "ford-kuga-plug-in-hybrid",
+    "type": "ai-generated",
+    "author": "Google Gemini (KI-generiert)"
+  },
+  {
+    "vehicleId": "ford-mustang-mach-e-awd",
+    "type": "ai-generated",
+    "author": "Google Gemini (KI-generiert)"
+  },
+  {
     "vehicleId": "honda-cr-v-ephev",
     "fileTitle": "File:Honda CR-V (6th generation) e-PHEV Auto Zuerich 2023 1X7A1066.jpg",
     "author": "Alexander-93",
@@ -45,6 +150,11 @@
     "modified": true
   },
   {
+    "vehicleId": "jaguar-i-pace-ev400-awd",
+    "type": "ai-generated",
+    "author": "Google Gemini (KI-generiert)"
+  },
+  {
     "vehicleId": "kia-ev6-awd-774-kwh",
     "fileTitle": "File:2023 Kia EV6 GT AWD.jpg",
     "author": "Calreyn88",
@@ -52,6 +162,11 @@
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
     "sourceUrl": "https://commons.wikimedia.org/wiki/File:2023_Kia_EV6_GT_AWD.jpg",
     "modified": true
+  },
+  {
+    "vehicleId": "kia-niro-ev",
+    "type": "ai-generated",
+    "author": "Google Gemini (KI-generiert)"
   },
   {
     "vehicleId": "land-rover-range-rover-evoque-p300e",
@@ -151,6 +266,11 @@
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
     "sourceUrl": "https://commons.wikimedia.org/wiki/File:Opel_Corsa_1.3_CDTI_ecoFLEX_Innovation_(E)_%E2%80%93_Frontansicht,_24._Dezember_2015,_Ratingen.jpg",
     "modified": true
+  },
+  {
+    "vehicleId": "opel-grandland-phev-4x4",
+    "type": "ai-generated",
+    "author": "Google Gemini (KI-generiert)"
   },
   {
     "vehicleId": "peugeot-e-2008",

@@ -1,29 +1,28 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import credits from '@/data/photo-credits.json'
 import { vehicles } from '@/data/vehicles'
+import { photoCredits, isAiCredit, type CommonsCredit } from '@/lib/photo-credits'
 
 export const metadata: Metadata = {
   title: 'Bildnachweise · Image credits — EV Compare',
   description: 'Sources and licences of the vehicle photos used on EV Compare.',
 }
 
-interface Credit {
-  vehicleId: string
-  fileTitle: string
-  author: string
-  licenseName: string
-  licenseUrl: string
-  sourceUrl: string
-  modified: boolean
+const byId = new Map(vehicles.map((v) => [v.id, v]))
+const nameOf = (id: string) => {
+  const v = byId.get(id)
+  return v ? `${v.brand} ${v.model}` : id
 }
 
-const byId = new Map(vehicles.map((v) => [v.id, v]))
-
 export default function CreditsPage() {
-  const rows = (credits as Credit[])
-    .map((c) => ({ ...c, vehicle: byId.get(c.vehicleId) }))
-    .sort((a, b) => `${a.vehicle?.brand} ${a.vehicle?.model}`.localeCompare(`${b.vehicle?.brand} ${b.vehicle?.model}`))
+  const rows = photoCredits
+    .filter((c): c is CommonsCredit => !isAiCredit(c))
+    .map((c) => ({ ...c, name: nameOf(c.vehicleId) }))
+    .sort((a, b) => a.name.localeCompare(b.name))
+  const aiRows = photoCredits
+    .filter(isAiCredit)
+    .map((c) => ({ ...c, name: nameOf(c.vehicleId) }))
+    .sort((a, b) => a.name.localeCompare(b.name))
 
   return (
     <div className="min-h-screen bg-page">
@@ -52,7 +51,7 @@ export default function CreditsPage() {
             {rows.map((c) => (
               <li key={c.vehicleId} className="rounded-xl border border-border bg-surface p-4 text-sm">
                 <p className="font-display font-semibold text-[15px] text-ink">
-                  {c.vehicle ? `${c.vehicle.brand} ${c.vehicle.model}` : c.vehicleId}
+                  {c.name}
                 </p>
                 <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-muted">
                   <dt>Autor · Author</dt>
@@ -74,6 +73,28 @@ export default function CreditsPage() {
               </li>
             ))}
           </ul>
+        )}
+
+        {aiRows.length > 0 && (
+          <section className="mt-12" aria-labelledby="ai-heading">
+            <h2 id="ai-heading" className="font-display font-semibold text-xl sm:text-2xl leading-tight text-ink">
+              KI-generierte Illustrationen <span className="text-muted-page font-normal">· AI-generated illustrations</span>
+            </h2>
+            <p className="mt-3 text-[15px] leading-relaxed text-muted-page">
+              Für diese Fahrzeuge zeigen wir mit Google Gemini erstellte Illustrationen (Symbolbild), keine
+              Fotos. Form, Farbe und Details können vom realen Fahrzeug abweichen. For these vehicles we show
+              illustrations created with Google Gemini, not photos. Shape, colour and details may differ from
+              the real vehicle.
+            </p>
+            <ul className="mt-5 rounded-xl border border-border bg-surface divide-y divide-border text-sm">
+              {aiRows.map((c) => (
+                <li key={c.vehicleId} className="px-4 py-3 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
+                  <span className="font-display font-semibold text-[15px] text-ink">{c.name}</span>
+                  <span className="text-muted">{c.author}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
         )}
 
         <p className="mt-10">

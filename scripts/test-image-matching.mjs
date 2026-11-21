@@ -2,7 +2,9 @@
 // Offline checks for the Commons matching / filtering rules.  node scripts/test-image-matching.mjs
 
 import assert from 'node:assert/strict'
-import { coreModel, makeMatcher, rejectReason, checkLicense } from './lib/image-match.mjs'
+import {
+  coreModel, makeMatcher, rejectReason, checkLicense, yearOf, checkYears, modelRejectReason,
+} from './lib/image-match.mjs'
 
 let passed = 0
 const t = (name, fn) => { fn(); passed++; console.log(`  ok  ${name}`) }
@@ -58,6 +60,57 @@ for (const w of ['Interior', 'cockpit', 'Engine', 'wheel', 'Rim', 'charging', 'C
 }
 t('does not reject "Dual Motor"', () => assert.equal(rejectReason(f('File:Tesla Model 3 Dual Motor.jpg')), null))
 t('rejects via description', () => assert.ok(rejectReason(f('File:a.jpg', { meta: { ImageDescription: '<p>Car at a charging station</p>' } }))))
+
+console.log('rear views, charging scenes')
+for (const title of [
+  'File:2020 Tesla Model X Dual Motor, Rear Right, 08-18-2020.jpg',
+  'File:2022 Mazda CX-60 e-Skyactiv PHEV (Europe) rear view.png',
+  'File:Volvo XC60 RECHARGE Plug-in Hybrid T6 AWD Inscription Expression (5LA-UB420XCP2) rear.jpg',
+  'File:Opel Corsa-e Heck.jpg',
+  'File:Mazda CX-60 back.jpg',
+  'File:Polestar 4 Long Range Single Motor – r 14022026.jpg',
+]) t(`rejects ${title}`, () => assert.match(rejectReason(f(title)), /rear view/))
+t('accepts front suffix "– f 05072025"', () => assert.equal(rejectReason(f('File:Polestar 2 Long Range Dual Motor (Facelift) – f 05072025.jpg')), null))
+t('accepts hatchback', () => assert.equal(rejectReason(f('File:Opel Corsa-e hatchback front.jpg')), null))
+t('accepts "Recharge"', () => assert.equal(rejectReason(f('File:Volvo XC60 Recharge front.jpg')), null))
+t('all-wheel drive in description is fine', () => assert.equal(rejectReason(f('File:a.jpg', { meta: { ImageDescription: 'all-wheel drive, front view' } })), null))
+t('rear-wheel drive in description is fine', () => assert.equal(rejectReason(f('File:a.jpg', { meta: { ImageDescription: 'rear-wheel drive version' } })), null))
+t('rejects charging in title', () => assert.ok(rejectReason(f('File:Porsche Cayenne E-Hybrid charging.jpg'))))
+t('rejects charging station in description', () => assert.ok(rejectReason(f('File:x.jpg', { meta: { ImageDescription: 'at a charging station' } }))))
+t('rejects Ladesäule', () => assert.ok(rejectReason(f('File:Porsche Cayenne an der Ladesäule.jpg'))))
+t('rejects tire close-up', () => assert.ok(rejectReason(f('File:The tire wheel of Volvo EX30 Ultra.jpg'))))
+
+console.log('body style')
+const pan = makeMatcher('Porsche', 'Panamera')
+t('Panamera rejects Sport Turismo', () => assert.equal(pan.test('File:Porsche Panamera Turbo S Sport Turismo e-hybrid.jpg').ok, false))
+t('Panamera rejects Shooting Brake', () => assert.equal(pan.test('File:Porsche Panamera Shooting Brake.jpg').ok, false))
+t('Panamera rejects Executive', () => assert.equal(pan.test('File:Porsche Panamera 4 E-Hybrid Executive.jpg').ok, false))
+t('Panamera accepts sedan', () => assert.equal(pan.test('File:Porsche Panamera 4 E-Hybrid (G3) IAA 2023.jpg').ok, true))
+t('EX30 rejects Cross Country', () => assert.equal(makeMatcher('Volvo', 'EX30 Single Motor Extended Range').test('File:Volvo EX30 Cross Country IAA 2025 DSC 1352.jpg').ok, false))
+t('Panamera first generation rejected', () => assert.ok(modelRejectReason('File:PORSCHE PANAMERA FIRST GENEGRATION China (6).jpg', ['(?i:(?:first|second|1st|2nd)[ _-]?gen)'])))
+t('body style in description', () => assert.equal(pan.bodyStyleIn('A Panamera Sport Turismo in white'), 'sport turismo'))
+t('no body style in plain description', () => assert.equal(pan.bodyStyleIn('Porsche Panamera, front view'), undefined))
+
+console.log('generation years')
+t('title year', () => assert.deepEqual(yearOf(f('File:2019 Tesla Model 3 Long Range AWD.jpg')), { year: 2019, from: 'title' }))
+t('M 93 date suffix', () => assert.equal(yearOf(f('File:Hyundai Kona Elektro (II) – f 08072024.jpg')).year, 2024))
+t('yyyymmdd date', () => assert.equal(yearOf(f('File:BMW iX3, Munich (20250908-P1049823).jpg')).year, 2025))
+t('model year beats photo date stamp', () => assert.deepEqual(yearOf(f('File:2018 Opel Corsa in Sovereign Silver Metallic, front left, 06-05-2025.jpg')), { year: 2018, from: 'title' }))
+t('2018 Corsa rejected for 2020+', () => assert.match(checkYears(f('File:2018 Opel Corsa in Sovereign Silver Metallic, front left, 06-05-2025.jpg'), [2020, null]).reason, /older/))
+t('rejects medical car', () => assert.ok(rejectReason(f('File:Porsche Cayenne (Medical Car) at the 2025 Adelaide Grand Final Parade - 02.jpg'))))
+t('two-digit model year prefix', () => assert.equal(yearOf(f('File:14 Porsche Panamera Base.jpg')).year, 2014))
+t('photo date fallback', () => assert.equal(yearOf(f('File:Nissan Leaf.jpg', { meta: { DateTimeOriginal: '2021-05-02 10:00:00' } })).year, 2021))
+t('Flickr id is no year', () => assert.equal(yearOf(f('File:Renault Captur (53326575621).jpg')), null))
+t('Leaf 2012 rejected for 2018–2025', () => assert.match(checkYears(f("File:Nissan Leaf - Mondial de l'Automobile de Paris 2012 - 006.jpg"), [2018, 2025]).reason, /older/))
+t('Leaf 2026 rejected for 2018–2025', () => assert.match(checkYears(f('File:2026 Nissan Leaf.jpg'), [2018, 2025]).reason, /newer/))
+t('3008 2021 rejected for 2024+', () => assert.ok(checkYears(f('File:2021 Peugeot 3008 B Hybrid4 1X7A0141.jpg'), [2024, null]).reason))
+t('in range', () => assert.equal(checkYears(f('File:2024 Peugeot E-3008.jpg'), [2024, null]).year.year, 2024))
+t('unknown year flagged', () => assert.equal(checkYears(f('File:Peugeot 3008.jpg'), [2024, null]).unknown, true))
+t('no range → no check', () => assert.deepEqual(checkYears(f('File:x 1999.jpg'), undefined), {}))
+const corsaReject = ['\\([A-E]\\)', 'Corsa[ _][A-E](?![-\\w])']
+t('Corsa (E) generation code rejected', () => assert.ok(modelRejectReason('File:Opel Corsa 1.3 CDTI ecoFLEX Innovation (E) – Frontansicht.jpg', corsaReject)))
+t('"Corsa E" generation rejected', () => assert.ok(modelRejectReason('File:Opel Corsa E 1.4.jpg', corsaReject)))
+t('"Corsa-e" kept', () => assert.equal(modelRejectReason('File:Opel Corsa-e Elegance (F) – f 2021.jpg', corsaReject), null))
 
 console.log('licence')
 t('CC BY-SA 4.0 ok', () => assert.equal(checkLicense({ LicenseShortName: 'CC BY-SA 4.0', License: 'cc-by-sa-4.0' }).ok, true))

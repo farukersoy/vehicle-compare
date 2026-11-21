@@ -7,6 +7,7 @@ import { Segmented } from './Controls'
 import { Vehicle, CostResult, Settings } from '@/types'
 import { fmt2, fmtCO2, fmtCH } from '@/lib/calculations'
 import { Translation } from '@/lib/i18n'
+import { isAiImage } from '@/lib/photo-credits'
 
 // Shared soft card shadow (ink-tinted, very low opacity)
 export const CARD_SHADOW =
@@ -110,6 +111,13 @@ export function LargeVehicleCard({
                                 ? 'bg-attention-soft text-attention-ink'
                                 : 'bg-positive-soft text-positive-ink'}`}>
               {cheaperBadgeLabel}
+            </span>
+          )}
+          {/* AI-generated image: subtle caption bottom-right, clear of the top-left "cheaper" badge
+              (type pill and range badge sit above the image box). */}
+          {vehicle.image && isAiImage(vehicle.id) && (
+            <span className="absolute bottom-1.5 right-2 z-10 px-1.5 rounded bg-surface/80 text-[12px] leading-5 text-muted pointer-events-none">
+              {t.illustration}
             </span>
           )}
         </div>

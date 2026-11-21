@@ -56,7 +56,10 @@ export const brandRegex = (brand) =>
 const VARIANTS = ['countryman', 'clubman', 'cabrio', 'cabriolet', 'convertible', 'coupe', 'coupé', 'roadster',
   'estate', 'avant', 'touring', 'kombi', 'combi', 'sportback', 'allroad', 'shooting brake', 'wagon', 'tourer',
   'gran coupe', 'fastback', 'active tourer', 'gran turismo', 'cross turismo', 'sport turismo', 'van', 'cargo',
-  'pickup', 'long wheelbase', 'lwb']
+  'pickup', 'long wheelbase', 'lwb', 'executive', 'cross country']
+
+const variantIn = (text, allowed) =>
+  VARIANTS.find((v) => !allowed.includes(v) && new RegExp(`${B}${esc(v)}${E}`, 'iu').test(text.replace(/_/g, ' ')))
 
 export function makeMatcher(brand, model) {
   const core = coreModel(model)
@@ -87,7 +90,7 @@ export function makeMatcher(brand, model) {
       if (requireBrand && !brandRegex(brand).test(t)) return { ok: false, reason: 'brand missing' }
       const missing = words.filter((_, i) => !wordRes[i].test(t))
       if (missing.length) return { ok: false, reason: `model token missing: ${missing.join(', ')}` }
-      const variant = VARIANTS.find((v) => !allowedVariants.includes(v) && new RegExp(`${B}${esc(v)}${E}`, 'iu').test(t))
+      const variant = variantIn(t, allowedVariants)
       if (variant) return { ok: false, reason: `other body style: ${variant}` }
       for (const { re, num } of siblingRes) {
         const others = [...t.matchAll(re)].map((m) => m[1]).filter((n) => n !== num)
@@ -95,12 +98,17 @@ export function makeMatcher(brand, model) {
       }
       return { ok: true }
     },
+    /** Body style named in free text (e.g. the description says "Sport Turismo") → variant or undefined. */
+    bodyStyleIn(text) {
+      return variantIn(String(text ?? ''), allowedVariants)
+    },
   }
 }
 
 // ─── Rejection filters ────────────────────────────────────────────────────────
 
 const REJECT_WORDS = [
+  'medical car', 'safety car', 'course car', 'police', 'polizei', 'taxi', 'ambulance', 'livery', 'parade',
   'interior', 'cockpit', 'dashboard', 'engine', 'details?', 'logo', 'badge', 'emblem', 'wheels?', 'rims?',
   'charging', 'charger', 'crash', 'race', 'racing', 'rally', 'tuning', 'tuned', 'concept', 'prototype',
   'scale model', 'model car', 'toy', 'wrap', 'wrapped', 'diecast', 'lego',
@@ -110,6 +118,20 @@ const REJECT_WORDS = [
 ]
 const REJECT_RE = new RegExp(`${B}(?:${REJECT_WORDS.join('|')})${E}`, 'iu')
 
+/** Charging scenes and close-ups of tyres – checked in title and description. */
+const SCENE_WORDS = [
+  'charge', 'charging station', 'charging cable', 'charge port', 'plugged in', 'plugged-in',
+  'tires?', 'tyres?', 'reifen', 'ladekabel', 'lades[äa]ule', 'ladebuchse', 'ladepunkt', 'wallbox',
+]
+const SCENE_RE = new RegExp(`${B}(?:${SCENE_WORDS.join('|')})${E}`, 'iu')
+
+/**
+ * Rear views – title only (a description may say "rear-wheel drive").
+ * Also the Commons photographer suffix "– r 05072025" (r = rear, f = front).
+ */
+const REAR_WORDS = ['rear', 'heck', 'heckansicht', 'back', 'back view', 'backside', 'rückansicht', 'hinten', 'arri[eè]re']
+const REAR_RE = new RegExp(`${B}(?:${REAR_WORDS.join('|')})${E}|[–-]\\s?r\\s\\d{6,8}${E}`, 'iu')
+
 export const stripHtml = (s) => String(s ?? '').replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ')
   .replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#0?39;/g, "'").replace(/\s+/g, ' ').trim()
 
@@ -118,10 +140,71 @@ export function rejectReason(file) {
   if (!/^image\/(jpeg|png|webp)$/.test(file.mime ?? '')) return `unsupported type ${file.mime}`
   if ((file.width ?? 0) < 1200) return `too small (${file.width} px wide)`
   if (file.height >= file.width) return 'portrait orientation'
-  const titleHit = REJECT_RE.exec(file.title)
+  const title = file.title.replace(/_/g, ' ')
+  // "all-wheel drive" / "rear-wheel drive" describe the car, not the shot.
+  const desc = stripHtml(file.meta?.ImageDescription).replace(/\b(?:all|four|front|rear|4)[\s-]wheel[\s-]drive\b/gi, ' ')
+  const titleHit = REJECT_RE.exec(title) ?? SCENE_RE.exec(title)
   if (titleHit) return `title mentions "${titleHit[0]}"`
-  const descHit = REJECT_RE.exec(stripHtml(file.meta?.ImageDescription))
+  const rearHit = REAR_RE.exec(`${title} ${stripHtml(file.meta?.ObjectName)}`)
+  if (rearHit) return `rear view ("${rearHit[0].trim()}")`
+  const descHit = REJECT_RE.exec(desc) ?? SCENE_RE.exec(desc)
   if (descHit) return `description mentions "${descHit[0]}"`
+  return null
+}
+
+// ─── Generation (year range) ──────────────────────────────────────────────────
+
+const YEAR = '(?:19|20)\\d{2}'
+
+/** Photo-date stamps in titles; their year says when the photo was taken, not the car's model year. */
+const DATE_STAMPS = [
+  new RegExp(`${B}\\d{1,2}[-./]\\d{1,2}[-./](${YEAR})${E}`, 'gu'),      // 06-05-2025, 24.12.2015
+  new RegExp(`${B}(${YEAR})[-./]\\d{1,2}[-./]\\d{1,2}${E}`, 'gu'),      // 2025-06-05
+  new RegExp(`[–-]\\s?[a-z]{1,2}\\s\\d{4}(${YEAR})${E}`, 'gu'),          // "– f 05072025"
+  new RegExp(`${B}(${YEAR})[01]\\d[0-3]\\d(?=[-_ )])`, 'gu'),            // (20250908-P1049823)
+]
+
+/**
+ * Best-known year of the car in the photo → { year, from } or null.
+ *   model/event year in the title ("2022 Mazda CX-60", "IAA 2023") – date stamps removed first,
+ *   else the title's date stamp ("– f 05072025", "06-05-2025", "(20250908-P1049823)"),
+ *   else EXIF / upload date from the metadata.
+ */
+export function yearOf(file) {
+  let title = file.title.replace(/_/g, ' ')
+  let stamped = null
+  for (const re of DATE_STAMPS) {
+    title = title.replace(re, (_, y) => { stamped = Math.max(stamped ?? 0, Number(y)); return ' ' })
+  }
+  const inTitle = [...title.matchAll(new RegExp(`${B}(${YEAR})${E}`, 'gu'))].map((m) => Number(m[1]))
+  if (inTitle.length) return { year: Math.max(...inTitle), from: 'title' }
+  const short = /^File:\s?(\d{2})\s+\p{Lu}/u.exec(title)                  // "File:14 Porsche Panamera", "File:23 BMW i4"
+  if (short) return { year: 2000 + Number(short[1]), from: 'title' }
+  if (stamped) return { year: stamped, from: 'title date' }
+  for (const key of ['DateTimeOriginal', 'DateTime']) {
+    const m = new RegExp(`${B}(${YEAR})${E}`, 'u').exec(stripHtml(file.meta?.[key]))
+    if (m) return { year: Number(m[1]), from: key === 'DateTimeOriginal' ? 'photo date' : 'upload date' }
+  }
+  return null
+}
+
+/** → { reason } when the year is outside [from, to], { unknown: true } when no year, else { year }. */
+export function checkYears(file, range) {
+  if (!range) return {}
+  const [from, to] = range
+  const y = yearOf(file)
+  if (!y) return { unknown: true }
+  if (from && y.year < from) return { reason: `older than current generation (${y.year} < ${from}, ${y.from})` }
+  if (to && y.year > to) return { reason: `newer generation (${y.year} > ${to}, ${y.from})` }
+  return { year: y }
+}
+
+/** Per-model reject patterns (case-sensitive, e.g. old generation codes) → reason or null. */
+export function modelRejectReason(text, patterns = []) {
+  for (const src of patterns) {
+    const m = new RegExp(src, 'u').exec(text.replace(/_/g, ' '))
+    if (m) return `excluded for this model ("${m[0]}")`
+  }
   return null
 }
 

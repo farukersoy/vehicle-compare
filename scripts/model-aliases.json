@@ -1,9 +1,66 @@
 {
-  "_comment": "Extra Commons search terms per vehicle id (or per 'Brand Model' prefix). Example entries below.",
+  "_comment": "Per vehicle id. Either an array of extra Commons search terms, or an object { search: [extra search terms], match: core model text used for matching instead of the full model (e.g. 'Panamera' instead of 'Panamera 4'), years: [from, to|null] current-generation range – candidates with a known year (title, Commons date suffix or EXIF date) outside it are rejected, candidates without a year are flagged, reject: [case-sensitive regex sources that disqualify a title, e.g. old generation codes] }.",
   "volvo-ex40-twin-motor-xc40-recharge": ["Volvo XC40 Recharge", "Volvo EX40"],
   "mercedes-eqa-300-4matic": ["Mercedes-Benz EQA"],
   "mercedes-eqb-350-4matic": ["Mercedes-Benz EQB"],
   "mercedes-glc-300-e-4matic": ["Mercedes-Benz GLC X254"],
   "citroen-e-c4": ["Citroën ë-C4", "Citroen e-C4"],
-  "citroen-e-c3": ["Citroën ë-C3", "Citroen e-C3"]
+  "citroen-e-c3": ["Citroën ë-C3", "Citroen e-C3"],
+
+  "opel-corsa-e": {
+    "search": ["Opel Corsa-e", "Opel Corsa F", "Opel Corsa Electric"],
+    "match": "Corsa",
+    "years": [2020, null],
+    "reject": ["\\([A-E]\\)", "Corsa[ _][A-E](?![-\\w])"]
+  },
+  "volvo-ex30-single-motor-extended-range": {
+    "search": ["Volvo EX30"],
+    "years": [2023, null]
+  },
+  "nissan-leaf-62-kwh": {
+    "search": ["Nissan Leaf ZE1", "Nissan Leaf e+"],
+    "match": "Leaf",
+    "years": [2018, 2025],
+    "reject": ["\\bA?ZE0\\b"]
+  },
+  "peugeot-3008-plug-in-hybrid-225": {
+    "search": ["Peugeot 3008 III", "Peugeot 3008 Hybrid", "Peugeot E-3008"],
+    "match": "3008",
+    "years": [2024, null],
+    "reject": ["Hybrid4", "\\bII\\b", "\\bP84\\b"]
+  },
+  "peugeot-e-3008": {
+    "search": ["Peugeot E-3008", "Peugeot 3008 III"],
+    "match": "3008",
+    "years": [2024, null],
+    "reject": ["Hybrid4", "\\bII\\b", "\\bP84\\b"]
+  },
+  "porsche-panamera-4-e-hybrid": {
+    "search": ["Porsche Panamera G3", "Porsche Panamera 4 E-Hybrid", "Porsche Panamera (976)"],
+    "match": "Panamera",
+    "years": [2024, null],
+    "reject": ["\\b(?:970|971)\\b", "\\bG[12]\\b", "(?i:(?:first|second|1st|2nd)[ _-]?gen)"]
+  },
+  "land-rover-range-rover-evoque-p300e": {
+    "search": ["Range Rover Evoque L551", "Range Rover Evoque P300e"],
+    "years": [2019, null],
+    "reject": ["\\bL538\\b"]
+  },
+  "mazda-cx-60-e-skyactiv-phev": {
+    "search": ["Mazda CX-60"],
+    "years": [2022, null]
+  },
+  "tesla-model-x-dual-motor": {
+    "search": ["Tesla Model X"],
+    "years": [2016, null]
+  },
+  "volvo-xc60-recharge-t6-awd": {
+    "search": ["Volvo XC60 Recharge", "Volvo XC60 T6", "Volvo XC60 (2017)"],
+    "years": [2017, null]
+  },
+  "porsche-cayenne-e-hybrid": {
+    "search": ["Porsche Cayenne E3", "Porsche Cayenne E-Hybrid", "Porsche Cayenne (9YA)"],
+    "years": [2018, null],
+    "reject": ["\\b(?:9PA|92A)\\b", "\\bE2\\b"]
+  }
 }
