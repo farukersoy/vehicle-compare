@@ -89,7 +89,7 @@ const aliases = await readJson(p('scripts/model-aliases.json'), {})
 const modelConfig = (id) => {
   const a = aliases[id]
   if (Array.isArray(a)) return { search: a, reject: [] }
-  return { search: a?.search ?? [], match: a?.match, years: a?.years, reject: a?.reject ?? [] }
+  return { search: a?.search ?? [], match: a?.match, years: a?.years, reject: a?.reject ?? [], prefer: a?.prefer ?? [] }
 }
 const credits = await readJson(PATHS.credits, [])
 const creditIds = new Set(credits.map((c) => c.vehicleId))
@@ -179,6 +179,10 @@ async function gatherCandidates(v) {
     let s = score
     if (years.year) { s += 1; why.push(`+1 year ${years.year.year} in range (${years.year.from})`) }
     if (years.unknown) { s -= 2; why.push('-2 no year – check generation') }
+    for (const [src, pts] of cfg.prefer) {
+      const m = new RegExp(src, 'u').exec(`${named} ${stripHtml(file.meta?.ImageDescription)}`)
+      if (m) { s += pts; why.push(`+${pts} preferred ("${m[0]}")`) }
+    }
     candidates.set(file.title, {
       file, source, license, author: authorOf(file.meta), score: Math.round(s * 10) / 10, why,
       ambiguous: match.ambiguous, yearUnknown: !!years.unknown,
@@ -251,7 +255,7 @@ for (const [i, v] of todo.entries()) {
     if (chosen.ambiguous) reasons.push(chosen.ambiguous)
     if (chosen.yearUnknown) reasons.push('no year in title or metadata – check the generation')
     const status = reasons.length ? 'needs-review' : 'found'
-    results.push({ v, status, chosen, reasons, categories, rejected, alternatives: ranked.filter((c) => c !== chosen).slice(0, 3) })
+    results.push({ v, status, chosen, reasons, categories, rejected, alternatives: ranked.filter((c) => c !== chosen).slice(0, 5) })
     log(`${label}: ${status} → ${chosen.file.title} (score ${chosen.score})`)
   } catch (err) {
     results.push({ v, status: 'not-found', note: `error: ${err.message}` })

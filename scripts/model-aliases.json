@@ -1,5 +1,5 @@
 {
-  "_comment": "Per vehicle id. Either an array of extra Commons search terms, or an object { search: [extra search terms], match: core model text used for matching instead of the full model (e.g. 'Panamera' instead of 'Panamera 4'), years: [from, to|null] current-generation range – candidates with a known year (title, Commons date suffix or EXIF date) outside it are rejected, candidates without a year are flagged, reject: [case-sensitive regex sources that disqualify a title, e.g. old generation codes] }.",
+  "_comment": "Per vehicle id. Either an array of extra Commons search terms, or an object { search: [extra search terms], match: core model text used for matching instead of the full model (e.g. 'Panamera' instead of 'Panamera 4'), years: [from, to|null] current-generation range – candidates with a known year (title, Commons date suffix or EXIF date) outside it are rejected, candidates without a year are flagged, reject: [case-sensitive regex sources that disqualify a title, e.g. old generation codes], prefer: [[regex, points], …] score bonus when title or description matches (e.g. preferred variant or colour) }.",
   "volvo-ex40-twin-motor-xc40-recharge": ["Volvo XC40 Recharge", "Volvo EX40"],
   "mercedes-eqa-300-4matic": ["Mercedes-Benz EQA"],
   "mercedes-eqb-350-4matic": ["Mercedes-Benz EQB"],
@@ -46,6 +46,13 @@
   "citroen-e-c4": ["Citroën ë-C4", "Citroen e-C4"],
   "citroen-e-c3": ["Citroën ë-C3", "Citroen e-C3"],
 
+  "opel-grandland-phev-4x4": {
+    "search": ["Opel Grandland X Hybrid4", "Opel Grandland X"],
+    "match": "Grandland X",
+    "years": [2017, 2021],
+    "reject": ["(?i:vizor|facelift|\\bFL\\b|\\bGSe\\b|electric|elektro)"],
+    "prefer": [["(?i:hybrid[ _-]?4)", 2], ["(?i:\\b(?:red|rot|rouge|rosso)\\b)", 0.5]]
+  },
   "opel-corsa-e": {
     "search": ["Opel Corsa-e", "Opel Corsa F", "Opel Corsa Electric"],
     "match": "Corsa",

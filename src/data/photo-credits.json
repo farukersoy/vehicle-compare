@@ -349,8 +349,12 @@
   },
   {
     "vehicleId": "opel-grandland-phev-4x4",
-    "type": "ai-generated",
-    "author": "Google Gemini (KI-generiert)"
+    "fileTitle": "File:Opel Grandland X.jpg",
+    "author": "Alexander Migl",
+    "licenseName": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Opel_Grandland_X.jpg",
+    "modified": true
   },
   {
     "vehicleId": "peugeot-3008-plug-in-hybrid-225",

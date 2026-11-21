@@ -77,7 +77,7 @@ gh repo create vehicle-compare --public --source=. --remote=origin --push
 - **30 vehicles** across BEV, PHEV, HEV categories
 - **10+ brands**: Opel, VW, Toyota, Hyundai, Kia, BMW, Tesla, Mercedes, Audi, Volvo, Dacia, Peugeot, Mini, Honda, Lucid
 - Data quality flag: `measured` (owner data) vs `estimated`
-- Reference vehicle: **Opel Grandland PHEV 4×4** — owner's real 22,849 km measurements
+- Reference vehicle: **Opel Grandland X Hybrid4 (2020)** — owner's real 22,849 km measurements
 
 ## Bulk build (one-time, offline)
 

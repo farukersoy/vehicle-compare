@@ -58,7 +58,7 @@ export const translations: Record<Lang, TranslationShape> = {
     tagline: 'Schweiz · Reale Verbrauchsdaten',
     title: 'EV Vergleich',
     subtitle:
-      'Vergleichen Sie die realen Energiekosten und den CO₂-Ausstoss von BEV, PHEV und Hybridfahrzeugen mit Ihrem Opel Grandland.',
+      'Vergleichen Sie die realen Energiekosten und den CO₂-Ausstoss von BEV, PHEV und Hybridfahrzeugen mit Ihrem Opel Grandland X Hybrid4.',
     chooseVehicle: 'Fahrzeug zum Vergleichen wählen',
     vehicles: 'Fahrzeuge',
     allBrands: 'Alle Marken',
@@ -112,7 +112,7 @@ export const translations: Record<Lang, TranslationShape> = {
     tagline: 'Switzerland · Real-world data',
     title: 'EV Compare',
     subtitle:
-      'Compare the real energy cost and CO₂ of BEV, PHEV and hybrid vehicles against your Opel Grandland.',
+      'Compare the real energy cost and CO₂ of BEV, PHEV and hybrid vehicles against your Opel Grandland X Hybrid4.',
     chooseVehicle: 'Choose a vehicle to compare',
     vehicles: 'vehicles',
     allBrands: 'All brands',

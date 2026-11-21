@@ -109,8 +109,9 @@ for (const row of parsed) {
   if (!brandRaw || !model) { report.skipped.push([where, `${brandRaw} ${model}`.trim() || '(empty)', 'missing brand or model']); continue }
 
   const { name: brand, info: brandInfo, unknown: unknownBrand } = canonicalBrand(brandRaw)
+  // Reference row: brand Opel AND model containing "Grandland" (any spelling/case).
   if (brand === 'Opel' && /grandland/i.test(model)) {
-    report.skipped.push([where, `${brand} ${model}`, 'reference vehicle (Opel Grandland) is never imported'])
+    report.skipped.push([where, `${brand} ${model}`, 'reference vehicle (Opel Grandland X Hybrid4) is never imported'])
     continue
   }
 

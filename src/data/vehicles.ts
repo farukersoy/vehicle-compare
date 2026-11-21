@@ -6,11 +6,11 @@ export const vehicles: Vehicle[] = [
   // ─── REFERENZ: Reale Messdaten des Fahrzeughalters ─────────────────────────
   {
     id: 'opel-grandland-phev-4x4',
-    model: 'Grandland PHEV 4×4',
+    model: 'Grandland X Hybrid4',
     brand: 'Opel',
     brandDomain: 'opel.com',
     brandColor: '#E8772E',
-    image: '/cars/opel-grandland-phev-4x4.jpg',
+    image: '/cars/opel-grandland-phev-4x4.webp',
     type: 'PHEV',
     segment: 'Kompakt-SUV',
     silhouette: 'suv',
