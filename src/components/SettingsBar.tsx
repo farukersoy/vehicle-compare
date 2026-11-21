@@ -3,8 +3,8 @@
 import { useState } from 'react'
 import { Settings } from '@/types'
 import { Lang, Translation } from '@/lib/i18n'
-import { IconBatteryFull, IconBatteryLow, IconChevronDown, IconSliders } from './Icons'
-import { DecimalInput, Segmented } from './Controls'
+import { IconChevronDown, IconSliders } from './Icons'
+import { DecimalInput } from './Controls'
 
 function Field({ label, children, htmlFor }: { label: string; children: React.ReactNode; htmlFor?: string }) {
   const Tag = htmlFor ? 'label' : 'div'
@@ -43,18 +43,16 @@ export function LanguageSwitch({ lang, onLangChange, t }: {
 interface Props {
   settings: Settings
   onChange: (next: Partial<Settings>) => void
-  showPhevToggle: boolean
   t: Translation
 }
 
-export default function SettingsBar({ settings, onChange, showPhevToggle, t }: Props) {
+export default function SettingsBar({ settings, onChange, t }: Props) {
   const [open, setOpen] = useState(false)
 
   const summary = [
-    showPhevToggle ? (settings.phevScenario === 'full' ? t.full : t.empty) : null,
     `${settings.co2GridGkwh} g/kWh`,
     `CHF ${settings.fuelPriceCHF}/L`,
-  ].filter(Boolean).join(' · ')
+  ].join(' · ')
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -73,17 +71,6 @@ export default function SettingsBar({ settings, onChange, showPhevToggle, t }: P
       <div id="settings-panel" className={`${open ? 'block' : 'hidden'} lg:block mt-2 lg:mt-0`}>
         <div className="rounded-xl border border-border bg-surface p-4 grid gap-4 sm:grid-cols-2
                         lg:flex lg:flex-wrap lg:items-end lg:gap-x-8 lg:gap-y-4 lg:px-6">
-          {showPhevToggle && (
-            <Field label={t.phevBattery}>
-              <Segmented label={t.phevBattery} value={settings.phevScenario}
-                onChange={(v) => onChange({ phevScenario: v })}
-                options={[
-                  { value: 'full', label: t.full, icon: <IconBatteryFull size={15} /> },
-                  { value: 'empty', label: t.empty, icon: <IconBatteryLow size={15} /> },
-                ]} />
-            </Field>
-          )}
-
           <Field label={t.gridCo2} htmlFor="grid-co2">
             <div className="flex items-center gap-3">
               <input id="grid-co2" type="range" min={10} max={120} step={5}

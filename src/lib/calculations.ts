@@ -4,7 +4,6 @@ import { Vehicle, Settings, CostResult } from '@/types'
 
 export const DEFAULT_SETTINGS: Settings = {
   chargeRate: 'home',
-  phevScenario: 'full',
   co2GridGkwh: 50,        // g CO2/kWh default grid factor
   homePriceCHF: 0.278,    // CHF/kWh — owner's billed average (ElCom median 2026: 0.277)
   publicPriceCHF: 0.59,   // CHF/kWh — TCS median DC fast charging 2026
@@ -27,14 +26,13 @@ export const ANNUAL_KM = 15_000
  * Rules:
  *  - BEV:  only electric cost, no fuel
  *  - HEV:  only fuel cost (battery never charges from grid)
- *  - PHEV: electric + fuel — switches to empty-battery scenario when requested
+ *  - PHEV: electric + fuel (values assume a regularly charged vehicle)
  *  - The reference vehicle (owner's Opel) always charges at home; the
  *    home/public toggle only applies to the compared vehicle.
  */
 export function calculateCost(vehicle: Vehicle, settings: Settings): CostResult {
   const {
     chargeRate,
-    phevScenario,
     co2GridGkwh,
     homePriceCHF,
     publicPriceCHF,
@@ -44,19 +42,13 @@ export function calculateCost(vehicle: Vehicle, settings: Settings): CostResult 
   const effectiveRate = vehicle.isReference ? 'home' : chargeRate
   const kwhPrice = effectiveRate === 'home' ? homePriceCHF : publicPriceCHF
 
-  // Determine effective consumption based on vehicle type + scenario
+  // Determine effective consumption based on vehicle type
   let electricKwhUsed = vehicle.electricKwh100km
   let fuelLUsed = vehicle.fuelL100km
 
   if (vehicle.type === 'HEV') {
     // HEV never draws from grid
     electricKwhUsed = 0
-  }
-
-  if (vehicle.type === 'PHEV' && phevScenario === 'empty') {
-    // Simulate worst-case: battery is flat, running on fuel only
-    electricKwhUsed = 0
-    fuelLUsed = vehicle.fuelL100kmEmpty ?? vehicle.fuelL100km * 3.5
   }
 
   // ── Cost ──────────────────────────────────────────────────────────────────────

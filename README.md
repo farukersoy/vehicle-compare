@@ -124,8 +124,8 @@ site never fetches anything at runtime.
 | Petrol CO₂ | 2'780 g/L | — |
 | CO₂ grid factor | 50 g/kWh | Adjustable slider |
 
-The reference Opel is always calculated with home charging.
-| PHEV scenario | Full battery | Toggle: full ↔ empty |
+The reference Opel is always calculated with home charging. PHEV values
+assume a regularly charged vehicle.
 
 ---
 

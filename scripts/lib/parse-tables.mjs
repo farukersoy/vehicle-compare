@@ -54,8 +54,9 @@ export function headerField(h) {
   if (/co2|co₂/.test(s)) return 'co2'
   if (/reichweite|range/.test(s)) return 'range'
   if (/tank/.test(s)) return 'tank'
+  // Empty-battery fuel columns are not used; ignore them so they never land in `fuel` or `battery`.
+  if (/(benzin|kraftstoff|fuel|sprit)/.test(s) && /(leer|empty|ladungserhalt|charge.?sustain)/.test(s)) return null
   if (/(batterie|battery|akku)/.test(s) && !/\/\s*100/.test(s)) return 'battery'
-  if (/(benzin|kraftstoff|fuel|sprit)/.test(s) && /(leer|empty|ladungserhalt|charge.?sustain)/.test(s)) return 'fuelEmpty'
   if (/(benzin|kraftstoff|fuel|sprit)/.test(s)) return 'fuel'
   if (/(strom|electric|energie|kwh\s*\/\s*100)/.test(s)) return 'kwh'
   return null

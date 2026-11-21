@@ -23,12 +23,6 @@ export const IconFuel = (p: IconProps) => (
   <Base {...p}><path d="M4 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16" /><path d="M3 21h12" /><path d="M4 10h10" />
     <path d="M14 8h2a2 2 0 0 1 2 2v6a1.5 1.5 0 0 0 3 0V8l-3-3" /></Base>
 )
-export const IconBatteryFull = (p: IconProps) => (
-  <Base {...p}><rect x="2" y="7" width="17" height="10" rx="2" /><path d="M22 11v2" /><path d="M6 10v4M10 10v4M14 10v4" /></Base>
-)
-export const IconBatteryLow = (p: IconProps) => (
-  <Base {...p}><rect x="2" y="7" width="17" height="10" rx="2" /><path d="M22 11v2" /><path d="M6 10v4" /></Base>
-)
 export const IconSliders = (p: IconProps) => (
   <Base {...p}><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0" />
     <circle cx="16" cy="6" r="2" /><circle cx="10" cy="12" r="2" /><circle cx="18" cy="18" r="2" /></Base>

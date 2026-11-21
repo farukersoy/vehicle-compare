@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { vehicles, REFERENCE_VEHICLE_ID } from '@/data/vehicles'
 import { calculateCost, DEFAULT_SETTINGS } from '@/lib/calculations'
-import { CostResult, Settings, Vehicle } from '@/types'
+import { CostResult, Settings } from '@/types'
 import { Lang, translations } from '@/lib/i18n'
 import { smoothScrollTo } from '@/lib/motion'
 import { displayDelta } from '@/lib/display'
@@ -13,18 +13,6 @@ import { LargeVehicleCard } from '@/components/VehicleCard'
 import ComparisonDelta, { formatCostDiff } from '@/components/ComparisonDelta'
 import VehicleGrid from '@/components/VehicleGrid'
 import { IconArrowUp, IconCar } from '@/components/Icons'
-
-/**
- * "PHEV battery empty" needs a measured empty-battery consumption. Where the
- * dataset has none (fuelL100kmEmpty undefined) the full-battery values are
- * kept instead of inventing a number; the card shows a short note.
- */
-const lacksEmptyValue = (v: Vehicle, s: Settings) =>
-  v.type === 'PHEV' && s.phevScenario === 'empty' && v.fuelL100kmEmpty == null
-
-function effectiveSettings(v: Vehicle, s: Settings): Settings {
-  return lacksEmptyValue(v, s) ? { ...s, phevScenario: 'full' } : s
-}
 
 export default function Home() {
   const [selectedId, setSelectedId] = useState<string | null>(null)
@@ -38,15 +26,12 @@ export default function Home() {
 
   const allResults = useMemo(() => {
     const map = new Map<string, CostResult>()
-    vehicles.forEach((v) => map.set(v.id, calculateCost(v, effectiveSettings(v, settings))))
+    vehicles.forEach((v) => map.set(v.id, calculateCost(v, settings)))
     return map
   }, [settings])
 
   const referenceResult = allResults.get(REFERENCE_VEHICLE_ID)!
   const selectedResult  = selectedId ? allResults.get(selectedId) ?? null : null
-
-  const showPhevToggle =
-    referenceVehicle.type === 'PHEV' || selectedVehicle?.type === 'PHEV'
 
   // Same rounded comparison as the delta band, so badges and numbers always agree
   const referenceCheaper = selectedResult
@@ -116,7 +101,6 @@ export default function Home() {
       <SettingsBar
         settings={settings}
         onChange={(p) => setSettings((s) => ({ ...s, ...p }))}
-        showPhevToggle={showPhevToggle}
         t={t}
       />
 
@@ -130,7 +114,6 @@ export default function Home() {
             <LargeVehicleCard
               vehicle={referenceVehicle}
               result={referenceResult}
-              note={lacksEmptyValue(referenceVehicle, settings) ? t.phevEmptyUnknown : undefined}
               t={t}
               priority
               cheaperBadgeLabel={selectedResult && referenceCheaper ? t.opelCheaper : undefined}
@@ -156,7 +139,6 @@ export default function Home() {
                 <LargeVehicleCard
                   vehicle={selectedVehicle}
                   result={selectedResult}
-                  note={lacksEmptyValue(selectedVehicle, settings) ? t.phevEmptyUnknown : undefined}
                   t={t}
                   cheaperBadgeLabel={!referenceCheaper ? t.rivalCheaper : undefined}
                   cheaperBadgeTone="red"
@@ -202,6 +184,7 @@ export default function Home() {
           <p>{t.footer1}</p>
           <p>{t.footer2}</p>
           <p>{t.footer3}</p>
+          <p>{t.footerPhev}</p>
           <p>
             <Link href="/credits" className="underline underline-offset-2 hover:text-ink">{t.imageCredits}</Link>
           </p>

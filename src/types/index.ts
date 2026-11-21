@@ -21,7 +21,6 @@ export interface Vehicle {
   silhouette: SilhouetteShape
   electricKwh100km: number
   fuelL100km: number
-  fuelL100kmEmpty?: number
   co2DirectGkm: number
   dataQuality: DataQuality
   sourceNote: string
@@ -50,7 +49,6 @@ export interface VehicleInvoice {
 
 export interface Settings {
   chargeRate: 'home' | 'public'
-  phevScenario: 'full' | 'empty'
   co2GridGkwh: number
   homePriceCHF: number
   publicPriceCHF: number

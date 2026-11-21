@@ -65,7 +65,7 @@ export function appendEntries(text, entriesSource) {
 
 const FIELD_ORDER = [
   'id', 'model', 'brand', 'brandDomain', 'brandColor', 'image', 'type', 'segment', 'silhouette',
-  'electricKwh100km', 'fuelL100km', 'fuelL100kmEmpty', 'co2DirectGkm', 'dataQuality', 'sourceNote',
+  'electricKwh100km', 'fuelL100km', 'co2DirectGkm', 'dataQuality', 'sourceNote',
   'rangeKm', 'tankLiters', 'usableBatteryKwh',
 ]
 

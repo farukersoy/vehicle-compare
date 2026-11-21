@@ -36,7 +36,7 @@ const PETROL_CO2 = 2780      // g/L
 const LIMITS = { bevKwh: [10, 30], phevFuel: [0.3, 9], phevKwh: [5, 40] }
 
 const NEUTRAL_COLOR = '#64748B'
-const OVERRIDE_FIELDS = ['silhouette', 'segment', 'model', 'fuelL100kmEmpty', 'rangeKm', 'tankLiters', 'usableBatteryKwh']
+const OVERRIDE_FIELDS = ['silhouette', 'segment', 'model', 'rangeKm', 'tankLiters', 'usableBatteryKwh']
 const r1 = (n) => Math.round(n * 10) / 10
 
 // ─── Load inputs ──────────────────────────────────────────────────────────────
@@ -99,7 +99,7 @@ const report = {
 }
 const seen = new Map()     // key → first record
 const pendingExisting = [] // { id, set } edits for existing entries
-const valuesOf = (r) => [r.type, r.kwh, r.fuel, r.fuelEmpty, r.range].join('|')
+const valuesOf = (r) => [r.type, r.kwh, r.fuel, r.range].join('|')
 
 for (const row of parsed) {
   const c = row.cells
@@ -125,7 +125,7 @@ for (const row of parsed) {
     where, brand, model, brandInfo, unknownBrand,
     id: slugify(`${brand} ${model}`),
     type: parseType(c.type),
-    kwh: num('kwh'), fuel: num('fuel'), fuelEmpty: num('fuelEmpty'),
+    kwh: num('kwh'), fuel: num('fuel'),
     cost: num('cost'), co2: num('co2'), range: num('range'), tank: num('tank'), battery: num('battery'),
   }
   if (!rec.type) issues.push(`unknown drive type "${cleanCell(c.type)}"`)
@@ -184,7 +184,6 @@ function handleExisting(v, rec) {
   // Optional fields that are missing are always added.
   const add = {}
   if (v.rangeKm == null && rec.range != null) add.rangeKm = Math.round(rec.range)
-  if (v.type === 'PHEV' && v.fuelL100kmEmpty == null && rec.fuelEmpty != null) add.fuelL100kmEmpty = rec.fuelEmpty
   if (v.tankLiters == null && rec.tank != null) add.tankLiters = rec.tank
   if (v.usableBatteryKwh == null && rec.battery != null) add.usableBatteryKwh = rec.battery
   for (const [k, val] of Object.entries(add)) report.existingAdded.push([v.id, k, val, rec.where])
@@ -194,7 +193,6 @@ function handleExisting(v, rec) {
   const cmp = (field, next) => { if (next != null && v[field] !== next) diffs.push([field, v[field], next]) }
   cmp('electricKwh100km', v.type === 'HEV' ? null : rec.kwh)
   cmp('fuelL100km', rec.fuel)
-  if (v.type === 'PHEV') cmp('fuelL100kmEmpty', rec.fuelEmpty)
   if (rec.range != null && v.rangeKm != null) cmp('rangeKm', Math.round(rec.range))
   for (const [field, oldV, newV] of diffs) {
     (UPDATE_EXISTING ? report.existingChanged : report.existingDiffNotApplied).push([v.id, field, oldV ?? '–', newV, rec.where])
@@ -218,7 +216,6 @@ function handleNew(rec) {
     silhouette: cls.silhouette,
     electricKwh100km: kwh,
     fuelL100km: fuel,
-    fuelL100kmEmpty: rec.type === 'PHEV' && rec.fuelEmpty != null ? rec.fuelEmpty : undefined,
     co2DirectGkm: r1((kwh * GRID_CO2 + fuel * PETROL_CO2) / 100),
     dataQuality: 'measured',
     sourceNote: `Gemini-Abfrage (Fahrzeughalter), ${monthYearDe()}`,
@@ -234,7 +231,6 @@ function handleNew(rec) {
   if (Object.keys(ov).length) notes.push('override')
   if (cls.rule === 'default' && !ov.silhouette) notes.push('silhouette: classifier default – check')
   if (rec.unknownBrand) notes.push('unknown brand')
-  if (entry.type === 'PHEV' && entry.fuelL100kmEmpty == null) notes.push('no empty-battery value (app keeps full-battery value)')
   const similar = existingByCore.get(coreKey(rec.brand, rec.model))
   if (similar) notes.push(`similar to existing ${similar.id}`)
   if (existingById.has(entry.id)) report.warnings.push(`${entry.id}: id already exists with a different brand/model spelling`)
