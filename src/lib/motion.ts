@@ -14,20 +14,23 @@ export function prefersReducedMotion(): boolean {
  */
 export function useCountUp(target: number, durationMs = 600): number {
   const [value, setValue] = useState(() => (prefersReducedMotion() ? target : 0))
-  const fromRef = useRef(prefersReducedMotion() ? target : 0)
+  // The value currently on screen. Animations start from it, so an interrupted
+  // or re-run effect (React runs effects twice in development) still ends on target.
+  const shownRef = useRef(prefersReducedMotion() ? target : 0)
 
   useEffect(() => {
-    const from = fromRef.current
-    fromRef.current = target
+    const from = shownRef.current
     if (from === target) return
-    if (prefersReducedMotion()) { setValue(target); return }
+    if (prefersReducedMotion()) { shownRef.current = target; setValue(target); return }
 
     let raf = 0
     const start = performance.now()
     const tick = (now: number) => {
       const p = Math.min(1, (now - start) / durationMs)
       const eased = 1 - Math.pow(1 - p, 3)
-      setValue(from + (target - from) * eased)
+      const v = p >= 1 ? target : from + (target - from) * eased
+      shownRef.current = v
+      setValue(v)
       if (p < 1) raf = requestAnimationFrame(tick)
     }
     raf = requestAnimationFrame(tick)

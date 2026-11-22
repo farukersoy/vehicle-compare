@@ -46,7 +46,7 @@ function PickerRow({ vehicle, result, referenceResult, selected, onSelect, t }: 
   const cost = shownValues(result).cost
   const diff = shownDiff(referenceResult, result).cost
   return (
-    <li>
+    <li className="min-w-0">
       <button type="button" onClick={onSelect} aria-pressed={selected}
         className={`w-full min-h-16 flex items-center gap-3 rounded-xl border bg-surface px-3 py-2 text-left
                     transition-[border-color,box-shadow] duration-150 motion-reduce:transition-none
@@ -171,7 +171,7 @@ export default function VehiclePicker({ vehicles, results, referenceResult, sele
       {filtered.length === 0 ? (
         <p className="mt-8 text-center text-[15px] text-muted">{t.noResults}</p>
       ) : (
-        <ul className="mt-4 grid gap-2 lg:grid-cols-2">
+        <ul className="mt-4 grid gap-2 grid-cols-[minmax(0,1fr)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
           {visible.map((v) => (
             <PickerRow key={v.id} vehicle={v} result={results.get(v.id)!} referenceResult={referenceResult}
               selected={v.id === selectedId} onSelect={() => onSelect(v.id)} t={t} />
