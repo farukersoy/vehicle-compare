@@ -791,7 +791,7 @@ export const vehicles: Vehicle[] = [
     brand: 'Opel',
     brandDomain: 'opel.com',
     brandColor: '#E8772E',
-    image: '/cars/opel-corsa-e.jpg',
+    image: '/cars/opel-corsa-e.webp',
     type: 'BEV',
     segment: 'Kompakt',
     silhouette: 'hatchback',
