@@ -97,8 +97,27 @@ export default function CreditsPage() {
           </section>
         )}
 
+        <section className="mt-12" aria-labelledby="logos-heading">
+          <h2 id="logos-heading" className="font-display font-semibold text-xl sm:text-2xl leading-tight text-ink">
+            Marken und Logos <span className="text-muted font-normal">· Brands and logos</span>
+          </h2>
+          <div className="mt-3 space-y-2 text-[15px] leading-relaxed text-muted">
+            <p lang="de">
+              Marken und Logos gehören den jeweiligen Inhabern und dienen nur der Kennzeichnung. Die Logoformen
+              stammen aus der Bibliothek{' '}
+              <a href="https://simpleicons.org" className="text-ink underline underline-offset-2" rel="noreferrer" target="_blank">Simple Icons</a>{' '}
+              (CC0). Fehlt ein Logo, zeigen wir die Initialen der Marke.
+            </p>
+            <p lang="en">
+              Brand names and logos belong to their respective owners and are used for identification only. The
+              logo shapes come from the Simple Icons library (CC0). Where no logo exists, we show the brand&apos;s
+              initials.
+            </p>
+          </div>
+        </section>
+
         <p className="mt-10">
-          <Link href="/" className="inline-flex items-center min-h-11 px-5 rounded-full border border-border bg-surface text-sm font-semibold text-ink">
+          <Link href="/" className="inline-flex items-center min-h-11 px-5 rounded-xl border border-border bg-surface text-sm font-semibold text-ink">
             ← EV Compare
           </Link>
         </p>

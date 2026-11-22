@@ -62,7 +62,7 @@ function VehicleHeader({ vehicle, isReference, t }: { vehicle: Vehicle; isRefere
   return (
     <div className="min-w-0 flex flex-col gap-3">
       <div className="flex items-center justify-between gap-2 min-h-7">
-        <BrandLogo brand={vehicle.brand} domain={vehicle.brandDomain} size={28} className="text-ink" />
+        <BrandLogo brand={vehicle.brand} size={28} className="text-ink" />
         <TypeChip type={vehicle.type} />
       </div>
       <div className="relative aspect-[16/10] rounded-xl bg-page overflow-hidden">

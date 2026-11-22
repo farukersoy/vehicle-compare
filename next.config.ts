@@ -11,10 +11,6 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'cdn.imagin.studio',
       },
-      {
-        protocol: 'https',
-        hostname: 'www.google.com', // brand favicons
-      },
     ],
   },
 }

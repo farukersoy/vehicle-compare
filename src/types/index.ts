@@ -13,7 +13,7 @@ export interface Vehicle {
   id: string
   model: string
   brand: string
-  brandDomain: string   // for logo: google.com/s2/favicons?domain=...
+  brandDomain: string   // brand website domain (informational; logos are self-hosted, see data/brand-logos.ts)
   brandColor: string    // hex brand color
   image?: string        // optional real photo path, e.g. '/cars/opel-grandland.jpg'
   type: VehicleType

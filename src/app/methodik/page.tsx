@@ -53,6 +53,10 @@ const DE: Section[] = [
     'Echte Fotos von Wikimedia Commons oder KI-generierte Illustrationen (Symbolbild).',
     'Details stehen bei den Bildnachweisen.',
   ] },
+  { h: 'Marken und Logos', p: [
+    'Marken und Logos gehören den jeweiligen Inhabern und dienen nur der Kennzeichnung.',
+    'Die Logoformen stammen aus der Bibliothek Simple Icons (CC0). Fehlt ein Logo, zeigen wir die Initialen der Marke.',
+  ] },
   { h: 'Keine Kaufberatung', p: [
     'Diese Seite ist keine Kaufberatung.',
     'Der reale Verbrauch hängt von Fahrweise, Jahreszeit und Strecke ab.',
@@ -92,6 +96,10 @@ const EN: Section[] = [
   { h: 'Photos', p: [
     'Real photos from Wikimedia Commons or AI-generated illustrations (Symbolbild).',
     'See the image credits for details.',
+  ] },
+  { h: 'Brands and logos', p: [
+    'Brand names and logos belong to their respective owners and are used for identification only.',
+    'The logo shapes come from the Simple Icons library (CC0). Where no logo exists, we show the brand\'s initials.',
   ] },
   { h: 'Not purchase advice', p: [
     'This site is not purchase advice.',
@@ -145,7 +153,7 @@ export default function MethodikPage() {
         <Block lang="en" title="English" sections={EN} asOf="Data as of: November 2026" creditsLabel="Image credits" />
 
         <p className="mt-10">
-          <Link href="/" className="inline-flex items-center min-h-11 px-5 rounded-full border border-border bg-surface text-sm font-semibold text-ink">
+          <Link href="/" className="inline-flex items-center min-h-11 px-5 rounded-xl border border-border bg-surface text-sm font-semibold text-ink">
             ← EV Compare
           </Link>
         </p>

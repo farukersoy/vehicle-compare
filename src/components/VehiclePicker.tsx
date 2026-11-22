@@ -52,7 +52,7 @@ function PickerRow({ vehicle, result, referenceResult, selected, onSelect, t }: 
                     transition-[border-color,box-shadow] duration-150 motion-reduce:transition-none
                     focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2
                     ${selected ? 'border-accent ring-1 ring-accent' : 'border-border hover:border-muted/40'}`}>
-        <BrandLogo brand={vehicle.brand} domain={vehicle.brandDomain} size={20} className="text-muted flex-shrink-0" />
+        <BrandLogo brand={vehicle.brand} size={20} className="text-muted flex-shrink-0" />
         <span className="relative w-14 sm:w-16 aspect-[16/10] flex-shrink-0 rounded-lg bg-page overflow-hidden">
           <VehicleVisual vehicle={vehicle} sizes="64px" className="p-0.5" />
         </span>
