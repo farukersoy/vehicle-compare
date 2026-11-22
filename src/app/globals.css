@@ -21,6 +21,9 @@
   --color-attention:      #DC2626;
   --color-attention-ink:  #B91C1C;
   --color-attention-soft: #FEF2F2;
+  --color-negative:       #B91C1C;  /* compared car cheaper */
+  --color-negative-soft:  #FDECEC;
+  --color-highlight:      #E8772E;  /* small highlights only, never text */
   --color-range:          #0F7A5C;  /* range badge: #16A37A darkened for AA with white text */
   --color-sunken:         #F1F5F9;  /* neutral tint for image wells */
 

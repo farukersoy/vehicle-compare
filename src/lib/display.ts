@@ -31,3 +31,41 @@ export function displayDelta(reference: CostResult, comparison: CostResult): Dis
     annualCO2Kg:   Math.abs(annualCO2Kg(co2Diff)),
   }
 }
+
+// ─── Compare panel rows ───────────────────────────────────────────────────────
+
+/** Values exactly as the compare panel shows them (already rounded). */
+export interface ShownValues {
+  /** CHF per 100 km, 2 decimals */
+  cost: number
+  /** CHF per year at ANNUAL_KM, whole francs, from the rounded per-100-km value */
+  year: number
+  /** g CO₂ per km, 1 decimal */
+  co2: number
+}
+
+export function shownValues(r: CostResult): ShownValues {
+  const cost = shownCost(r)
+  return { cost, year: Math.round(annualCostCHF(cost)), co2: shownCO2(r) }
+}
+
+/**
+ * Differences for the result sentence and the sticky bar, computed from the
+ * displayed values (comparison − reference): the per-year figure is the
+ * difference of the two displayed yearly costs, so the rows always add up.
+ */
+export function shownDiff(reference: CostResult, comparison: CostResult) {
+  const a = shownValues(reference)
+  const b = shownValues(comparison)
+  return {
+    cost: Number((b.cost - a.cost).toFixed(2)),
+    year: b.year - a.year,
+    co2: Number((b.co2 - a.co2).toFixed(1)),
+  }
+}
+
+/** Index of the best value (0 = reference, 1 = compared) or null on a tie / missing value. */
+export function bestIndex(a: number | null | undefined, b: number | null | undefined, higherIsBetter = false): 0 | 1 | null {
+  if (a == null || b == null || a === b) return null
+  return (higherIsBetter ? a > b : a < b) ? 0 : 1
+}
