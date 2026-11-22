@@ -11,7 +11,7 @@ import { shownDiff } from '@/lib/display'
 import { fmt2 } from '@/lib/calculations'
 import SettingsBar, { LanguageSwitch } from '@/components/SettingsBar'
 import ComparePanel from '@/components/ComparePanel'
-import VehicleGrid from '@/components/VehicleGrid'
+import VehiclePicker from '@/components/VehiclePicker'
 import { IconArrowUp } from '@/components/Icons'
 
 /** Number of vehicles the reference car is compared against (shown in the subtitle). */
@@ -143,9 +143,10 @@ export default function Home() {
       {/* Vehicle picker */}
       <section ref={pickerRef} className="max-w-6xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-16 scroll-mt-4">
         <h2 className="font-display font-semibold text-xl sm:text-2xl text-ink mb-4">{t.chooseVehicle}</h2>
-        <VehicleGrid
+        <VehiclePicker
           vehicles={vehicles}
           results={gridResults}
+          referenceResult={referenceResult}
           selectedId={selectedId}
           onSelect={handleSelect}
           t={t}
