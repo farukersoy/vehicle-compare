@@ -222,7 +222,9 @@ export default function ComparePanel({
   const diff = selectedResult ? shownDiff(referenceResult, selectedResult) : null
   const dash = '–'
 
-  const hasRange = reference.rangeKm != null || selected?.rangeKm != null
+  // Range row only when BOTH cars have a value (no "1'000" against "–");
+  // it appears automatically once a compared vehicle gets range data.
+  const hasRange = reference.rangeKm != null && selected?.rangeKm != null
   const showToggle = !!selected && selected.type !== 'HEV'
 
   const info = {
@@ -277,9 +279,8 @@ export default function ComparePanel({
           values={[fmtCO2(a.co2), b ? fmtCO2(b.co2) : dash]} best={b ? bestIndex(a.co2, b.co2) : null} />
         {hasRange && (
           <Row label={t.rowRange} unit="km" info={info.range} t={t}
-            values={[reference.rangeKm != null ? fmtCH(reference.rangeKm) : dash,
-                     selected ? (selected.rangeKm != null ? fmtCH(selected.rangeKm) : dash) : dash]}
-            best={selected ? bestIndex(reference.rangeKm, selected.rangeKm, true) : null} />
+            values={[fmtCH(reference.rangeKm!), fmtCH(selected!.rangeKm!)]}
+            best={bestIndex(reference.rangeKm, selected!.rangeKm, true)} />
         )}
       </div>
 

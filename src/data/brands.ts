@@ -5,7 +5,7 @@
 // brandColor is only shown as a tiny dot next to the brand name.
 
 export interface BrandInfo {
-  domain: string   // logo via google.com/s2/favicons?domain=…
+  domain: string   // brand website domain (informational; logos are self-hosted, see src/data/brand-logos.ts)
   color: string    // hex
 }
 
