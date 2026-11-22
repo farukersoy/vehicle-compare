@@ -40,6 +40,16 @@ export default function Home() {
     return map
   }, [settings])
 
+  // Picker thumbnails: every vehicle at ITS OWN default charging rate, so the
+  // grid prices stay stable while cars are selected or the toggle is tapped.
+  const { co2GridGkwh, homePriceCHF, publicPriceCHF, fuelPriceCHF } = settings
+  const gridResults = useMemo(() => {
+    const base = { co2GridGkwh, homePriceCHF, publicPriceCHF, fuelPriceCHF }
+    const map = new Map<string, CostResult>()
+    vehicles.forEach((v) => map.set(v.id, calculateCost(v, { ...base, chargeRate: defaultChargeRate(v) })))
+    return map
+  }, [co2GridGkwh, homePriceCHF, publicPriceCHF, fuelPriceCHF])
+
   const referenceResult = allResults.get(REFERENCE_VEHICLE_ID)!
   const selectedResult  = selectedId ? allResults.get(selectedId) ?? null : null
 
@@ -185,7 +195,7 @@ export default function Home() {
         <h2 className="font-display font-semibold text-xl sm:text-2xl text-ink mb-4">{t.chooseVehicle}</h2>
         <VehicleGrid
           vehicles={vehicles}
-          results={allResults}
+          results={gridResults}
           selectedId={selectedId}
           onSelect={handleSelect}
           t={t}

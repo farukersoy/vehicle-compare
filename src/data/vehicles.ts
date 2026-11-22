@@ -10,7 +10,7 @@ export const vehicles: Vehicle[] = [
     brand: 'Opel',
     brandDomain: 'opel.com',
     brandColor: '#E8772E',
-    image: '/cars/opel-grandland-phev-4x4.webp',
+    image: '/cars/opel-grandland-x-2017.webp',
     type: 'PHEV',
     segment: 'Kompakt-SUV',
     silhouette: 'suv',
