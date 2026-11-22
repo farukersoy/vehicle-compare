@@ -104,56 +104,28 @@ interface Props {
   className?: string
 }
 
+// Flat, monochrome fallback drawing in the design-system tokens (no gradients).
+const INK = '#0B1F3A'
+const PAGE = '#F6F7F9'
+const BORDER = '#E5E7EB'
+
 export default function VehicleSilhouette({
   shape,
-  bodyColor = '#0B1F3A',
+  bodyColor = '#556274',
   className = '',
 }: Props) {
   const cfg = shapes[shape]
-  const uid = shape // stable — no SSR mismatch risk for static IDs
-
   return (
-    <svg
-      viewBox="0 0 200 90"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      aria-hidden="true"
-      role="img"
-    >
-      <defs>
-        <linearGradient id={`body-${uid}`} x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor={bodyColor} stopOpacity="0.85" />
-          <stop offset="100%" stopColor={bodyColor} stopOpacity="1" />
-        </linearGradient>
-        <linearGradient id={`glass-${uid}`} x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#AEDCF5" stopOpacity="0.6" />
-          <stop offset="100%" stopColor="#4BA8DC" stopOpacity="0.3" />
-        </linearGradient>
-      </defs>
-
-      {/* Ground shadow */}
-      <ellipse cx="100" cy="86" rx="88" ry="3" fill="#000" opacity="0.12" />
-
-      {/* Car body */}
-      <path d={cfg.bodyD} fill={`url(#body-${uid})`} />
-
-      {/* Windows / glass */}
-      <path d={cfg.windowD} fill={`url(#glass-${uid})`} />
-
-      {/* Front wheel */}
-      <circle cx={cfg.wheel1X} cy={cfg.wheelCY} r={cfg.wheelR + 3} fill={bodyColor} opacity="0.7" />
-      <circle cx={cfg.wheel1X} cy={cfg.wheelCY} r={cfg.wheelR} fill="#1C1C1E" />
-      <circle cx={cfg.wheel1X} cy={cfg.wheelCY} r={cfg.wheelR * 0.45} fill="#666" />
-      <circle cx={cfg.wheel1X} cy={cfg.wheelCY} r={cfg.wheelR * 0.18} fill="#999" />
-
-      {/* Rear wheel */}
-      <circle cx={cfg.wheel2X} cy={cfg.wheelCY} r={cfg.wheelR + 3} fill={bodyColor} opacity="0.7" />
-      <circle cx={cfg.wheel2X} cy={cfg.wheelCY} r={cfg.wheelR} fill="#1C1C1E" />
-      <circle cx={cfg.wheel2X} cy={cfg.wheelCY} r={cfg.wheelR * 0.45} fill="#666" />
-      <circle cx={cfg.wheel2X} cy={cfg.wheelCY} r={cfg.wheelR * 0.18} fill="#999" />
-
-      {/* Headlight glint */}
-      <circle cx={cfg.wheel1X - cfg.wheelR - 12} cy={cfg.wheelCY - 14} r="3" fill="#FFF" opacity="0.6" />
+    <svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg" className={className} aria-hidden="true">
+      <ellipse cx="100" cy="86" rx="88" ry="3" fill={BORDER} />
+      <path d={cfg.bodyD} fill={bodyColor} />
+      <path d={cfg.windowD} fill={PAGE} />
+      {[cfg.wheel1X, cfg.wheel2X].map((x) => (
+        <g key={x}>
+          <circle cx={x} cy={cfg.wheelCY} r={cfg.wheelR} fill={INK} />
+          <circle cx={x} cy={cfg.wheelCY} r={cfg.wheelR * 0.45} fill={BORDER} />
+        </g>
+      ))}
     </svg>
   )
 }

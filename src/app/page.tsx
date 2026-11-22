@@ -107,11 +107,11 @@ export default function Home() {
 
       {/* Intro */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 sm:pt-10 pb-4 sm:pb-6">
-        <p className="text-xs font-semibold uppercase tracking-wider text-muted-page">{t.tagline}</p>
+        <p className="text-xs font-semibold uppercase tracking-wider text-muted">{t.tagline}</p>
         <h1 className="mt-2 font-display font-semibold text-[22px] sm:text-[26px] leading-tight text-ink">
           {t.title}
         </h1>
-        <p className="mt-2 text-[15px] sm:text-base leading-relaxed text-muted-page max-w-2xl">
+        <p className="mt-2 text-[15px] sm:text-base leading-relaxed text-muted max-w-2xl">
           {t.subtitle.replace('{n}', String(COMPARED_COUNT))}
         </p>
       </div>
@@ -142,7 +142,7 @@ export default function Home() {
 
       {/* Vehicle picker */}
       <section ref={pickerRef} className="max-w-6xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-16 scroll-mt-4">
-        <h2 className="font-display font-semibold text-xl sm:text-2xl text-ink mb-4">{t.chooseVehicle}</h2>
+        <h2 className="font-display font-semibold text-lg sm:text-xl text-ink mb-4">{t.chooseVehicle}</h2>
         <VehiclePicker
           vehicles={vehicles}
           results={gridResults}
@@ -155,7 +155,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className={`border-t border-border px-4 sm:px-6 py-8 ${showSummaryBar ? 'pb-24' : ''}`}>
-        <div className="max-w-3xl mx-auto text-xs leading-relaxed text-muted-page text-center space-y-2">
+        <div className="max-w-3xl mx-auto text-xs leading-relaxed text-muted text-center space-y-2">
           <p>{t.footerSources}</p>
           <p className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
             <Link href="/methodik" className="underline underline-offset-2 hover:text-ink">{t.methodology}</Link>

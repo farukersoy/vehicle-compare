@@ -18,9 +18,12 @@ export function Segmented<V extends string>({ value, options, onChange, label }:
         const active = o.value === value
         return (
           <button key={o.value} type="button" aria-pressed={active} onClick={() => onChange(o.value)}
-            className={`min-h-11 px-4 rounded-full inline-flex items-center gap-1.5 text-sm font-semibold
-                        transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent
-                        ${active ? 'bg-accent text-white shadow-sm' : 'text-ink hover:bg-surface'}`}>
+            className={`relative min-h-11 px-4 rounded-full inline-flex items-center gap-1.5 text-sm font-semibold
+                        transition-colors duration-150 motion-reduce:transition-none
+                        focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2
+                        ${active
+                          ? 'bg-accent text-white after:absolute after:bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-5 after:h-[3px] after:rounded-full after:bg-highlight'
+                          : 'text-ink hover:bg-surface'}`}>
             {o.icon}{o.label}
           </button>
         )

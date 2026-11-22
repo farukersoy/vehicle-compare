@@ -115,7 +115,7 @@ function Block({ lang, title, sections, asOf, creditsLabel }: {
           </div>
         ))}
       </div>
-      <p className="mt-4 text-sm text-muted-page">
+      <p className="mt-4 text-sm text-muted">
         {asOf} · <Link href="/credits" className="text-ink underline underline-offset-2">{creditsLabel}</Link>
       </p>
     </section>
@@ -133,9 +133,9 @@ export default function MethodikPage() {
 
       <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <h1 className="font-display font-semibold text-[28px] sm:text-4xl leading-tight text-ink">
-          So haben wir gerechnet <span className="text-muted-page font-normal">· How we calculated</span>
+          So haben wir gerechnet <span className="text-muted font-normal">· How we calculated</span>
         </h1>
-        <p className="mt-3 text-sm text-muted-page">
+        <p className="mt-3 text-sm text-muted">
           <a href="#h-de" className="underline underline-offset-2">Deutsch</a>
           {' · '}
           <a href="#h-en" className="underline underline-offset-2">English</a>
