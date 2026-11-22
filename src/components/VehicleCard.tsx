@@ -29,16 +29,17 @@ function TypePill({ type, overlay = false }: { type: Vehicle['type']; overlay?: 
   )
 }
 
+/** Two lines at most: the distance and one short caption (≤ ~20 characters, never wraps). */
 function RangeBadge({ km, caption, compact = false }: { km: number; caption: string; compact?: boolean }) {
   return (
-    <div className={`flex-shrink-0 rounded-xl bg-range text-white text-right
+    <div className={`flex-shrink-0 rounded-lg bg-range text-white text-right
                      shadow-[0_4px_12px_-4px_rgba(15,122,92,0.55)]
-                     ${compact ? 'px-2 py-1 max-w-[7.5rem]' : 'px-3 py-2 max-w-[11rem]'}`}>
+                     ${compact ? 'px-2 py-1 max-w-[7.5rem]' : 'px-2.5 py-1.5 max-w-[9rem]'}`}>
       <div className={`font-display font-semibold leading-tight tabular-nums whitespace-nowrap
-                       ${compact ? 'text-[13px]' : 'text-lg'}`}>
+                       ${compact ? 'text-[13px]' : 'text-base'}`}>
         ≈ {fmtCH(km)} km
       </div>
-      <div className={`text-xs leading-snug text-white/95 ${compact ? 'truncate' : ''}`}>{caption}</div>
+      <div className="text-xs leading-tight text-white/95 whitespace-nowrap truncate">{caption}</div>
     </div>
   )
 }
@@ -73,10 +74,10 @@ export function LargeVehicleCard({
 
         {/* Top row: type pill left, range badge in the top-right corner (normal flow, no overlap).
             Fixed height only from md, where the cards sit side by side and must align. */}
-        <div className="flex items-start justify-between gap-3 md:min-h-[5.5rem]">
+        <div className="flex items-start justify-between gap-3 md:min-h-[3rem]">
           <div className="pt-1"><TypePill type={vehicle.type} /></div>
           {vehicle.rangeKm != null && (
-            <RangeBadge km={vehicle.rangeKm} caption={vehicle.rangeNote ?? t.range} />
+            <RangeBadge km={vehicle.rangeKm} caption={vehicle.isReference ? t.rangeReference : t.range} />
           )}
         </div>
 
@@ -127,19 +128,20 @@ export function LargeVehicleCard({
           {/* Charging: fixed toggle-height slot so both cards' numbers line up side by side.
               Reference: static (always home). Compared BEV/PHEV: home/public toggle. HEV: no grid power. */}
           {vehicle.isReference ? (
-            <p className="mt-2 min-h-[50px] flex items-center gap-1.5 text-sm text-muted">
+            <p className="mt-2 min-h-[50px] md:min-h-[70px] flex items-center md:items-start md:pt-3 gap-1.5 text-sm text-muted">
               <IconHome size={15} /> {t.chargingAlwaysHome}
             </p>
           ) : showChargeToggle ? (
-            <div className="mt-2">
+            <div className="mt-2 md:min-h-[70px]">
               <Segmented label={t.charging} value={charge!.rate} onChange={charge!.onChange}
                 options={[
                   { value: 'home', label: t.home, icon: <IconHome size={15} /> },
                   { value: 'public', label: t.public, icon: <IconBolt size={15} /> },
                 ]} />
+              <p className="mt-1 text-xs leading-snug text-muted">{t.priceBasisCompared}</p>
             </div>
           ) : (
-            <div aria-hidden className="hidden md:block mt-2 h-[50px]" />
+            <div aria-hidden className="hidden md:block mt-2 h-[70px]" />
           )}
 
           <div className="flex items-baseline gap-1.5 mt-3">

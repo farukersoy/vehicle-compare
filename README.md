@@ -118,14 +118,14 @@ site never fetches anything at runtime.
 
 | Setting | Default | Notes |
 |---------|---------|-------|
-| Charge rate (toggle on the compared vehicle's card; Opel always home) | Home | CHF 0.278 / kWh (owner's billed average; ElCom median 2026: 0.277) |
+| Charge rate (toggle on the compared vehicle's card; Opel always home) | BEV: Public · PHEV: Home | Set on every selection by the vehicle's type; a tap applies to that vehicle only and is not remembered. Home CHF 0.278 / kWh (owner's billed average; ElCom median 2026: 0.277) |
 | Public charge | — | CHF 0.59 / kWh (TCS median DC fast charging) |
 | Petrol | CHF 1.718 / L | Editable; owner's actual average |
 | Petrol CO₂ | 2'780 g/L | — |
 | CO₂ grid factor | 50 g/kWh | Adjustable slider |
 
 The reference Opel is always calculated with home charging. PHEV values
-assume a regularly charged vehicle.
+assume a regularly charged vehicle. Full explanation for visitors: `/methodik`.
 
 ---
 

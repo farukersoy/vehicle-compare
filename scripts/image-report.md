@@ -9,13 +9,13 @@
 
 | id | file | licence | author | score | note |
 | --- | --- | --- | --- | --- | --- |
-| opel-corsa-e | File:2023 Opel Corsa-e IAA 2023 1X7A0385.jpg | CC BY-SA 4.0 | Alexander-93 | 0 | saved 44 KB (q80) · old file moved to scripts/backup/photos/opel-corsa-e.2026-11-22T00-04-29.jpg |
+| opel-grandland-phev-4x4 | File:Opel Grandland X, IAA 2017, Frankfurt (1Y7A3371).jpg | CC BY-SA 4.0 | Matti Blume | 0 | saved 63 KB (q80) · old file moved to scripts/backup/photos/opel-grandland-phev-4x4.2026-11-22T00-17-01.webp |
 
 ## Replacing
 
 | id | current file | proposed | status |
 | --- | --- | --- | --- |
-| opel-corsa-e | public/cars/opel-corsa-e.webp | File:2023 Opel Corsa-e IAA 2023 1X7A0385.jpg | found |
+| opel-grandland-phev-4x4 | public/cars/opel-grandland-phev-4x4.webp | File:Opel Grandland X, IAA 2017, Frankfurt (1Y7A3371).jpg | found |
 
 ## Needs review
 

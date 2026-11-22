@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { vehicles, REFERENCE_VEHICLE_ID } from '@/data/vehicles'
 import { calculateCost, DEFAULT_SETTINGS } from '@/lib/calculations'
-import { CostResult, Settings } from '@/types'
+import { CostResult, Settings, Vehicle } from '@/types'
 import { Lang, translations } from '@/lib/i18n'
 import { smoothScrollTo } from '@/lib/motion'
 import { displayDelta } from '@/lib/display'
@@ -13,6 +13,16 @@ import { LargeVehicleCard } from '@/components/VehicleCard'
 import ComparisonDelta, { formatCostDiff } from '@/components/ComparisonDelta'
 import VehicleGrid from '@/components/VehicleGrid'
 import { IconArrowUp, IconCar } from '@/components/Icons'
+
+/** Number of vehicles the reference car is compared against (shown in the subtitle). */
+const COMPARED_COUNT = vehicles.filter((v) => !v.isReference).length
+
+/**
+ * Charging rate a compared vehicle starts with: battery-electric cars on the
+ * public fast-charging price, plug-in hybrids at home. HEVs never use grid power.
+ * Applied on every selection; a tap on the toggle is not remembered.
+ */
+const defaultChargeRate = (v: Vehicle): Settings['chargeRate'] => (v.type === 'BEV' ? 'public' : 'home')
 
 export default function Home() {
   const [selectedId, setSelectedId] = useState<string | null>(null)
@@ -45,6 +55,8 @@ export default function Home() {
 
   const handleSelect = useCallback((id: string) => {
     scrollPending.current = true
+    const v = vehicles.find((x) => x.id === id)
+    if (v) setSettings((s) => ({ ...s, chargeRate: defaultChargeRate(v) }))
     setSelectedId(id)
   }, [])
 
@@ -94,7 +106,9 @@ export default function Home() {
         <h1 className="mt-2 font-display font-semibold text-[28px] sm:text-4xl leading-tight text-ink">
           {t.title}
         </h1>
-        <p className="mt-2 text-[15px] sm:text-base leading-relaxed text-muted-page max-w-2xl">{t.subtitle}</p>
+        <p className="mt-2 text-[15px] sm:text-base leading-relaxed text-muted-page max-w-2xl">
+          {t.subtitle.replace('{n}', String(COMPARED_COUNT))}
+        </p>
       </div>
 
       {/* Settings */}
@@ -180,14 +194,14 @@ export default function Home() {
 
       {/* Footer */}
       <footer className={`border-t border-border px-4 sm:px-6 py-8 ${showSummaryBar ? 'pb-24 md:pb-8' : ''}`}>
-        <div className="max-w-3xl mx-auto text-xs leading-relaxed text-muted-page text-center space-y-1.5">
-          <p>{t.footer1}</p>
-          <p>{t.footer2}</p>
-          <p>{t.footer3}</p>
-          <p>{t.footerPhev}</p>
-          <p>
+        <div className="max-w-3xl mx-auto text-xs leading-relaxed text-muted-page text-center space-y-2">
+          <p>{t.footerSources}</p>
+          <p className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
+            <Link href="/methodik" className="underline underline-offset-2 hover:text-ink">{t.methodology}</Link>
             <Link href="/credits" className="underline underline-offset-2 hover:text-ink">{t.imageCredits}</Link>
+            <span>{t.dataAsOf}</span>
           </p>
+          <p>{t.notAdvice}</p>
         </div>
       </footer>
 

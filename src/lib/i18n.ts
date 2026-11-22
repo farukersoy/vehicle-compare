@@ -3,6 +3,7 @@ export type Lang = 'de' | 'en'
 export interface TranslationShape {
   tagline: string
   title: string
+  /** "{n}" is replaced with the number of compared vehicles. */
   subtitle: string
   chooseVehicle: string
   vehicles: string
@@ -21,13 +22,17 @@ export interface TranslationShape {
   public: string
   gridCo2: string
   typeAll: string
-  footer1: string
-  footer2: string
-  footer3: string
-  /** PHEV values assume regular charging. */
-  footerPhev: string
+  /** Footer: one short sources line. */
+  footerSources: string
+  methodology: string
+  dataAsOf: string
+  notAdvice: string
   fuelPrice: string
   range: string
+  /** Short range-badge caption for the reference car (≤ ~20 characters). */
+  rangeReference: string
+  /** Caption under the charging toggle of the compared car. */
+  priceBasisCompared: string
   yourBilling: string
   electricity: string
   petrol: string
@@ -56,19 +61,19 @@ export interface TranslationShape {
 export const translations: Record<Lang, TranslationShape> = {
   de: {
     tagline: 'Schweiz · Reale Verbrauchsdaten',
-    title: 'EV Vergleich',
+    title: 'Echte Verbrauchskosten im Vergleich',
     subtitle:
-      'Vergleichen Sie die realen Energiekosten und den CO₂-Ausstoss von BEV, PHEV und Hybridfahrzeugen mit Ihrem Opel Grandland X Hybrid4.',
+      'Gemessene Werte eines Plug-in-Hybrids gegenüber {n} Modellen, auf Basis tatsächlicher Rechnungen.',
     chooseVehicle: 'Fahrzeug zum Vergleichen wählen',
     vehicles: 'Fahrzeuge',
     allBrands: 'Alle Marken',
-    yourReference: 'Ihr Referenzfahrzeug — reale Verbrauchsdaten',
+    yourReference: 'Referenzfahrzeug · Messwerte des Halters',
     energyCost: 'Energiekosten pro 100 km',
     perYear: 'pro Jahr',
     measured: 'Gemessen',
     estimated: 'Geschätzt',
-    opelCheaper: 'Opel günstiger',
-    rivalCheaper: 'Konkurrent günstiger',
+    opelCheaper: 'Referenzfahrzeug günstiger',
+    rivalCheaper: 'Vergleichsfahrzeug günstiger',
     pickPrompt: 'Wählen Sie unten ein Fahrzeug',
     charging: 'Laden',
     chargingAlwaysHome: 'Laden: immer zu Hause',
@@ -76,16 +81,16 @@ export const translations: Record<Lang, TranslationShape> = {
     public: 'Öffentlich',
     gridCo2: 'Netz-CO₂',
     typeAll: 'Alle',
-    footer1:
-      'Datenquellen: Gemini-Abfrage (Fahrzeughalter), reale Messungen.',
-    footer2:
-      'Standardwerte: Benzin CHF 1.718/L · Strom zuhause CHF 0.278/kWh · öffentlich CHF 0.59/kWh · Benzin-CO₂ 2\'780 g/L · Netz-CO₂ 50 g/kWh',
-    footer3:
-      'Preisquellen: Strom zuhause = Ø Abrechnung Fahrzeughalter (ElCom-Median 2026: CHF 0.277/kWh), öffentlich = TCS-Median DC-Schnellladen · Stand 2026',
-    footerPhev: 'PHEV-Werte gelten für regelmässig geladene Fahrzeuge.',
+    footerSources:
+      'Quellen: Messwerte und Rechnungen des Halters (Referenzfahrzeug) · KI-gestützte Abfrage mit Google Gemini (Vergleichsfahrzeuge) · Preise: Halter, TCS',
+    methodology: 'So haben wir gerechnet',
+    dataAsOf: 'Datenstand: November 2026',
+    notAdvice: 'Keine Kaufberatung.',
     fuelPrice: 'Benzin',
     range: 'Reichweite',
-    yourBilling: 'Ihre Abrechnung',
+    rangeReference: '1× laden, gemessen',
+    priceBasisCompared: 'Preisbasis Vergleichsfahrzeug',
+    yourBilling: 'Abrechnung des Halters',
     electricity: 'Strom',
     petrol: 'Benzin',
     total: 'Total',
@@ -110,19 +115,19 @@ export const translations: Record<Lang, TranslationShape> = {
   },
   en: {
     tagline: 'Switzerland · Real-world data',
-    title: 'EV Compare',
+    title: 'Real-world running costs compared',
     subtitle:
-      'Compare the real energy cost and CO₂ of BEV, PHEV and hybrid vehicles against your Opel Grandland X Hybrid4.',
+      'Measured figures of a plug-in hybrid against {n} models, based on actual bills.',
     chooseVehicle: 'Choose a vehicle to compare',
     vehicles: 'vehicles',
     allBrands: 'All brands',
-    yourReference: 'Your reference vehicle — real-world data',
+    yourReference: 'Reference car · owner\'s measurements',
     energyCost: 'Energy cost per 100 km',
     perYear: 'per year',
     measured: 'Measured',
     estimated: 'Estimated',
-    opelCheaper: 'Opel cheaper',
-    rivalCheaper: 'Rival cheaper',
+    opelCheaper: 'Reference car cheaper',
+    rivalCheaper: 'Compared car cheaper',
     pickPrompt: 'Select a vehicle below',
     charging: 'Charging',
     chargingAlwaysHome: 'Charging: always at home',
@@ -130,16 +135,16 @@ export const translations: Record<Lang, TranslationShape> = {
     public: 'Public',
     gridCo2: 'Grid CO₂',
     typeAll: 'All',
-    footer1:
-      'Data sources: Gemini query (vehicle owners), real-world measurements.',
-    footer2:
-      'Defaults: petrol CHF 1.718/L · home electricity CHF 0.278/kWh · public CHF 0.59/kWh · petrol CO₂ 2\'780 g/L · grid CO₂ 50 g/kWh',
-    footer3:
-      'Price sources: home electricity = owner\'s billed average (ElCom median 2026: CHF 0.277/kWh), public = TCS median DC fast charging · as of 2026',
-    footerPhev: 'PHEV values assume regularly charged vehicles.',
+    footerSources:
+      'Sources: owner\'s measurements and bills (reference car) · AI-assisted query with Google Gemini (compared cars) · prices: owner, TCS',
+    methodology: 'How we calculated',
+    dataAsOf: 'Data as of: November 2026',
+    notAdvice: 'Not purchase advice.',
     fuelPrice: 'Petrol',
     range: 'Range',
-    yourBilling: 'Your billing',
+    rangeReference: '1 charge, measured',
+    priceBasisCompared: 'Price basis, compared car',
+    yourBilling: 'Owner\'s billing',
     electricity: 'Electricity',
     petrol: 'Petrol',
     total: 'Total',

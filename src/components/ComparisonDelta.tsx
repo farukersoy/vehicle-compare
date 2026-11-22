@@ -26,7 +26,7 @@ export default function ComparisonDelta({ reference, comparison, t }: Props) {
   const { costDiff, co2Diff, annualCostCHF: annualDiff, annualCO2Kg: annualCO2 } =
     displayDelta(reference, comparison)
 
-  // positive = compared car costs more = Opel wins = green; rival cheaper = red.
+  // positive = compared car costs more = reference car cheaper = green; compared car cheaper = red.
   const opelWins = costDiff >= 0
   const animated = useCountUp(costDiff)
 
