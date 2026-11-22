@@ -43,9 +43,3 @@ export const IconCar = (p: IconProps) => (
 export const IconLeaf = (p: IconProps) => (
   <Base {...p}><path d="M5 19c0-8 5-13 15-14-1 10-6 15-14 15" /><path d="M5 19 13 11" /></Base>
 )
-export const IconCheck = (p: IconProps) => (
-  <Base {...p}><path d="m5 12.5 4.5 4.5L19 7.5" /></Base>
-)
-export const IconInfo = (p: IconProps) => (
-  <Base {...p}><circle cx="12" cy="12" r="9" /><path d="M12 11v5.5" /><path d="M12 7.6v.2" /></Base>
-)

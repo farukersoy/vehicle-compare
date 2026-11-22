@@ -56,34 +56,6 @@ export interface TranslationShape {
   language: string
   typeFilter: string
   brandFilter: string
-  /** Compare panel */
-  referenceShort: string
-  comparedShort: string
-  resultRefCheaper: string
-  resultCompCheaper: string
-  resultEqual: string
-  rowCost100: string
-  rowCostYear: string
-  rowCo2: string
-  rowRange: string
-  bestValue: string
-  noValue: string
-  details: string
-  consumption: string
-  infoAbout: string
-  infoCost: string
-  infoYear: string
-  infoCo2: string
-  infoRange: string
-  /** Picker */
-  sortLabel: string
-  sortCost: string
-  sortDiff: string
-  sortCo2: string
-  diffMore: string
-  diffLess: string
-  diffSame: string
-  vsReference: string
 }
 
 export const translations: Record<Lang, TranslationShape> = {
@@ -140,32 +112,6 @@ export const translations: Record<Lang, TranslationShape> = {
     language: 'Sprache',
     typeFilter: 'Antriebsart',
     brandFilter: 'Marke',
-    referenceShort: 'Referenzfahrzeug',
-    comparedShort: 'Vergleichsfahrzeug',
-    resultRefCheaper: 'Referenzfahrzeug ist {d} pro 100 km günstiger, {y} pro Jahr.',
-    resultCompCheaper: 'Vergleichsfahrzeug ist {d} pro 100 km günstiger, {y} pro Jahr.',
-    resultEqual: 'Beide kosten gleich viel pro 100 km.',
-    rowCost100: 'Kosten pro 100 km',
-    rowCostYear: 'Kosten pro Jahr',
-    rowCo2: 'CO₂',
-    rowRange: 'Reichweite',
-    bestValue: 'bester Wert',
-    noValue: 'kein Wert',
-    details: 'Details',
-    consumption: 'Verbrauch pro 100 km',
-    infoAbout: 'Info zu',
-    infoCost: 'Strom zu Hause CHF {home}/kWh, öffentlich CHF {public}/kWh, Benzin CHF {fuel}/L. Das Referenzfahrzeug lädt immer zu Hause.',
-    infoYear: 'Bei {km} km pro Jahr. Gerechnet mit den Kosten pro 100 km wie angezeigt.',
-    infoCo2: 'Benzin 2.78 kg CO₂ pro Liter, Strom {grid} g pro kWh. PHEV-Werte gelten für regelmässig geladene Fahrzeuge.',
-    infoRange: 'Elektroauto: mit voller Batterie. Referenzfahrzeug: eine gemessene Fahrt mit einer Ladung zu Hause, ohne Zwischenstopp.',
-    sortLabel: 'Sortieren',
-    sortCost: 'Nach Kosten',
-    sortDiff: 'Nach Differenz',
-    sortCo2: 'Nach CO₂',
-    diffMore: '{d} teurer',
-    diffLess: '{d} günstiger',
-    diffSame: 'gleich teuer',
-    vsReference: 'gegenüber Referenzfahrzeug',
   },
   en: {
     tagline: 'Switzerland · Real-world data',
@@ -220,32 +166,6 @@ export const translations: Record<Lang, TranslationShape> = {
     language: 'Language',
     typeFilter: 'Powertrain',
     brandFilter: 'Brand',
-    referenceShort: 'Reference car',
-    comparedShort: 'Compared car',
-    resultRefCheaper: 'Reference car is {d} per 100 km cheaper, {y} per year.',
-    resultCompCheaper: 'Compared car is {d} per 100 km cheaper, {y} per year.',
-    resultEqual: 'Both cost the same per 100 km.',
-    rowCost100: 'Cost per 100 km',
-    rowCostYear: 'Cost per year',
-    rowCo2: 'CO₂',
-    rowRange: 'Range',
-    bestValue: 'best value',
-    noValue: 'no value',
-    details: 'Details',
-    consumption: 'Consumption per 100 km',
-    infoAbout: 'Info about',
-    infoCost: 'Home charging CHF {home}/kWh, public CHF {public}/kWh, petrol CHF {fuel}/L. The reference car always charges at home.',
-    infoYear: 'At {km} km per year. Based on the cost per 100 km as shown.',
-    infoCo2: 'Petrol 2.78 kg CO₂ per litre, electricity {grid} g per kWh. PHEV values assume regularly charged vehicles.',
-    infoRange: 'Electric car: with a full battery. Reference car: one measured trip with one charge at home and no stop.',
-    sortLabel: 'Sort',
-    sortCost: 'By cost',
-    sortDiff: 'By difference',
-    sortCo2: 'By CO₂',
-    diffMore: '{d} more',
-    diffLess: '{d} less',
-    diffSame: 'same cost',
-    vsReference: 'vs reference car',
   },
 }
 

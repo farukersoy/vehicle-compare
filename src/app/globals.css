@@ -1,24 +1,29 @@
 @import "tailwindcss";
 
 @theme {
-  /* ── Design-system palette (see DESIGN.md). These are the only colours. ──
-     Contrast (WCAG): ink on surface 16.5:1 · muted on surface 6.0:1, on page
-     5.6:1 · positive on surface 5.3:1, on positive-soft 4.8:1 · negative on
-     surface 6.5:1, on negative-soft 5.6:1 · white on range 5.3:1.
-     highlight (#E8772E) is 2.9:1 on white: small bars/markers only, never text. */
+  /* ── Semantic palette ────────────────────────────────────────────────────
+     Contrast (WCAG): ink on surface 16.5:1 · muted on surface 4.8:1 ·
+     muted-page on page 5.8:1 · positive-ink on surface 5.3:1 ·
+     attention on surface 4.8:1 · attention-ink on attention-soft 5.9:1.
+     #16A37A (positive) is 3.2:1 on white: fine for fills, dots, borders and
+     icons, too light for small text, so text and the range badge use
+     positive-ink instead. */
   --color-ink:            #0B1F3A;
-  --color-muted:          #556274;
+  --color-muted:          #64748B;  /* secondary text on white surfaces */
+  --color-muted-page:     #556274;  /* secondary text on the page background */
   --color-surface:        #FFFFFF;
   --color-page:           #F6F7F9;
   --color-border:         #E5E7EB;
-  --color-accent:         #0B1F3A;  /* buttons, selected chips, selected rows, focus ring */
-  --color-highlight:      #E8772E;  /* reference identity bar, active toggle marker */
-  --color-positive:       #0F7A5C;
-  --color-positive-soft:  #E8F5F0;  /* behind the result sentence and difference values only */
-  --color-negative:       #B91C1C;
-  --color-negative-soft:  #FDECEC;  /* behind the result sentence and difference values only */
-  --color-range:          #0F7A5C;  /* range badge background, white text */
-  --color-monogram:       #EEF1F5;  /* brand monogram background */
+  --color-accent:         #0B1F3A;  /* primary action / selection */
+  --color-positive:       #16A37A;
+  --color-positive-ink:   #0F7A5C;
+  --color-positive-soft:  #ECFDF5;
+  --color-attention:      #DC2626;
+  --color-attention-ink:  #B91C1C;
+  --color-attention-soft: #FEF2F2;
+  --color-range:          #0F7A5C;  /* range badge: #16A37A darkened for AA with white text */
+  --color-sunken:         #F1F5F9;  /* neutral tint for image wells and logo tiles */
+  --color-monogram:       #EEF1F5;  /* brand monogram background (BrandLogo fallback) */
 
   /* Fonts */
   --font-display: var(--font-space-grotesk), system-ui, sans-serif;
@@ -59,17 +64,21 @@ body {
 .range-input::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 20px; height: 20px; margin-top: -8px; border-radius: 999px;
-  background: var(--color-accent); border: 3px solid var(--color-surface);
+  background: var(--color-accent); border: 3px solid #fff;
   box-shadow: 0 1px 3px rgb(11 31 58 / 0.35);
 }
 .range-input::-moz-range-thumb {
   width: 20px; height: 20px; border-radius: 999px;
-  background: var(--color-accent); border: 3px solid var(--color-surface);
+  background: var(--color-accent); border: 3px solid #fff;
   box-shadow: 0 1px 3px rgb(11 31 58 / 0.35);
 }
 .range-input:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
 
 /* ── Motion ─────────────────────────────────────────────────────────────── */
+@keyframes card-reveal {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 @keyframes card-in {
   from { opacity: 0; transform: translateY(12px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -78,8 +87,8 @@ body {
   from { opacity: 0; transform: translateY(100%); }
   to   { opacity: 1; transform: translateY(0); }
 }
-.animate-card-in { animation: card-in 0.2s ease-out both; }
-.animate-bar-in  { animation: bar-in 0.2s ease-out both; }
+.animate-card-in { animation: card-in 0.35s ease-out both; }
+.animate-bar-in  { animation: bar-in 0.25s ease-out both; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

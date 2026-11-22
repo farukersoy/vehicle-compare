@@ -41,7 +41,7 @@ export default function VehicleVisual({ vehicle, sizes, priority = false, classN
 
   return (
     <div className={`absolute inset-0 flex items-center justify-center ${className}`}>
-      <VehicleSilhouette shape={vehicle.silhouette} className="w-full h-full" />
+      <VehicleSilhouette shape={vehicle.silhouette} bodyColor="#94A3B8" className="w-full h-full" />
     </div>
   )
 }

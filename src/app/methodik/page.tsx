@@ -123,7 +123,7 @@ function Block({ lang, title, sections, asOf, creditsLabel }: {
           </div>
         ))}
       </div>
-      <p className="mt-4 text-sm text-muted">
+      <p className="mt-4 text-sm text-muted-page">
         {asOf} · <Link href="/credits" className="text-ink underline underline-offset-2">{creditsLabel}</Link>
       </p>
     </section>
@@ -141,9 +141,9 @@ export default function MethodikPage() {
 
       <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <h1 className="font-display font-semibold text-[28px] sm:text-4xl leading-tight text-ink">
-          So haben wir gerechnet <span className="text-muted font-normal">· How we calculated</span>
+          So haben wir gerechnet <span className="text-muted-page font-normal">· How we calculated</span>
         </h1>
-        <p className="mt-3 text-sm text-muted">
+        <p className="mt-3 text-sm text-muted-page">
           <a href="#h-de" className="underline underline-offset-2">Deutsch</a>
           {' · '}
           <a href="#h-en" className="underline underline-offset-2">English</a>
@@ -153,7 +153,7 @@ export default function MethodikPage() {
         <Block lang="en" title="English" sections={EN} asOf="Data as of: November 2026" creditsLabel="Image credits" />
 
         <p className="mt-10">
-          <Link href="/" className="inline-flex items-center min-h-11 px-5 rounded-xl border border-border bg-surface text-sm font-semibold text-ink">
+          <Link href="/" className="inline-flex items-center min-h-11 px-5 rounded-full border border-border bg-surface text-sm font-semibold text-ink">
             ← EV Compare
           </Link>
         </p>

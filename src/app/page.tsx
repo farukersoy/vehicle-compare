@@ -7,12 +7,12 @@ import { calculateCost, DEFAULT_SETTINGS } from '@/lib/calculations'
 import { CostResult, Settings, Vehicle } from '@/types'
 import { Lang, translations } from '@/lib/i18n'
 import { smoothScrollTo } from '@/lib/motion'
-import { shownDiff } from '@/lib/display'
-import { fmt2 } from '@/lib/calculations'
+import { displayDelta } from '@/lib/display'
 import SettingsBar, { LanguageSwitch } from '@/components/SettingsBar'
-import ComparePanel from '@/components/ComparePanel'
-import VehiclePicker from '@/components/VehiclePicker'
-import { IconArrowUp } from '@/components/Icons'
+import { LargeVehicleCard } from '@/components/VehicleCard'
+import ComparisonDelta, { formatCostDiff } from '@/components/ComparisonDelta'
+import VehicleGrid from '@/components/VehicleGrid'
+import { IconArrowUp, IconCar } from '@/components/Icons'
 
 /** Number of vehicles the reference car is compared against (shown in the subtitle). */
 const COMPARED_COUNT = vehicles.filter((v) => !v.isReference).length
@@ -53,6 +53,11 @@ export default function Home() {
   const referenceResult = allResults.get(REFERENCE_VEHICLE_ID)!
   const selectedResult  = selectedId ? allResults.get(selectedId) ?? null : null
 
+  // Same rounded comparison as the delta band, so badges and numbers always agree
+  const referenceCheaper = selectedResult
+    ? displayDelta(referenceResult, selectedResult).costDiff >= 0
+    : true
+
   // ── Scroll to the comparison after a selection ────────────────────────────
   const compareRef = useRef<HTMLElement>(null)
   const pickerRef  = useRef<HTMLElement>(null)
@@ -92,7 +97,7 @@ export default function Home() {
   }, [])
 
   const showSummaryBar = pastCompare && !!selectedVehicle && !!selectedResult
-  const costDiff = selectedResult ? shownDiff(referenceResult, selectedResult).cost : 0
+  const costDiff = selectedResult ? displayDelta(referenceResult, selectedResult).costDiff : 0
 
   return (
     <div className="min-h-screen bg-page">
@@ -107,46 +112,90 @@ export default function Home() {
 
       {/* Intro */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 sm:pt-10 pb-4 sm:pb-6">
-        <p className="text-xs font-semibold uppercase tracking-wider text-muted">{t.tagline}</p>
-        <h1 className="mt-2 font-display font-semibold text-[22px] sm:text-[26px] leading-tight text-ink">
+        <p className="text-xs font-semibold uppercase tracking-wider text-muted-page">{t.tagline}</p>
+        <h1 className="mt-2 font-display font-semibold text-[28px] sm:text-4xl leading-tight text-ink">
           {t.title}
         </h1>
-        <p className="mt-2 text-[15px] sm:text-base leading-relaxed text-muted max-w-2xl">
+        <p className="mt-2 text-[15px] sm:text-base leading-relaxed text-muted-page max-w-2xl">
           {t.subtitle.replace('{n}', String(COMPARED_COUNT))}
         </p>
       </div>
 
-      {/* Compare panel */}
-      <section ref={compareRef} aria-label={t.compareHeading}
-               className="max-w-6xl mx-auto px-4 sm:px-6 scroll-mt-4">
-        <ComparePanel
-          reference={referenceVehicle}
-          referenceResult={referenceResult}
-          selected={selectedVehicle}
-          selectedResult={selectedResult}
-          settings={settings}
-          onRateChange={(rate) => setSettings((s) => ({ ...s, chargeRate: rate }))}
-          onPickVehicle={() => smoothScrollTo(pickerRef.current)}
-          t={t}
-        />
-      </section>
-
       {/* Settings */}
-      <div className="pt-6">
-        <SettingsBar
-          settings={settings}
-          onChange={(p) => setSettings((s) => ({ ...s, ...p }))}
-          t={t}
-        />
-      </div>
+      <SettingsBar
+        settings={settings}
+        onChange={(p) => setSettings((s) => ({ ...s, ...p }))}
+        t={t}
+      />
+
+      {/* Comparison */}
+      <section ref={compareRef} aria-label={t.compareHeading}
+               className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 sm:pt-8 scroll-mt-4">
+        <div className="grid gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_224px_minmax(0,1fr)] lg:gap-6 items-stretch">
+
+          {/* Reference car — mobile: 1st · tablet: 2nd (under the delta) · desktop: left */}
+          <div className="order-1 md:order-2 lg:order-1 min-w-0">
+            <LargeVehicleCard
+              vehicle={referenceVehicle}
+              result={referenceResult}
+              t={t}
+              priority
+              cheaperBadgeLabel={selectedResult && referenceCheaper ? t.opelCheaper : undefined}
+              cheaperBadgeTone="green"
+            />
+          </div>
+
+          {/* Delta — mobile: band between the cards · tablet: full-width band on top · desktop: middle column */}
+          {selectedVehicle && selectedResult ? (
+            <div className="order-2 md:order-1 md:col-span-2 lg:col-span-1 lg:order-2 min-w-0">
+              <ComparisonDelta reference={referenceResult} comparison={selectedResult} t={t} />
+            </div>
+          ) : (
+            <div aria-hidden className="hidden lg:flex lg:order-2 items-center justify-center">
+              <span className="text-xs font-semibold uppercase tracking-[0.25em] text-muted-page">vs</span>
+            </div>
+          )}
+
+          {/* Compared car */}
+          <div className="order-3 min-w-0">
+            {selectedVehicle && selectedResult ? (
+              <div key={selectedVehicle.id} className="animate-card-in h-full">
+                <LargeVehicleCard
+                  vehicle={selectedVehicle}
+                  result={selectedResult}
+                  t={t}
+                  cheaperBadgeLabel={!referenceCheaper ? t.rivalCheaper : undefined}
+                  cheaperBadgeTone="red"
+                  charge={{
+                    rate: settings.chargeRate,
+                    onChange: (rate) => setSettings((s) => ({ ...s, chargeRate: rate })),
+                  }}
+                />
+              </div>
+            ) : (
+              // The whole placeholder is one tap target that scrolls down to the picker.
+              <button type="button" onClick={() => smoothScrollTo(pickerRef.current)}
+                className="group w-full h-full min-h-[220px] rounded-xl border-2 border-dashed border-border bg-surface/60
+                           flex flex-col items-center justify-center gap-4 p-6 text-center
+                           hover:border-slate-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent">
+                <IconCar size={40} className="text-muted" />
+                <span className="font-display font-semibold text-lg text-ink max-w-[16rem]">{t.pickPrompt}</span>
+                <span className="inline-flex items-center min-h-11 px-6 rounded-full bg-accent text-white text-sm font-semibold
+                                 group-hover:bg-ink/90">
+                  {t.pickVehicle}
+                </span>
+              </button>
+            )}
+          </div>
+        </div>
+      </section>
 
       {/* Vehicle picker */}
       <section ref={pickerRef} className="max-w-6xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-16 scroll-mt-4">
-        <h2 className="font-display font-semibold text-lg sm:text-xl text-ink mb-4">{t.chooseVehicle}</h2>
-        <VehiclePicker
+        <h2 className="font-display font-semibold text-xl sm:text-2xl text-ink mb-4">{t.chooseVehicle}</h2>
+        <VehicleGrid
           vehicles={vehicles}
           results={gridResults}
-          referenceResult={referenceResult}
           selectedId={selectedId}
           onSelect={handleSelect}
           t={t}
@@ -154,8 +203,8 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className={`border-t border-border px-4 sm:px-6 py-8 ${showSummaryBar ? 'pb-24' : ''}`}>
-        <div className="max-w-3xl mx-auto text-xs leading-relaxed text-muted text-center space-y-2">
+      <footer className={`border-t border-border px-4 sm:px-6 py-8 ${showSummaryBar ? 'pb-24 md:pb-8' : ''}`}>
+        <div className="max-w-3xl mx-auto text-xs leading-relaxed text-muted-page text-center space-y-2">
           <p>{t.footerSources}</p>
           <p className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
             <Link href="/methodik" className="underline underline-offset-2 hover:text-ink">{t.methodology}</Link>
@@ -166,20 +215,21 @@ export default function Home() {
         </div>
       </footer>
 
-      {/* Sticky bar: both names and the key difference, once the panel is out of view */}
+      {/* Mobile summary bar */}
       {showSummaryBar && selectedVehicle && (
-        <div className="fixed inset-x-0 bottom-0 z-40 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] animate-bar-in">
+        <div className="md:hidden fixed inset-x-0 bottom-0 z-40 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] animate-bar-in">
           <button type="button" onClick={() => smoothScrollTo(compareRef.current)}
             aria-label={t.backToComparison}
-            className="mx-auto max-w-xl w-full min-h-12 flex items-center gap-3 rounded-xl bg-accent text-white px-4
+            className="w-full min-h-12 flex items-center gap-3 rounded-full bg-accent text-white px-4
                        shadow-[0_8px_24px_-8px_rgba(11,31,58,0.5)]
-                       focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-accent">
+                       focus:outline-none focus-visible:ring-2 focus-visible:ring-white">
             <span className="text-sm truncate min-w-0">
-              {referenceVehicle.brand} {referenceVehicle.model} · {selectedVehicle.brand} {selectedVehicle.model}
+              {referenceVehicle.brand} vs {selectedVehicle.model}
             </span>
-            <span className={`ml-auto inline-flex items-center h-7 px-2.5 rounded-lg text-sm font-semibold tabular-nums whitespace-nowrap
-                              ${costDiff >= 0 ? 'bg-positive-soft text-positive' : 'bg-negative-soft text-negative'}`}>
-              {costDiff === 0 ? t.diffSame : (costDiff > 0 ? t.diffMore : t.diffLess).replace('{d}', `CHF ${fmt2(Math.abs(costDiff))}`)}
+            <span className={`ml-auto inline-flex items-center h-7 px-2.5 rounded-full text-sm font-semibold
+                              font-mono tabular-nums whitespace-nowrap
+                              ${costDiff >= 0 ? 'bg-positive-soft text-positive-ink' : 'bg-attention-soft text-attention-ink'}`}>
+              {formatCostDiff(costDiff)}<span className="text-xs font-normal ml-1">/100 km</span>
             </span>
             <IconArrowUp size={18} className="flex-shrink-0" />
           </button>
